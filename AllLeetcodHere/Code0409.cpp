@@ -1,5 +1,8 @@
 ﻿#include <iostream>
 #include <vector>
+#include <unordered_set>
+#include <set>
+#include <deque>
 using namespace std;
 
 class MyLinkedList {	// leetcode 707
@@ -101,8 +104,393 @@ private:
 	int m_len;
 };
 
+class UnionFind	// 并查集
+{
+public:
+	UnionFind() {}
+
+	UnionFind(int n)
+	{
+		parent.reserve(n);
+		depth.reserve(n);
+
+		for (int i = 0; i < n; ++i)
+		{
+			parent.push_back(i);
+			depth.push_back(1);
+
+		}
+	}
+
+	void Union(int a, int b)	// union 关键字冲突
+	{
+		int x = Find(a), y = Find(b);
+		if (depth[x] <= depth[y])
+			parent[x] = y;
+		else
+			parent[y] = x;
+		if (depth[x] == depth[y] && x != y)
+			depth[y]++;
+	}
+
+	int Find(int x)
+	{
+		return parent[x] == x ? x : Find(parent[x]);
+	}
+
+private:
+	vector<int> parent;
+	vector<int> depth;
+};
+
 class Solution {
 public:
+	int minSpeedOnTime(vector<int>& dist, double hour) {	// leetcode 1870 9/10/22
+		int n = dist.size();
+		if (n - 1 >= hour)
+			return -1;
+
+		int max = dist[0], min = 1, speed;	// 因为 hour 精确到小数点后两位，所以距离最大值为最大值的 100 倍
+		for (int i = 0; i < n; ++i)			// 我并没有这么写，但两者效率都挺低
+			if (max < dist[i])				// max 也可以简单粗暴的设为题目给的上限 1e7
+				max = dist[i];
+
+		double decimal = hour - (int)hour;
+		if (decimal != 0)
+		{
+			double anotherMax = dist[n - 1] / decimal;
+			if (anotherMax > max)
+			{
+				if (anotherMax - (int)anotherMax != 0)
+					max = anotherMax + 1;
+				else
+					max - anotherMax;
+			}
+		}
+
+		while (true)
+		{
+			speed = (min + max) / 2;
+			if (judgeSpeed(dist, hour, speed))
+				if (speed > 1 && judgeSpeed(dist, hour, speed - 1))
+					max = speed - 1;
+				else
+					return speed;
+			else
+				min = speed + 1;
+		}
+		return speed;
+	}
+	bool judgeSpeed(vector<int>& dist, double hour, int speed)
+	{
+		int n = dist.size();
+		double sum = 0, tempD, tempI;
+		for (int i = 0; i < n - 1; ++i)
+		{
+			tempD = (double)dist[i] / speed;
+			tempI = dist[i] / speed;
+			sum += tempD > tempI ? tempI + 1 : tempI;
+		}
+		sum += (double)dist[n - 1] / speed;
+		return sum <= hour ? true : false;
+	}
+
+	int networkDelayTime(vector<vector<int>>& times, int n, int k) {	// leetcode 743 9/9/22 效率低
+		vector<vector<int> > edges(n + 1, vector<int>(n + 1, -1));
+
+		for (auto i = times.begin(); i != times.end(); ++i)
+			edges[(*i)[0]][(*i)[1]] = (*i)[2];
+
+		vector<int> dis = Dijkstra(edges, n, k);
+		int max = dis[1];
+		for (int i = 1; i <= n; ++i)
+		{
+			if (dis[i] == -1)
+				return -1;
+			if (max < dis[i])
+				max = dis[i];
+		}
+		return max;
+	}
+	vector<int> Dijkstra(vector<vector<int> >& edges, int n, int k)
+	{
+		vector<int> dis(n + 1, -1);
+		dis[k] = 0;
+		unordered_set<int> v;
+		v.insert(k);
+
+		int tempPoint = -1, tempDis = -1;
+		while (true)
+		{
+			for (auto i = v.begin(); i != v.end(); ++i)
+				for (int j = 1; j <= n; ++j)
+					if (v.find(j) == v.end())
+					{
+						if (edges[*i][j] != -1 && (dis[*i] + edges[*i][j] < dis[j] || dis[j] == -1))
+							dis[j] = dis[*i] + edges[*i][j];
+						if ((dis[j] < tempDis || tempDis == -1) && dis[j] != -1)
+						{
+							tempDis = dis[j];
+							tempPoint = j;
+						}
+					}
+
+			if (tempPoint == -1)
+				break;
+			v.insert(tempPoint);
+			tempPoint = -1;
+			tempDis = -1;
+		}
+		return dis;
+	}
+
+	bool containsCycle(vector<vector<char>>& grid) {	// leetcode 1559 9/8/22 ***
+		int m = grid.size(), n = grid[0].size();
+		if (m == 1 || n == 1)
+			return false;
+
+		UnionFind unionFind(m * n);
+
+		for (int i = 0; i < m; ++i)
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				int temp = grid[i][j];
+				int a = i * n + j, b = (i + 1) * n + j, c = i * n + j + 1;
+				if (i < m - 1 && grid[i + 1][j] == temp)
+				{
+					if (unionFind.Find(a) == unionFind.Find(b))
+						return true;
+					else
+						unionFind.Union(a, b);
+				}
+				if (j < n - 1 && grid[i][j + 1] == temp)
+				{
+					if (unionFind.Find(a) == unionFind.Find(c))
+						return true;
+					else
+						unionFind.Union(a, c);
+				}
+			}
+		}
+		return false;
+	}
+
+	int cherryPickup(vector<vector<int>>& grid) {	// leetcode 741 没写出来
+		int m = grid.size(), n = grid[0].size();
+		if (grid[0][0] == -1 || grid[m - 1][n - 1] == -1)
+			return 0;
+
+		vector<vector<int> > down_right(m, vector<int>(n, 0));
+		vector<vector<int> > up_left(m, vector<int>(n, 0));
+
+		printVector(grid);
+		cout << endl;
+
+		down_right[0][0] = grid[0][0];
+		grid[0][0] = 0;
+		for (int i = 1; i < n; ++i)
+		{
+			if (grid[0][i] == -1 || down_right[0][i - 1] == -1)
+				down_right[0][i] = -1;
+			else
+				down_right[0][i] = down_right[0][i - 1] + grid[0][i];
+		}
+		for (int i = 1; i < m; ++i)
+		{
+			if (grid[i][0] == -1 || down_right[i - 1][0] == -1)
+				down_right[i][0] = -1;
+			else
+				down_right[i][0] = down_right[i - 1][0] + grid[i][0];
+		}
+
+		printVector(down_right);
+		cout << endl;
+
+		for (int i = 1; i < m; ++i)
+		{
+			for (int j = 1; j < n; ++j)
+			{
+				if (down_right[i - 1][j] == -1 && down_right[i][j - 1] == -1 || grid[i][j] == -1)
+					down_right[i][j] = -1;
+				else if (grid[i - 1][j] == -1)
+				{
+					grid[i][j - 1] = 0;
+					if (j - 1 == 0)
+					{
+						for (int k = 0; k < i; ++k)
+							grid[k][0] = 0;
+					}
+					down_right[i][j] = down_right[i][j - 1] + grid[i][j];
+				}
+				else if (grid[i][j - 1] == -1)
+				{
+					grid[i - 1][j] = 0;
+					if (i - 1 == 0)
+					{
+						for (int k = 0; k < j; ++k)
+							grid[0][k] = 0;
+					}
+					down_right[i][j] = down_right[i - 1][j] + grid[i][j];
+				}
+				else
+				{
+					if (down_right[i - 1][j] > down_right[i][j - 1])
+					{
+						down_right[i][j] = down_right[i - 1][j] + grid[i][j];
+						//grid[i - 1][j] = 0;
+					}
+					else
+					{
+						down_right[i][j] = down_right[i][j - 1] + grid[i][j];
+						//grid[i][j - 1] = 0;
+					}
+				}
+			}
+		}
+		grid[m - 1][n - 1] = 0;
+		int d_r = down_right[m - 1][n - 1];
+		if (d_r == -1)
+			return 0;
+
+		printVector(grid);
+		cout << endl;
+
+		printVector(down_right);
+		cout << endl;
+
+		up_left[m - 1][n - 1] = grid[m - 1][n - 1];
+		for (int i = n - 2; i >= 0; --i)
+		{
+			if (grid[0][i] == -1 || up_left[0][i + 1] == -1)
+				up_left[0][i] = -1;
+			else
+				up_left[0][i] = up_left[0][i + 1] + grid[0][i];
+		}
+		for (int i = m - 2; i >= 0; --i)
+		{
+			if (grid[i][0] == -1 || up_left[i + 1][0] == -1)
+				up_left[i][0] = -1;
+			else
+				up_left[i][0] = up_left[i + 1][0] + grid[i][0];
+		}
+
+		for (int i = m - 2; i >= 0; --i)
+		{
+			for (int j = n - 2; j >= 0; --j)
+			{
+				if (up_left[i + 1][j] == -1 && up_left[i][j + 1] == -1 || grid[i][j] == -1)
+					up_left[i][j] = -1;
+				else if (grid[i + 1][j] == -1)
+				{
+					up_left[i][j] = up_left[i][j + 1] + grid[i][j];
+				}
+				else if (grid[i][j + 1] == -1)
+				{
+					up_left[i][j] = up_left[i + 1][j] + grid[i][j];
+				}
+				else
+				{
+					if (up_left[i + 1][j] > up_left[i][j + 1])
+					{
+						up_left[i][j] = up_left[i + 1][j] + grid[i][j];
+					}
+					else
+					{
+						up_left[i][j] = up_left[i][j + 1] + grid[i][j];
+					}
+				}
+			}
+		}
+		int u_l = up_left[0][0];
+		if (u_l == -1)
+			return 0;
+
+		return d_r + u_l;
+	}
+
+	vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {	// leetcode 733 9/5/22
+		if (image[sr][sc] == color)
+			return image;
+
+		int m = image.size(), n = image[0].size();
+		vector<vector<int> > sign(m, vector<int>(n, 0));	// 不需要标志数组，直接修改image颜色，见参考代码（因为传的对象引用，修改会改变函数外对象的值）
+		vector<vector<int> > result(m, vector<int>(n, 0));
+		sign[sr][sc] = 1;
+
+		deque<pair<int, int> > coordinates;
+		coordinates.push_back(pair<int, int>(sr, sc));
+
+		int x, y;
+		int temp = image[sr][sc];
+		while (!coordinates.empty())
+		{
+			x = coordinates.front().first;
+			y = coordinates.front().second;
+
+			if (x >= 1 && image[x - 1][y] == temp && sign[x - 1][y] == 0)
+			{
+				sign[x - 1][y] = 1;
+				coordinates.push_back(pair<int, int>(x - 1, y));
+			}
+			if (y < n - 1 && image[x][y + 1] == temp && sign[x][y + 1] == 0)
+			{
+				sign[x][y + 1] = 1;
+				coordinates.push_back(pair<int, int>(x, y + 1));
+			}
+			if (x < m - 1 && image[x + 1][y] == temp && sign[x + 1][y] == 0)
+			{
+				sign[x + 1][y] = 1;
+				coordinates.push_back(pair<int, int>(x + 1, y));
+			}
+			if (y >= 1 && image[x][y - 1] == temp && sign[x][y - 1] == 0)
+			{
+				sign[x][y - 1] = 1;
+				coordinates.push_back(pair<int, int>(x, y - 1));
+			}
+			coordinates.pop_front();
+		}
+		for (int i = 0; i < m; ++i)
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				if (sign[i][j] == 1)
+				{
+					result[i][j] = color;
+				}
+				else
+				{
+					result[i][j] = image[i][j];
+				}
+			}
+		}
+		return result;
+	}
+	//const int dx[4] = { 1, 0, 0, -1 };
+	//const int dy[4] = { 0, 1, -1, 0 };
+	//vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
+	//	int currColor = image[sr][sc];
+	//	if (currColor == color) {
+	//		return image;
+	//	}
+	//	int n = image.size(), m = image[0].size();
+	//	queue<pair<int, int>> que;
+	//	que.emplace(sr, sc);
+	//	image[sr][sc] = color;
+	//	while (!que.empty()) {
+	//		int x = que.front().first, y = que.front().second;
+	//		que.pop();
+	//		for (int i = 0; i < 4; i++) {
+	//			int mx = x + dx[i], my = y + dy[i];
+	//			if (mx >= 0 && mx < n && my >= 0 && my < m && image[mx][my] == currColor) {
+	//				que.emplace(mx, my);
+	//				image[mx][my] = color;
+	//			}
+	//		}
+	//	}
+	//	return image;
+	//}
+
 	int minPathSum(vector<vector<int>>& grid) {	// leetcode 64	// 进阶版，允许各个方向的移动 *
 		int m = grid.size(), n = grid[0].size();
 		vector<vector<int> > dis(m, vector<int>(n, 0));	// m 行 n 列的值全为 0 的二维向量
@@ -238,6 +626,19 @@ public:
 		}
 		return r;
 	}
+
+	// 调试相关
+	void printVector(vector<vector<int> >& nums)
+	{
+		for (auto i = nums.begin(); i != nums.end(); ++i)
+		{
+			for (auto j = (*i).begin(); j != (*i).end(); ++j)
+			{
+				cout << *j << "   ";
+			}
+			cout << endl;
+		}
+	}
 };
 
 /* notes
@@ -246,8 +647,27 @@ public:
 
 */
 
+vector<vector<int> > testVector;
+vector<int> testA = { 2, 1, 1 };
+vector<int> testB = { 2, 3, 1 };
+vector<int> testC = { 3, 4, 1 };
+
+vector<int> testD = { 2, 3, 3 };
+
+vector<int> testE = { 0, 0, 0, 1, 0, 0, 0 };
+vector<int> testF = { 0, 0, 0, 1, 0, 0, 0 };
+vector<int> testG = { 0, 0, 0, 1, 1, 1, 1 };
+
 void test1()
-{
+{	
+	testVector.push_back(testA);
+	testVector.push_back(testB);
+	testVector.push_back(testC);
+
+	vector<int> temp = { 1, 1, 100000 };
+
+	Solution s;
+	cout << "result: " << s.minSpeedOnTime(temp, 2.01) << endl;
 
 }
 
