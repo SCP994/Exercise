@@ -1,8 +1,12 @@
 ﻿#include <iostream>
 #include <vector>
 #include <unordered_set>
+#include <unordered_map>
 #include <set>
+#include <stack>
 #include <deque>
+#include <queue>
+#include <numeric>
 using namespace std;
 
 class MyLinkedList {	// leetcode 707
@@ -113,12 +117,10 @@ public:
 	{
 		parent.reserve(n);
 		depth.reserve(n);
-
 		for (int i = 0; i < n; ++i)
 		{
 			parent.push_back(i);
 			depth.push_back(1);
-
 		}
 	}
 
@@ -145,6 +147,152 @@ private:
 
 class Solution {
 public:
+	int numIslands(vector<vector<char>>& grid)	// leetcode 200 9/14/22 三个思路 bfs dfs 并查集
+	{
+		int m = grid.size(), n = grid[0].size(), count = 0;	// 注意完全不用设置 sign 来标志是否被访问过，直接把 grid 相应位置改为 0 即可
+		deque<pair<int, int> > coordinates;
+		for (int i = 0; i < m; ++i)
+			for (int j = 0; j < n; ++j)
+				if (grid[i][j] == '1')
+				{
+					++count;
+					coordinates.push_back(pair<int, int>(i, j));
+					bfs(grid, coordinates, m, n);
+				}
+		return count;
+	}
+	void bfs(vector<vector<char> >& grid, deque<pair<int, int> >& coordinates, int m, int n)
+	{
+		int x, y;
+		vector<int> dirs = { -1, 0, 1, 0, -1 };
+		while (!coordinates.empty())
+		{
+			auto p = coordinates.front();
+			coordinates.pop_front();
+			for (int k = 0; k < 4; ++k)
+			{
+				x = p.first + dirs[k];
+				y = p.second + dirs[k + 1];
+				if (x >= 0 && x < m && y >= 0 && y < n && grid[x][y] == '1')
+				{
+					coordinates.push_back({ x, y });
+					grid[x][y] = '0';
+				}
+			}
+		}
+	}
+	// dfs 与 bfs 类似
+	int numIslands(vector<vector<char>>& grid)	// UnionFind *
+	{
+		int m = grid.size(), n = grid[0].size();
+		UnionFind uf(m * n);
+		set<int> s;
+		for (int i = 0; i < m; ++i)
+			for (int j = 0; j < n; ++j)
+				if (grid[i][j] == '1')
+				{
+					if (i < m - 1 && grid[i + 1][j] == '1')
+						uf.Union((i + 1) * n + j, i * n + j);	// 注意这里 i 乘的是列数 n 而不是行数 m！
+					if (j < n - 1 && grid[i][j + 1] == '1')
+						uf.Union(i * n + j + 1, i * n + j);
+				}
+		for (int i = 0; i < m; ++i)
+			for (int j = 0; j < n; ++j)
+				if (grid[i][j] == '1')
+					s.insert(uf.Find(i * n + j));
+		//ans += grid[i][j] == '1' && i * n + j == find(i * n + j);	// 另一种计算方法，ans 即返回值，注意一个岛屿只有一个点使等式成立
+		return s.size();
+	}
+
+	//vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {	// leetcode 496 9/13/22
+	//	int m = nums1.size(), n = nums2.size(), temp = -1;
+	//	vector<int> result(m);
+	//	for (int i = n - 1, j = m - 1; j >= 0; --i)
+	//	{
+	//		if (nums2[i] > nums1[j])
+	//			temp = nums2[i];
+	//		else if (nums2[i] == nums1[j])
+	//		{
+	//			result[j] = temp;
+	//			temp = -1;
+	//			i = n;
+	//			--j;
+	//		}
+	//	}
+	//	return result;
+	//}
+	vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {	// 单调栈解法
+		int m = nums1.size(), n = nums2.size();
+		stack<int> numsStack;
+		vector<int> result(m);
+		unordered_map<int, int> numsMap;
+
+		for (int i = n - 1; i >= 0; --i)
+		{
+			while (!numsStack.empty() && numsStack.top() < nums2[i])	// 维护一个单调栈
+				numsStack.pop();
+			if (!numsStack.empty())
+				numsMap[nums2[i]] = numsStack.top();	// 每个元素的右边最大值存入 hash 表
+			else
+				numsMap[nums2[i]] = -1;
+			numsStack.push(nums2[i]);
+		}
+		for (int i = 0; i < m; ++i)
+			result[i] = numsMap[nums1[i]];	// 时间复杂度 O(m + n)
+		return result;
+	}
+
+	int chalkReplacer(vector<int>& chalk, int k) {	// leetcode 1894 9/12/22
+		int n = chalk.size();	// 思路还行，时间、空间效率一般，C++ 11 可以使用 long long 和 unsigned long long
+		long sum = 0;		// 参考代码里思路更好
+		vector<long> sum_index(n, 0);	//注意
+		for (int i = 0; i < n; ++i)
+		{
+			sum += chalk[i];
+			sum_index[i] = sum;
+		}
+
+		cout << sum_index[n - 1] << endl;
+
+		long temp = k - k / sum_index[n - 1] * sum_index[n - 1];
+		k = temp;
+		if (k == 0)
+			return 0;
+
+		int min = 0, max = n - 1, mid;
+
+		while (true)
+		{
+			mid = (min + max) / 2;
+			if (sum_index[mid] < k)
+				min = mid + 1;
+			else if (sum_index[mid] == k)
+				return mid + 1;
+			else
+			{
+				if (mid == 0 || sum_index[mid - 1] <= k)
+					return mid;
+				else
+					max = mid - 1;
+			}
+		}
+		return 0;
+	}
+	//int chalkReplacer(vector<int>& chalk, int k) {
+	//	int n = chalk.size();
+	//	long long total = accumulate(chalk.begin(), chalk.end(), 0LL);
+	//	k %= total;
+	//	int res = -1;
+	//	for (int i = 0; i < n; ++i) {	// 只用遍历一遍，不用相加
+	//		if (chalk[i] > k) {
+	//			res = i;
+	//			break;
+	//		}
+	//		k -= chalk[i];
+	//	}
+	//	return res;
+	//}
+
 	int minSpeedOnTime(vector<int>& dist, double hour) {	// leetcode 1870 9/10/22
 		int n = dist.size();
 		if (n - 1 >= hour)
@@ -648,26 +796,32 @@ public:
 */
 
 vector<vector<int> > testVector;
-vector<int> testA = { 2, 1, 1 };
-vector<int> testB = { 2, 3, 1 };
-vector<int> testC = { 3, 4, 1 };
-
-vector<int> testD = { 2, 3, 3 };
-
+vector<int> testA = { 1, 1, 1, 1, 0, 0, 0 };
+vector<int> testB = { 0, 0, 0, 1, 0, 0, 0 };
+vector<int> testC = { 0, 0, 0, 1, 0, 0, 1 };
+vector<int> testD = { 1, 0, 0, 1, 0, 0, 0 };
 vector<int> testE = { 0, 0, 0, 1, 0, 0, 0 };
 vector<int> testF = { 0, 0, 0, 1, 0, 0, 0 };
 vector<int> testG = { 0, 0, 0, 1, 1, 1, 1 };
 
 void test1()
 {	
+	Solution s;
 	testVector.push_back(testA);
 	testVector.push_back(testB);
 	testVector.push_back(testC);
+	testVector.push_back(testD);
+	testVector.push_back(testE);
+	testVector.push_back(testF);
+	testVector.push_back(testG);
 
-	vector<int> temp = { 1, 1, 100000 };
+	vector<int> demo = { 3, 4, 1, 2 };
 
-	Solution s;
-	cout << "result: " << s.minSpeedOnTime(temp, 2.01) << endl;
+	vector<int> a = { 2, 1, 3 };
+	vector<int> b = { 2, 3, 1 };
+
+	vector<vector<char> > test = { { '1' }, { '1' } };
+	cout << s.numIslands(test) << endl;
 
 }
 
