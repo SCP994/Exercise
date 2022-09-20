@@ -7,6 +7,7 @@
 #include <deque>
 #include <queue>
 #include <numeric>
+#include <string>
 using namespace std;
 
 class MyLinkedList {	// leetcode 707
@@ -116,51 +117,199 @@ public:
 	UnionFind(int n)
 	{
 		parent.reserve(n);
-		depth.reserve(n);
 		for (int i = 0; i < n; ++i)
-		{
 			parent.push_back(i);
-			depth.push_back(1);
-		}
 	}
 
-	void Union(int a, int b)	// union 关键字冲突
+	void Union(int a, int b)
 	{
-		int x = Find(a), y = Find(b);
-		if (depth[x] <= depth[y])
-			parent[x] = y;
-		else
-			parent[y] = x;
-		if (depth[x] == depth[y] && x != y)
-			depth[y]++;
+		parent[Find(a)] = b;
 	}
 
-	int Find(int x)
-	{
-		return parent[x] == x ? x : Find(parent[x]);
+	int Find(int a)
+	{	// 路径压缩
+		return parent[a] == a ? a : (parent[a] = Find(parent[a]));
 	}
 
 private:
 	vector<int> parent;
-	vector<int> depth;
+};
+
+class UnionFind_leetcode399	// 并查集、维护权值
+{
+public:
+	UnionFind_leetcode399() {}
+
+	UnionFind_leetcode399(int n)
+	{
+		parent.reserve(n);
+		for (int i = 0; i < n; ++i)
+			parent.push_back(i);
+	}
+
+	void Union(int a, int b, unordered_map<int, unordered_map<int, double> >& ans)
+	{
+		if (parent[a] == a)
+			parent[a] = b;
+		else
+		{
+			int temp = Find(a, ans);
+			parent[temp] = b;
+			ans[temp][b] = ans[temp][a] * ans[a][b];	// 确保 ans[a][b] 再 Union 过程之前已被赋值
+			ans[b][temp] = 1.0 / ans[temp][b];
+		}
+	}
+
+	int Find(int a, unordered_map<int, unordered_map<int, double> >& ans)
+	{	// 路径压缩
+		if (parent[a] == a)
+			return a;
+		else
+		{
+			int temp = Find(parent[a], ans);
+			ans[a][temp] = ans[a][parent[a]] * ans[parent[a]][temp];
+			ans[temp][a] = 1.0 / ans[a][temp];
+			parent[a] = temp;
+			return parent[a];
+		}
+	}
+
+private:
+	vector<int> parent;
 };
 
 class Solution {
 public:
-	int numIslands(vector<vector<char>>& grid)	// leetcode 200 9/14/22 三个思路 bfs dfs 并查集
-	{
-		int m = grid.size(), n = grid[0].size(), count = 0;	// 注意完全不用设置 sign 来标志是否被访问过，直接把 grid 相应位置改为 0 即可
-		deque<pair<int, int> > coordinates;
-		for (int i = 0; i < m; ++i)
-			for (int j = 0; j < n; ++j)
-				if (grid[i][j] == '1')
-				{
-					++count;
-					coordinates.push_back(pair<int, int>(i, j));
-					bfs(grid, coordinates, m, n);
-				}
-		return count;
+	const int inf = 0x3f3f;
+
+	int maximumRemovals(string s, string p, vector<int>& removable) {	// leetcode 1898 9/20/22
+		int min = 0, max = removable.size();
+		while (min < max)	// 注意要考虑等于的情况，比如 0 - 10 中找 7
+							// 若去掉等于号，则 mid 的值 0.5 进 1，min = mid，因为 min 被考虑过
+							// mid 的值 0.5 取掉，max = mid，因为 max 被考虑过
+							// 即使如此还是有问题，比如只有两个元素，或者二分查找最大的元素，等于号则不会有问题
+							// 所以对于二分查找指定数的问题，一定是小于等于
+							// 这题不同的是，min = 0 永远符合条件，min 只会取符合条件的值，最后返回 min，有等于号会死循环
+							// 这道题类似与二分查找第一个小于指定值的值的索引，假设不存在相等的值。但当数组中
+							// 没有小于的值时会返回索引 0，答案错误，而这道题 0 永远成立，所以不存在这个问题
+		{
+			int mid = min + max + 1 >> 1;
+			if (sub_1898(mid, removable, s, p))
+				min = mid;
+			else
+				max = mid - 1;	// 注意这里的逻辑，符合的 mid 赋值给 min ，不符合，max = mid - 1，
+		}
+		return min;
 	}
+	bool sub_1898(int k, vector<int>& removable, string s, string p)
+	{
+		int len_s = s.length(), len_p = p.length();
+		vector<bool> sign(len_s, false);
+		for (int i = 0; i < k; ++i)
+			sign[removable[i]] = true;
+		int i = 0, j = 0;
+		for (; i < len_s && j < len_p; ++i)
+			if (!sign[i] && s[i] == p[j])
+				++j;
+		return j == len_p ? true : false;
+	}
+
+	//vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries)	// leetcode 399 9/16-17/22
+	//{
+	//	int len_equations = equations.size(), len_queries = queries.size(), count = 0, tempInt1, tempInt2, tempInt3;
+	//	string tempStr1, tempStr2;
+	//	unordered_set<string> stringSet;
+	//	unordered_map<string, int> stringToNums;	// 字符串对应到并查集的数字
+	//	unordered_map<int, unordered_map<int, double> > ans;
+	//	vector<double> result(len_queries);
+	//	for (int i = 0; i < len_equations; ++i)
+	//		for (int j = 0; j < 2; ++j)
+	//		{
+	//			tempStr1 = equations[i][j];
+	//			if (stringSet.find(tempStr1) == stringSet.end())
+	//			{
+	//				stringSet.insert(tempStr1);
+	//				stringToNums[tempStr1] = count++;
+	//			}
+	//		}
+	//	UnionFind_leetcode399 uf(count);
+	//	for (int i = 0; i < len_equations; ++i)
+	//	{
+	//		tempInt1 = stringToNums[equations[i][0]];
+	//		tempInt2 = stringToNums[equations[i][1]];
+	//		ans[tempInt1][tempInt2] = values[i];
+	//		ans[tempInt2][tempInt1] = 1.0 / values[i];
+	//		ans[tempInt1][tempInt1] = 1.0;
+	//		ans[tempInt2][tempInt2] = 1.0;	// 先算再 Union
+	//		if (uf.Find(tempInt1, ans) != uf.Find(tempInt2, ans))
+	//			uf.Union(tempInt1, tempInt2, ans);
+	//	}
+	//	for (int i = 0; i < len_queries; ++i)
+	//	{
+	//		tempStr1 = queries[i][0];
+	//		tempStr2 = queries[i][1];
+	//		tempInt1 = stringToNums[tempStr1];
+	//		tempInt2 = stringToNums[tempStr2];
+	//		if (stringSet.find(tempStr1) == stringSet.end() || stringSet.find(tempStr2) == stringSet.end()
+	//			|| uf.Find(tempInt1, ans) != uf.Find(tempInt2, ans))
+	//			result[i] = -1.0;
+	//		else
+	//		{
+	//			tempInt3 = uf.Find(tempInt1, ans);
+	//			result[i] = ans[tempInt1][tempInt3] * ans[tempInt3][tempInt2];
+	//		}
+	//	}
+	//	return result;
+	//}
+	unordered_map<string, string> p;
+	unordered_map<string, double> w;
+	vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries) {
+		int n = equations.size();
+		for (auto e : equations) {
+			p[e[0]] = e[0];
+			p[e[1]] = e[1];
+			w[e[0]] = 1.0;
+			w[e[1]] = 1.0;
+		}
+		for (int i = 0; i < n; ++i) {
+			vector<string> e = equations[i];
+			string a = e[0], b = e[1];
+			string pa = find(a), pb = find(b);
+			if (pa == pb) continue;
+			p[pa] = pb;
+			w[pa] = w[b] * values[i] / w[a];
+		}
+		int m = queries.size();
+		vector<double> ans(m);
+		for (int i = 0; i < m; ++i) {
+			string c = queries[i][0], d = queries[i][1];
+			ans[i] = p.find(c) == p.end() || p.find(d) == p.end() || find(c) != find(d) ? -1.0 : w[c] / w[d];
+		}
+		return ans;
+	}
+	string find(string x) {	// 并查集
+		if (p[x] != x) {
+			string origin = p[x];
+			p[x] = find(p[x]);
+			w[x] *= w[origin];	// 路径压缩、更新权值，权值为子除以父
+		}
+		return p[x];
+	}
+
+	//int numIslands(vector<vector<char>>& grid)	// leetcode 200 9/14/22 三个思路 bfs dfs 并查集
+	//{
+	//	int m = grid.size(), n = grid[0].size(), count = 0;	// 注意完全不用设置 sign 来标志是否被访问过，直接把 grid 相应位置改为 0 即可
+	//	deque<pair<int, int> > coordinates;
+	//	for (int i = 0; i < m; ++i)
+	//		for (int j = 0; j < n; ++j)
+	//			if (grid[i][j] == '1')
+	//			{
+	//				++count;
+	//				coordinates.push_back(pair<int, int>(i, j));
+	//				bfs(grid, coordinates, m, n);
+	//			}
+	//	return count;
+	//}
 	void bfs(vector<vector<char> >& grid, deque<pair<int, int> >& coordinates, int m, int n)
 	{
 		int x, y;
@@ -343,53 +492,24 @@ public:
 		return sum <= hour ? true : false;
 	}
 
-	int networkDelayTime(vector<vector<int>>& times, int n, int k) {	// leetcode 743 9/9/22 效率低
-		vector<vector<int> > edges(n + 1, vector<int>(n + 1, -1));
-
-		for (auto i = times.begin(); i != times.end(); ++i)
-			edges[(*i)[0]][(*i)[1]] = (*i)[2];
-
-		vector<int> dis = Dijkstra(edges, n, k);
-		int max = dis[1];
-		for (int i = 1; i <= n; ++i)
-		{
-			if (dis[i] == -1)
-				return -1;
-			if (max < dis[i])
-				max = dis[i];
-		}
-		return max;
-	}
-	vector<int> Dijkstra(vector<vector<int> >& edges, int n, int k)
-	{
-		vector<int> dis(n + 1, -1);
+	int networkDelayTime(vector<vector<int>>& times, int n, int k) {	// leetcode 743 9/9/22 9/18/22
+		vector<vector<int> > edges(n + 1, vector<int>(n + 1, inf));
+		for (auto& i : times) edges[i[0]][i[1]] = i[2];
+		vector<bool> vis(n + 1, false);	// true 或 false 用来判断该点是否已经找到最短路径！！！
+		vector<int> dis(n + 1, inf);
 		dis[k] = 0;
-		unordered_set<int> v;
-		v.insert(k);
-
-		int tempPoint = -1, tempDis = -1;
-		while (true)
+		for (int i = 0; i < n; ++i)	// 最多 n 个循环
 		{
-			for (auto i = v.begin(); i != v.end(); ++i)
-				for (int j = 1; j <= n; ++j)
-					if (v.find(j) == v.end())
-					{
-						if (edges[*i][j] != -1 && (dis[*i] + edges[*i][j] < dis[j] || dis[j] == -1))
-							dis[j] = dis[*i] + edges[*i][j];
-						if ((dis[j] < tempDis || tempDis == -1) && dis[j] != -1)
-						{
-							tempDis = dis[j];
-							tempPoint = j;
-						}
-					}
-
-			if (tempPoint == -1)
-				break;
-			v.insert(tempPoint);
-			tempPoint = -1;
-			tempDis = -1;
+			int t = -1;
+			for (int j = 1; j <= n; ++j)
+				if (!vis[j] && (t == -1 || dis[t] > dis[j]))	// 找最小的 dis
+					t = j;
+			vis[t] = true;
+			for (int j = 1; j <= n; ++j)
+				dis[j] = min(dis[j], dis[t] + edges[t][j]);	// 更新距离
 		}
-		return dis;
+		int result = *max_element(++dis.begin(), dis.end());	// 别忘了跳过第 0 个元素
+		return result == inf ? -1 : result;
 	}
 
 	bool containsCycle(vector<vector<char>>& grid) {	// leetcode 1559 9/8/22 ***
@@ -791,38 +911,16 @@ public:
 
 /* notes
 	vector<int> a(2, 8); // 这样生成含有两个元素且值为8的向量
-
+	3 >> 1 右移（左移）操作只适用于整数，比除法快，优先级比除法低，答案与整数除法相同：3 >> 1 为 1
 
 */
-
-vector<vector<int> > testVector;
-vector<int> testA = { 1, 1, 1, 1, 0, 0, 0 };
-vector<int> testB = { 0, 0, 0, 1, 0, 0, 0 };
-vector<int> testC = { 0, 0, 0, 1, 0, 0, 1 };
-vector<int> testD = { 1, 0, 0, 1, 0, 0, 0 };
-vector<int> testE = { 0, 0, 0, 1, 0, 0, 0 };
-vector<int> testF = { 0, 0, 0, 1, 0, 0, 0 };
-vector<int> testG = { 0, 0, 0, 1, 1, 1, 1 };
-
 void test1()
 {	
-	Solution s;
-	testVector.push_back(testA);
-	testVector.push_back(testB);
-	testVector.push_back(testC);
-	testVector.push_back(testD);
-	testVector.push_back(testE);
-	testVector.push_back(testF);
-	testVector.push_back(testG);
-
-	vector<int> demo = { 3, 4, 1, 2 };
-
-	vector<int> a = { 2, 1, 3 };
-	vector<int> b = { 2, 3, 1 };
-
-	vector<vector<char> > test = { { '1' }, { '1' } };
-	cout << s.numIslands(test) << endl;
-
+	Solution solution;
+	string s = "qobftgcueho";
+	string p = "obue";
+	vector<int> removable = { 5 };
+	cout << solution.maximumRemovals(s, p, removable) << endl;
 }
 
 int main(void)
