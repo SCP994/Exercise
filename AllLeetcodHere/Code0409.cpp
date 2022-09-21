@@ -182,6 +182,36 @@ class Solution {
 public:
 	const int inf = 0x3f3f;
 
+	vector<int> sortArray(vector<int>& nums) {	// leetcode 912 9/21/22
+		int len = nums.size();					// 堆排序
+		for (int i = len >> 1; i >= 0; --i)		// 稳定：冒泡、插入、归并、基数
+			maxHeap(nums, i, len);			// 不稳定：选择、快排、希尔、堆排序
+		for (int i = len - 1; i >= 0; --i)
+		{
+			swap(nums[0], nums[--len]);
+			maxHeap(nums, 0, len);
+		}
+		return nums;
+	}
+	void maxHeap(vector<int>& nums, int i, int len)
+	{
+		while (true)
+		{
+			int left = 2 * i, right = left + 1, temp = i;
+			if (left < len && nums[i] < nums[left])
+				temp = left;
+			if (right < len && nums[temp] < nums[right])
+				temp = right;
+			if (temp != i)
+			{
+				swap(nums[i], nums[temp]);
+				i = temp;
+			}
+			else
+				break;
+		}
+	}
+
 	int maximumRemovals(string s, string p, vector<int>& removable) {	// leetcode 1898 9/20/22
 		int min = 0, max = removable.size();
 		while (min < max)	// 注意要考虑等于的情况，比如 0 - 10 中找 7
@@ -917,10 +947,10 @@ public:
 void test1()
 {	
 	Solution solution;
-	string s = "qobftgcueho";
-	string p = "obue";
-	vector<int> removable = { 5 };
-	cout << solution.maximumRemovals(s, p, removable) << endl;
+	vector<int> nums = { 1, 6, 7, 1, 6, 7, 1, 6, 7, 1, 6, 7, 1, 6, 7, 1, 6, 7, -3, 5234223, 123, 893, 0, 0, 91 };
+	vector<int> result = solution.sortArray(nums);
+	for (auto i : result)
+		cout << i << "  ";
 }
 
 int main(void)
