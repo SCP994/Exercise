@@ -8,6 +8,7 @@
 #include <queue>
 #include <numeric>
 #include <string>
+#include "Notes.h"
 using namespace std;
 
 class MyLinkedList {	// leetcode 707
@@ -178,9 +179,113 @@ private:
 	vector<int> parent;
 };
 
+class NumArray {	// leetcode 303 9/23/22 前缀和 动态规划
+public:
+	NumArray(vector<int>& nums)
+	{
+		int len = nums.size();
+		sums.resize(len + 1);
+		for (int i = 0; i < len; ++i)
+			sums[i + 1] = sums[i] + nums[i];	// 注意这里
+	}
+
+	int sumRange(int left, int right) {
+		return sums[right + 1] - sums[left];
+	}
+
+private:
+	vector<int> sums;
+};
+
 class Solution {
 public:
 	const int inf = 0x3f3f;
+
+	string addStrings(string num1, string num2) {	// leetcode 415 9/22/22
+		int len1 = num1.length(), len2 = num2.length(), c_in = 0,	// 算出来的结果可以先存到 vector<int> 里面
+			len_min = min(len1, len2), len_max = max(len1, len2);
+		string result = "", temp = len1 > len2 ? num1 : num2;
+		auto adder = [](int a, int b, int c_in)
+		{
+			int temp = a + b + c_in;
+			return pair<int, int>(temp % 10, temp / 10);
+		};
+		for (int i = 0; i < len_min; ++i)
+		{
+			auto it = adder(num1[len1 - i - 1] - '0', num2[len2 - i - 1] - '0', c_in);
+			c_in = it.second;
+			result.append(1, '0' + it.first);
+		}
+		for (int i = 0; i < len_max - len_min; ++i)
+		{
+			auto it = adder(temp[len_max - len_min - i - 1] - '0', 0, c_in);
+			c_in = it.second;
+			result.append(1, '0' + it.first);
+		}
+		if (c_in)
+			result.append(1, '0' + c_in);
+		reverse(result.begin(), result.end());
+		return result;
+	}
+
+	string multiply(string num1, string num2) {		// leetcode 43 9/22/22
+		int len1 = num1.length(), len2 = num2.length(), c_in = 0,
+			lenMin = min(len1, len2), lenMax = max(len1, len2);
+		string result = "0", mid = "",
+			strMax = len1 >= len2 ? num1 : num2, strMin = len1 >= len2 ? num2 : num1;
+		auto multiplier = [](int a, int b, int c_in)
+		{
+			int temp = a * b + c_in;
+			return pair<int, int>(temp % 10, temp / 10);
+		};
+		for (int i = 0; i < lenMin; ++i)
+		{
+			if (strMin[lenMin - i - 1] == '0')
+				continue;
+			for (int j = i; j > 0; --j)
+				mid.append(1, '0');
+			for (int j = 0; j < lenMax; ++j)
+			{
+				auto it = multiplier(strMax[lenMax - j - 1] - '0', strMin[lenMin - i - 1] - '0', c_in);
+				c_in = it.second;
+				mid.append(1, '0' + it.first);
+			}
+			if (c_in)
+				mid.append(1, '0' + c_in);
+			reverse(mid.begin(), mid.end());
+			result = addStrings(result, mid);
+			c_in = 0;
+			mid = "";
+		}
+		return result;
+	}
+	//string multiply(string num1, string num2) {
+	//	int m = num1.size(), n = num2.size();
+	//	vector<int> res(m + n);
+	//	for (int i = 0; i < n; ++i) {
+	//		int b = num2[n - 1 - i] - '0';
+	//		mul(num1, b, i, res);
+	//	}
+	//	string ans = "";
+	//	for (int v : res) ans.push_back(v + '0');
+	//	while (ans.size() > 1 && ans.back() == '0') ans.pop_back();
+	//	reverse(ans.begin(), ans.end());
+	//	return ans;
+	//}
+	//void mul(string A, int b, int i, vector<int>& res) {
+	//	for (int j = A.size() - 1, t = 0; j >= 0 || t > 0; --j) {
+	//		if (j >= 0) {
+	//			int a = A[j] - '0';
+	//			t += a * b;
+	//		}
+	//		res[i++] += t % 10;
+	//		if (res[i - 1] >= 10) {
+	//			res[i - 1] %= 10;
+	//			++res[i];
+	//		}
+	//		t /= 10;
+	//	}
+	//}
 
 	vector<int> sortArray(vector<int>& nums) {	// leetcode 912 9/21/22
 		int len = nums.size();					// 堆排序
@@ -947,13 +1052,16 @@ public:
 void test1()
 {	
 	Solution solution;
-	vector<int> nums = { 1, 6, 7, 1, 6, 7, 1, 6, 7, 1, 6, 7, 1, 6, 7, 1, 6, 7, -3, 5234223, 123, 893, 0, 0, 91 };
-	vector<int> result = solution.sortArray(nums);
-	for (auto i : result)
-		cout << i << "  ";
+	string a = "11";
+	string b = "123";
+	cout << solution.multiply(a, b);
 }
 
 int main(void)
 {
 	test1();
+
+	Notes n;
+	vector<int> a = { 1, 4, 5, 3, 2 };
+	cout << n.minMax(a).first << " " << n.minMax(a).second << endl;
 }

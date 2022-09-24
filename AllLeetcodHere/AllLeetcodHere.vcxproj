@@ -141,6 +141,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Code0409.cpp" />
+    <ClCompile Include="Notes.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Notes.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
