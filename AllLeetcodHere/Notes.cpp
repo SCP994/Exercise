@@ -2,7 +2,8 @@
 
 pair<int, int> Notes::minMax(vector<int>& nums)
 {
-	int len = nums.size(), mi, ma, i = 1, temp;
+	size_t len = nums.size();
+	int mi, ma, i = 1;
 	if (len == 0)
 		throw;
 	if (len == 1)
@@ -30,18 +31,4 @@ pair<int, int> Notes::minMax(vector<int>& nums)
 			if (nums[i] > ma) ma = nums[i];
 		}
 	return { mi, ma };
-}
-
-NumMatrix::NumMatrix(vector<vector<int> >& matrix)
-{
-	int len1 = matrix.size(), len2 = matrix[0].size();
-	sums = vector<vector<int> >(len1 + 1, vector<int>(len2 + 1, 0));
-	for (int i = 0; i < len1; ++i)
-		for (int j = 0; j < len2; ++j)
-			sums[i + 1][j + 1] = sums[i + 1][j] + sums[i][j + 1] - sums[i][j] + matrix[i][j];	// careful here
-}
-
-int NumMatrix::sumRegion(int rol1, int col1, int rol2, int col2)
-{
-	return sums[rol2 + 1][col2 + 1] - sums[rol2 + 1][col1] - sums[rol1][col2 + 1] + sums[rol1][col1];
 }
