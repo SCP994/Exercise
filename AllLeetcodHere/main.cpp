@@ -1,5 +1,4 @@
 ﻿#include "Solution02.h"
-#include <stdio.h>
 
 /* notes
 	vector<int> a(2, 8); // 这样生成含有两个元素且值为8的向量
@@ -10,10 +9,10 @@
 */
 
 void test()
-{	
+{
 	Solution s;
-	cout << s.lengthOfLongestSubstring("abcdef");
-	
+	vector<vector<int> > t = { {1, 3},{2, 6},{8, 10},{15, 18} };
+	s.merge(t);
 	
 }
 

@@ -91,3 +91,89 @@ int Solution::lengthOfLongestSubstring(string s)
     }
     return count;
 }
+
+int Solution::numSubarrayProductLessThanK(vector<int>& nums, int k)
+{
+    //auto f = [](int x)->int   // 不需要
+    //{
+    //    return x * (x + 1) / 2;
+    //};
+    int len = nums.size(), l = 0, r = 0, acc = 1, sum = 0, temp;
+    for (l = 0, r = 0; l < len && r < len;)
+        if (nums[r] >= k && l == r) // 注意 l == r
+        {
+            ++r;
+            l = r;
+            acc = 1;
+        }
+        else
+        {
+            acc *= nums[r];
+            temp = l;
+            while (acc >= k)
+                acc /= nums[l++];
+            //if (temp != l)
+            //    sum += f(l - temp + r - l) - f(r - l);
+            sum += r - l + 1;   // 效率更高
+            ++r;
+        }
+    //sum += f(r - l);
+    return sum;
+}
+
+int Solution::numSubarrayProductLessThanK_(vector<int>& nums, int k)
+{
+    int len = nums.size(), acc = 1, sum = 0;
+    for (int r = 0, l = 0; r < len; ++r)
+    {
+        acc *= nums[r];
+        while (l <= r && acc >= k)
+        {
+            acc /= nums[l];
+            ++l;
+        }
+        sum += r - l + 1;
+    }
+    return sum;
+}
+
+int Solution::hammingWeight(uint32_t n)
+{
+    int count = 0;
+    while (n > 0)
+    {
+        if (n % 2 == 1)
+            ++count;
+        n /= 2;
+    }
+    return count;
+}
+
+int Solution::hammingWeight_(uint32_t n)
+{
+    int count = 0;
+    while (n)
+    {
+        count += n & 1;
+        n >>= 1;
+    }
+    return count;
+}
+
+int Solution::hammingWeight__(uint32_t n)
+{
+    int count = 0;
+    while (n)
+    {
+        ++count;
+        n &= n - 1; // 或 n -= (n & -n);
+    }
+    return count;
+}
+
+vector<vector<int> > Solution::merge(vector<vector<int> >& intervals)
+{
+
+
+
+}
