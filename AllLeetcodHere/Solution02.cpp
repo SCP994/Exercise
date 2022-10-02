@@ -173,7 +173,87 @@ int Solution::hammingWeight__(uint32_t n)
 
 vector<vector<int> > Solution::merge(vector<vector<int> >& intervals)
 {
+    int len = intervals.size();
+    vector<vector<int> > result;
+    for (auto i = intervals.begin(); i != intervals.end(); ++i)
+        for (auto j = i + 1; j != intervals.end(); ++j)
+            if ((*j)[1] >= (*i)[0] && (*j)[0] <= (*i)[1])
+            {
+                (*j)[0] = min((*i)[0], (*j)[0]);
+                (*j)[1] = max((*i)[1], (*j)[1]);
+                (*i)[0] = inf;
+                break;
+            }
+    for (auto i = intervals.begin(); i != intervals.end(); ++i)
+        if ((*i)[0] != inf)
+            result.push_back(*i);
+    return result;
+}
 
+vector<vector<int> > Solution::merge_(vector<vector<int> >& intervals)
+{
+    int len = intervals.size();
+    vector<vector<int> > result;
+    sort(intervals.begin(), intervals.end());   // #include <algorithm>
+    int st = intervals[0][0], ed = intervals[0][1], s, e;   // 先排序，后遍历合并
+    for (auto i = ++intervals.begin(); i != intervals.end(); ++i)
+    {
+        s = (*i)[0], e = (*i)[1];
+        if (s > ed)
+        {
+            result.push_back({ st, ed });
+            st = s, ed = e;
+        }
+        else
+            ed = max(ed, e);
+    }
+    result.push_back({ st, ed });
+    return result;
+}
 
+vector<int> Solution::dailyTemperatures(vector<int>& temperatures)
+{
+    int len = temperatures.size();
+    vector<int> result(len);
+    stack<pair<int, int> > temp;
+    for (int i = 0; i < len; ++i)
+    {
+        while (!temp.empty())
+            if (temp.top().first >= temperatures[i])
+            {
+                temp.push({ temperatures[i], i });
+                break;
+            }
+            else
+            {
+                result[temp.top().second] = i - temp.top().second;
+                temp.pop();
+            }
+        if (temp.empty())
+            temp.push({ temperatures[i], i });
+    }
+    while (!temp.empty())
+    {
+        result[temp.top().second] = 0;  // 不需要，vector 默认初始化值为 0
+        temp.pop();
+    }
+    return result;
+}
 
+vector<int> Solution::dailyTemperatures_(vector<int>& temperatures)
+{
+    int len = temperatures.size();
+    vector<int> result(len);
+    stack<int> temp;    // 只存索引
+    for (int i = 0; i < len; ++i)
+    {
+        while (!temp.empty() && temperatures[i] > temperatures[temp.top()])
+        {
+            int t = temp.top();
+            result[t] = i - t;
+            temp.pop();
+        }
+        temp.push(i);
+    }
+    return result;
 }

@@ -2,6 +2,8 @@
 #include <vector>
 #include <set>
 #include <unordered_set>
+#include <algorithm>
+#include <stack>
 using namespace std;
 
 class BinaryIndexedTree
@@ -46,7 +48,13 @@ public:
 
 	int hammingWeight__(uint32_t n);
 
-	vector<vector<int> > merge(vector<vector<int> >& intervals);
+	vector<vector<int> > merge(vector<vector<int> >& intervals);	// leetcode 56 10/1/22
+
+	vector<vector<int> > merge_(vector<vector<int> >& intervals);
+
+	vector<int> dailyTemperatures(vector<int>& temperatures);	// leetcode 739 10/2/22 单调栈
+
+	vector<int> dailyTemperatures_(vector<int>& temperatures);
 
 	void printV(vector<vector<int> >& t)
 	{

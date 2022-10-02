@@ -11,8 +11,10 @@
 void test()
 {
 	Solution s;
-	vector<vector<int> > t = { {1, 3},{2, 6},{8, 10},{15, 18} };
-	s.merge(t);
+	vector<int> t = { 73, 74, 75, 71, 69, 72, 76, 73 };
+	vector<int> a = s.dailyTemperatures(t);
+	for (auto i : a)
+		cout << i << " ";
 	
 }
 
