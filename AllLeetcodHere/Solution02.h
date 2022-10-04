@@ -4,6 +4,7 @@
 #include <unordered_set>
 #include <algorithm>
 #include <stack>
+#include <cmath>
 using namespace std;
 
 class BinaryIndexedTree
@@ -55,6 +56,12 @@ public:
 	vector<int> dailyTemperatures(vector<int>& temperatures);	// leetcode 739 10/2/22 单调栈
 
 	vector<int> dailyTemperatures_(vector<int>& temperatures);
+
+	int sumSubarrayMins(vector<int>& arr);	// leetcode 907 10/3-4/22 单调栈 *
+
+	int maxWidthRamp(vector<int>& nums);	// leetcode 962 10/4/22
+
+	int maxWidthRamp_(vector<int>& nums);
 
 	void printV(vector<vector<int> >& t)
 	{

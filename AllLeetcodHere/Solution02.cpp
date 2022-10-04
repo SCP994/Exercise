@@ -257,3 +257,68 @@ vector<int> Solution::dailyTemperatures_(vector<int>& temperatures)
     }
     return result;
 }
+
+int Solution::sumSubarrayMins(vector<int>& arr)
+{
+    int len = arr.size();
+    vector<int> left(len, -1), right(len, len);
+    stack<int> temp;
+    for (int i = 0; i < len; ++i)
+    {
+        while (!temp.empty() && arr[temp.top()] >= arr[i])
+            temp.pop();
+        if (!temp.empty())
+            left[i] = temp.top();
+        temp.push(i);
+    }
+    temp = stack<int>();
+    for (int i = len - 1; i >= 0; --i)
+    {
+        while (!temp.empty() && arr[temp.top()] > arr[i])
+            temp.pop();
+        if (!temp.empty())
+            right[i] = temp.top();
+        temp.push(i);
+    }
+    long sum = 0;
+    for (int i = 0; i < len; ++i)
+        sum += (long)(i - left[i]) * (right[i] - i) * arr[i];
+    return sum % (int)(1e9 + 7);
+}
+
+int Solution::maxWidthRamp(vector<int>& nums)
+{
+    int len = nums.size(), width = 0;
+    vector<pair<int, int> > v;
+    for (int i = 0; i < len; ++i)
+        v.push_back({ nums[i], i });
+    sort(v.begin(), v.end());
+    int temp = v[0].second;
+    for (int i = 1; i < len; ++i)
+        if (v[i].second > temp)
+            width = max(width, v[i].second - temp);
+        else
+            temp = v[i].second;
+    return width;
+}
+
+int Solution::maxWidthRamp_(vector<int>& nums)
+{
+    int len = nums.size(), width = 0;
+    stack<int> temp;
+    temp.push(0);
+    for (int i = 1; i < len; ++i)
+        if (nums[i] < nums[temp.top()]) // 所有可能的 i 构成的子序列一定是单调递减的
+            temp.push(i);
+    for (int i = len - 1; i; --i)
+    {
+        while (!temp.empty() && nums[i] >= nums[temp.top()])
+        {
+            width = max(width, i - temp.top());
+            temp.pop();
+        }
+        if (temp.empty())
+            break;
+    }
+    return width;
+}
