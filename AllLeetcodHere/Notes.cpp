@@ -1,4 +1,4 @@
-#include "Notes.h"
+﻿#include "Notes.h"
 
 pair<int, int> Notes::minMax(vector<int>& nums)
 {
@@ -31,4 +31,14 @@ pair<int, int> Notes::minMax(vector<int>& nums)
 			if (nums[i] > ma) ma = nums[i];
 		}
 	return { mi, ma };
+}
+
+void Notes::check()
+{
+	int i = 0b00000001000000100000010000001000;	// 如果是大端存储，数据低位保存到地址高位；小端存储，数据低位保存到地址低位
+	int j = 0b00001000000001000000001000000001;
+	int a = *(char*)&i;	// 取 int 四个字节中存储在地址低位的数字
+	int b = *(char*)&j;
+	cout << a << endl;	// 大端存储，值为 00000001；小端存储，值为 00001000
+	cout << b << endl;	// 与 a 的输出正好相反
 }

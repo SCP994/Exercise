@@ -61,7 +61,13 @@ public:
 
 	int maxWidthRamp(vector<int>& nums);	// leetcode 962 10/4/22
 
-	int maxWidthRamp_(vector<int>& nums);
+	int maxWidthRamp_(vector<int>& nums);	// *
+
+	int maxChunksToSorted(vector<int>& arr);	// leetcode 768 10/5/22 单调栈
+
+	int maxChunksToSorted_(vector<int>& arr);
+
+	long long subArrayRanges(vector<int>& nums);	// leetcode 2104 10/6/22 单调栈，与 leetcode 907 类似
 
 	void printV(vector<vector<int> >& t)
 	{

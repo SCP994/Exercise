@@ -322,3 +322,87 @@ int Solution::maxWidthRamp_(vector<int>& nums)
     }
     return width;
 }
+
+int Solution::maxChunksToSorted(vector<int>& arr)
+{
+    int len = arr.size(), count = 0;
+    stack<int> temp;
+    temp.push(0);
+    for (int i = 1; i < len; ++i)
+        if (arr[i] >= arr[temp.top()])
+            temp.push(i);   // 非严格递增的单调栈
+    for (int i = len - 1; i; --i)
+        if (i == temp.top())
+        {
+            temp.pop();
+            ++count;    // 遇到自己加 1
+        }
+        else
+        {
+            int t = temp.top();
+            temp.pop();
+            while (!temp.empty() && arr[i] < arr[temp.top()])   // 和 top 下面的元素比较大小
+            {
+                t = temp.top();
+                temp.pop();
+            }
+            temp.push(t);
+        }
+    return count + 1;
+}
+
+int Solution::maxChunksToSorted_(vector<int>& arr)
+{
+    stack<int> temp;
+    for (auto& i : arr)
+        if (temp.empty() || temp.top() <= i)
+            temp.push(i);
+        else
+        {
+            int t = temp.top();
+            temp.pop();
+            while (!temp.empty() && temp.top() > i) // 遇到比 top 下面的元素小的值就弹掉这个元素
+                temp.pop();
+            temp.push(t);
+        }
+    return temp.size();
+}
+
+long long Solution::subArrayRanges(vector<int>& nums)
+{
+    int len = nums.size();
+    vector<int> leftMax(len, -1), leftMin(len, -1), rightMax(len, len), rightMin(len, len);
+    stack<int> tempMax, tempMin;
+    for (int i = 0; i < len; ++i)
+    {
+        while (!tempMax.empty() && nums[tempMax.top()] < nums[i])
+            tempMax.pop();
+        if (!tempMax.empty())
+            leftMax[i] = tempMax.top();
+        tempMax.push(i);
+        while (!tempMin.empty() && nums[tempMin.top()] >= nums[i])  // 注意等号要出现在一边
+            tempMin.pop();
+        if (!tempMin.empty())
+            leftMin[i] = tempMin.top();
+        tempMin.push(i);
+    }
+    tempMax = stack<int>();
+    tempMin = stack<int>();
+    for (int i = len - 1; i >= 0; --i)
+    {
+        while (!tempMax.empty() && nums[tempMax.top()] <= nums[i])
+            tempMax.pop();
+        if (!tempMax.empty())
+            rightMax[i] = tempMax.top();
+        tempMax.push(i);
+        while (!tempMin.empty() && nums[tempMin.top()] > nums[i])
+            tempMin.pop();
+        if (!tempMin.empty())
+            rightMin[i] = tempMin.top();
+        tempMin.push(i);
+    }
+    long long sum = 0;
+    for (int i = 0; i < len; ++i)
+        sum += (long long)nums[i] * ((rightMax[i] - i) * (i - leftMax[i]) - (rightMin[i] - i) * (i - leftMin[i]));
+    return sum;
+}
