@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <stack>
 #include <cmath>
+#include <queue>
 using namespace std;
 
 class BinaryIndexedTree
@@ -68,6 +69,16 @@ public:
 	int maxChunksToSorted_(vector<int>& arr);
 
 	long long subArrayRanges(vector<int>& nums);	// leetcode 2104 10/6/22 单调栈，与 leetcode 907 类似
+
+	int maxSumMinProduct(vector<int>& nums);	// leetcode 1856 10/7/22	单调栈 + 前缀和 *
+
+	vector<int> maxSlidingWindow(vector<int>& nums, int k);	// leetcode 239 10/7/22 单调栈
+
+	vector<int> maxSlidingWindow_(vector<int>& nums, int k);	// 单调队列 *
+
+	int findMaxValueOfEquation(vector<vector<int>>& points, int k);	// leetcode 1499 10/8/22 单调队列
+
+	int findMaxValueOfEquation_(vector<vector<int>>& points, int k);
 
 	void printV(vector<vector<int> >& t)
 	{

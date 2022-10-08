@@ -406,3 +406,127 @@ long long Solution::subArrayRanges(vector<int>& nums)
         sum += (long long)nums[i] * ((rightMax[i] - i) * (i - leftMax[i]) - (rightMin[i] - i) * (i - leftMin[i]));
     return sum;
 }
+
+int Solution::maxSumMinProduct(vector<int>& nums)
+{
+    int len = nums.size();
+    vector<int> leftMin(len, -1), rightMin(len, len);
+    stack<int> temp;
+    for (int i = 0; i < len; ++i)
+    {
+        while (!temp.empty() && nums[temp.top()] >= nums[i])
+            temp.pop();
+        if (!temp.empty())
+            leftMin[i] = temp.top();
+        temp.push(i);
+    }
+    temp = stack<int>();
+    for (int i = len - 1; i >= 0; --i)
+    {
+        while (!temp.empty() && nums[temp.top()] >= nums[i])
+            temp.pop();
+        if (!temp.empty())
+            rightMin[i] = temp.top();
+        temp.push(i);
+    }
+
+    vector<long> prefixSums(len + 1);
+    for (int i = 1; i <= len; ++i)
+        prefixSums[i] += prefixSums[i - 1] + nums[i - 1];   // 前缀和 *
+
+    long result = 0;
+    for (int i = 0; i < len; ++i)
+        result = max(result, (long)(prefixSums[rightMin[i]] - prefixSums[leftMin[i] + 1]) * nums[i]);
+    return result % (int)(1e9 + 7);
+}
+
+vector<int> Solution::maxSlidingWindow(vector<int>& nums, int k)
+{
+    int len = nums.size();
+    vector<int> result, leftMax(len, -1), rightMax(len, len);
+    stack<int> temp;
+    for (int i = 0; i < len; ++i)
+    {
+        while (!temp.empty() && nums[temp.top()] < nums[i])
+            temp.pop();
+        if (!temp.empty())
+            leftMax[i] = i - temp.top() > k ? i - k : temp.top();
+        else if (i + 1 > k)
+            leftMax[i] = i - k;
+        temp.push(i);
+    }
+    temp = stack<int>();
+    for (int i = len - 1; i >= 0; --i)
+    {
+        while (!temp.empty() && nums[temp.top()] <= nums[i])
+            temp.pop();
+        if (!temp.empty())
+            rightMax[i] = temp.top() - i > k ? i + k : temp.top();
+        else if (len - i > k)
+            rightMax[i] = i + k;
+        temp.push(i);
+    }
+    for (int i = 0; i < len; ++i)
+    {
+        if (rightMax[i] - leftMax[i] <= k)
+            continue;
+        for (int j = 0; j < rightMax[i] - leftMax[i] - k; ++j)
+            result.push_back(nums[i]);
+    }
+    return result;
+}
+
+vector<int> Solution::maxSlidingWindow_(vector<int>& nums, int k)
+{
+    int len = nums.size();
+    deque<int> q;   // 双端队列
+    vector<int> result;
+    for (int i = 0; i < len; ++i)   // 单调队列
+    {
+        if (!q.empty() && q.front() < i - k + 1)
+            q.pop_front();
+        while (!q.empty() && nums[q.back()] <= nums[i])
+            q.pop_back();
+        q.push_back(i);
+        if (i >= k - 1)
+            result.push_back(nums[q.front()]);
+    }
+    return result;
+}
+
+int Solution::findMaxValueOfEquation(vector<vector<int> >& points, int k)
+{
+    int len = points.size(), result = -0x3f3f3f3f;
+    deque<int> q;
+    for (int i = 0; i < len; ++i)
+    {
+        while (!q.empty() && points[i][0] - points[q.front()][0] > k)
+            q.pop_front();
+        if (!q.empty())
+        {
+            result = max(result, points[i][0] - points[q.front()][0] + points[i][1] + points[q.front()][1]);    // 和单调队列最大值相加并更新
+            while (!q.empty() && points[i][0] - points[q.back()][0] + points[q.back()][1] <= points[i][1])  // 递减的单调队列
+                q.pop_back();
+        }
+        q.push_back(i);
+    }
+    return result;
+}
+
+int Solution::findMaxValueOfEquation_(vector<vector<int> >& points, int k)
+{
+    int result = -0x3f3f3f3f;
+    deque<vector<int> > q;
+    for (auto& item : points)
+    {
+        int x = item[0], y = item[1];
+        while (!q.empty() && x - q.front()[0] > k)
+            q.pop_front();
+        if (!q.empty())
+            result = max(result, x - q.front()[0] + y + q.front()[1]);
+        while (!q.empty() && y >= q.back()[1] + x - q.back()[0])
+            q.pop_back();
+        q.push_back(item);
+    }
+    return result;
+}
