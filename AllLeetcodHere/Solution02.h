@@ -30,7 +30,7 @@ private:
 class Solution
 {
 public:
-	const int inf = 0x3f3f;
+	const int inf = 0x3f3f3f3f;
 
 	vector<int> getModifiedArray(int length, vector<vector<int>>& updates);	// leetcode 370 9/25/22 未提交
 
@@ -79,6 +79,10 @@ public:
 	int findMaxValueOfEquation(vector<vector<int>>& points, int k);	// leetcode 1499 10/8/22 单调队列
 
 	int findMaxValueOfEquation_(vector<vector<int>>& points, int k);
+
+	int shortestSubarray(vector<int>& nums, int k);	// leetcode 862 10/9/22 单调队列
+
+	int constrainedSubsetSum(vector<int>& nums, int k);	// leetcode 1425 10/11/22 DP + 单调队列 ***
 
 	void printV(vector<vector<int> >& t)
 	{

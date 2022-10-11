@@ -530,3 +530,42 @@ int Solution::findMaxValueOfEquation_(vector<vector<int> >& points, int k)
     }
     return result;
 }
+
+int Solution::shortestSubarray(vector<int>& nums, int k)
+{
+    int len = nums.size(), result = inf;
+    vector<long> prefixSums(len + 1);
+    for (int i = 0; i < len; ++i)
+        prefixSums[i + 1] += prefixSums[i] + nums[i];   // 前缀和
+    deque<int> q;
+    for (int i = 0; i <= len; ++i)
+    {
+        while (!q.empty() && prefixSums[i] - prefixSums[q.front()] >= k)
+        {
+            result = min(result, i - q.front());
+            q.pop_front();
+        }
+        while (!q.empty() && prefixSums[i] <= prefixSums[q.back()]) // 递增的单调队列
+            q.pop_back();
+        q.push_back(i);
+    }
+    return result == inf ? -1 : result;
+}
+
+int Solution::constrainedSubsetSum(vector<int>& nums, int k)
+{
+    int len = nums.size(), result = -inf;
+    vector<int> dp(len);
+    deque<int> q;
+    for (int i = 0; i < len; ++i)
+    {
+        if (!q.empty() && i - q.front() > k)
+            q.pop_front();
+        dp[i] = max(0, q.empty() ? 0 : dp[q.front()]) + nums[i];
+        result = max(result, dp[i]);
+        while (!q.empty() && dp[q.back()] <= dp[i])
+            q.pop_back();
+        q.push_back(i);
+    }
+    return result;
+}
