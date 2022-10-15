@@ -140,15 +140,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BinaryIndexedTree.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Notes.cpp" />
     <ClCompile Include="Solution01.cpp" />
     <ClCompile Include="Solution02.cpp" />
+    <ClCompile Include="TrieTree.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BinaryIndexedTree.h" />
     <ClInclude Include="Notes.h" />
     <ClInclude Include="Solution02.h" />
     <ClInclude Include="Solution01.h" />
+    <ClInclude Include="TrieTree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

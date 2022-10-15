@@ -1,5 +1,6 @@
 ﻿#include "Notes.h"
 
+
 pair<int, int> Notes::minMax(vector<int>& nums)
 {
 	size_t len = nums.size();
@@ -41,4 +42,26 @@ void Notes::check()
 	int b = *(char*)&j;
 	cout << a << endl;	// 大端存储，值为 00000001；小端存储，值为 00001000
 	cout << b << endl;	// 与 a 的输出正好相反
+}
+
+float Notes::testTime()
+{
+	auto t_start = chrono::high_resolution_clock::now();
+	// 要测试的代码
+	auto t_end = chrono::high_resolution_clock::now();
+	float t_total = chrono::duration<float, std::milli>(t_end - t_start).count();
+	std::cout << "1 detection and track total take: " << t_total << " ms." << std::endl;
+	return t_total;
+}
+
+void Notes::malloc_free()
+{
+	char* ptr = (char*)malloc(8);
+	if (!ptr)
+		throw bad_alloc();
+	for (int i = 0; i < 7; ++i)
+		ptr[i] = 'a' + i;
+	ptr[7] = '\0';
+	cout << ptr << endl;	// abcdefg
+	free(ptr);
 }

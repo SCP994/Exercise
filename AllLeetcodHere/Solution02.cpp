@@ -1,25 +1,5 @@
 ﻿#include "Solution02.h"
 
-void BinaryIndexedTree::update(int index, int value)
-{
-    while (index <= length)
-    {
-        v[index] += value;
-        index += lowbit(index);
-    }
-}
-
-int BinaryIndexedTree::query(int index)
-{
-    int sum = 0;
-    while (index > 0)
-    {
-        sum += v[index];
-        index -= lowbit(index);
-    }
-    return sum;
-}
-
 vector<int> Solution::getModifiedArray(int length, vector<vector<int> >& updates)
 {
     vector<int> result(length, 0);
@@ -568,4 +548,259 @@ int Solution::constrainedSubsetSum(vector<int>& nums, int k)
         q.push_back(i);
     }
     return result;
+}
+
+string Solution::shortestPalindrome(string s)
+{
+    int len = s.length();
+    string result;
+    for (int i = len; i; --i)
+    {
+        string right = s.substr(i / 2, i - i / 2);
+        reverse(right.begin(), right.end());
+        string left = s.substr(0, i / 2 + i % 2);
+        if (right == left)
+        {
+            string temp = s.substr(i / 2 + i % 2, len - i / 2 - i % 2);
+            string mid = i % 2 ? s.substr(i / 2, 1) : "";
+            reverse(temp.begin(), temp.end());
+            result += temp;
+            result += mid;
+            reverse(temp.begin(), temp.end());
+            result += temp;
+            break;
+        }
+    }
+    return result;
+}
+
+string Solution::shortestPalindrome_(string s)
+{
+    int len = s.size(), base = 131, idx = 0;    // 字符串哈希，base 一般取 131 或 13331
+    // 通常 mod 取 2^64，C++ 里 unsigned long long 溢出即自动对 2^64 取模
+    ull mul = 1;    // typedef unsigned long long ull;
+    ull prefix = 0, suffix = 0;
+    for (int i = 0; i < len; ++i)
+    {
+        int t = s[i] - 'a' + 1;
+        prefix = prefix * base + t;
+        prefix = prefix * base + t;
+        suffix = suffix + mul * t;
+        mul *= base;
+        if (prefix == suffix)
+            idx = i + 1;
+    }
+    if (idx == len)
+        return s;   // 可省去一次 reverse
+    string result = s.substr(idx, len - idx);
+    reverse(result.begin(), result.end());
+    result += s;
+    return result;
+}
+
+vector<vector<int> > Solution::palindromePairs(vector<string>& words)   // 字符串哈希，效率一般
+{
+    int len = words.size(), base = 131;
+    ull prefix = 0, suffix = 0, mul = 1;
+    vector<vector<ull> > hash;
+    for (int i = 0; i < len; ++i)
+    {
+        int len_word = words[i].size();
+        for (int j = 0; j < len_word; ++j)
+        {
+            int t = words[i][j] - 'a' + 1;
+            prefix = prefix * base + t;
+            suffix = suffix + mul * t;
+            mul *= base;
+        }
+        hash.push_back({ prefix, suffix, mul });
+        prefix = 0;
+        suffix = 0;
+        mul = 1;
+    }
+    vector<vector<int> > result;
+    for (int i = 0; i < len; ++i)
+        for (int j = i + 1; j < len; ++j)
+        {
+            ull p_i = hash[i][0], s_i = hash[i][1], mul_i = hash[i][2];
+            ull p_j = hash[j][0], s_j = hash[j][1], mul_j = hash[j][2];
+            ull a = p_i * mul_j + p_j, b = s_j * mul_i + s_i;
+            if (a == b)
+                result.push_back({ i, j });
+            a = p_j * mul_i + p_i; b = s_i * mul_j + s_j;
+            if (a == b)
+                result.push_back({ j, i });
+        }
+    return result;
+}
+
+bool Solution::isPalindrome(string& str, int left, int right)
+{
+    int len = right - left + 1;
+    for (int i = 0; i < len / 2; ++i)
+        if (str[left + i] != str[right - i])
+            return false;
+    return true;
+}
+
+vector<vector<int> > Solution::palindromePairs_(vector<string>& words)
+{
+    TrieTree trieTree;
+    int len = words.size();
+    for (int i = 0; i < len; ++i)
+        trieTree.insert(words[i], i);
+    vector<vector<int> > result;
+    for (int i = 0; i < len; ++i)
+    {
+        int n = words[i].size();
+        for (int j = 0; j <= n; ++j)
+        {
+            if (j && isPalindrome(words[i], 0, j - 1))  // 如果没有 j 会重复加入
+            {
+                int k = trieTree.findWord(words[i], j, n - 1);
+                if (k != -1 && k != i)
+                    result.push_back({ k, i });
+            }
+            if (isPalindrome(words[i], j, n - 1))
+            {
+                int k = trieTree.findWord(words[i], 0, j - 1);
+                if (k != -1 && k != i)
+                    result.push_back({ i, k });
+            }
+        }
+    }
+    return result;
+}
+
+vector<pair<int, int> > Solution::manacher(string& s)
+{
+    int len = s.size();
+    string temp = "#";
+    temp += s[0];
+    for (int i = 1; i < len; ++i)
+    {
+        temp += "*";
+        temp += s[i];
+    }
+    temp += "!";
+    int m = len * 2;
+    vector<int> v(m);
+    vector<pair<int, int> > result(len);
+    int p = 0, maxn = -1;
+    for (int i = 1; i < m; ++i)
+    {
+        v[i] = maxn > i ? min(v[p - (i - p)], maxn - i) : 0;
+        while (temp[i - v[i] - 1] == temp[i + v[i] + 1])
+            ++v[i];
+        if (i + v[i] > maxn)
+        {
+            p = i;
+            maxn = i + v[i];
+        }
+        if (i - v[i] == 1)
+            result[(i + v[i]) / 2].first = 1;
+        if (i + v[i] == m - 1)
+            result[(i - v[i]) / 2].second = 1;
+    }
+    return result;
+}
+
+vector<vector<int> > Solution::palindromePairs__(vector<string>& words)
+{
+    TrieTree trie1, trie2;
+    int len = words.size();
+    for (int i = 0; i < len; ++i)
+    {
+        trie1.insert(words[i], i);
+        string temp = words[i];
+        reverse(temp.begin(), temp.end());
+        trie2.insert(temp, i);
+    }
+    vector<vector<int> > result;
+    for (int i = 0; i < len; ++i)
+    {
+        const vector<pair<int, int> >& mana = manacher(words[i]);
+        const vector<int>& id1 = trie2.query(words[i]); // 逆序里找正序
+        reverse(words[i].begin(), words[i].end());
+        const vector<int>& id2 = trie1.query(words[i]); // 正序里找逆序
+        int m = words[i].size();
+        int t = id1[m];
+        if (t != -1 && t != i)
+            result.push_back({ i, t });
+        for (int j = 0; j < m; ++j)
+        {
+            if (mana[j].first)
+            {
+                t = id2[m - j - 1];
+                if (t != -1)
+                    result.push_back({ t, i });
+            }
+            if (mana[j].second)
+            {
+                t = id1[j];
+                if (t != -1)
+                    result.push_back({ i, t });
+            }
+        }
+    }
+    return result;
+}
+
+string Solution::longestDupSubstring(string s)
+{
+    int len = s.size(), base = 131, idx = 0, left = 0, right = len;
+    ull suffix;
+    vector<ull> p(len + 1), h(len + 1);
+    p[0] = 1;
+    for (int i = 0; i < len; ++i)
+    {
+        int t = s[i] - 'a' + 1;
+        p[i + 1] = p[i] * base; // 提前算出来
+        h[i + 1] = h[i] * base + t;
+    }
+    unordered_set<ull> ullSet;
+    while (left < right)    // 二分查找
+    {
+        int mid = left + right + 1 >> 1;
+        ullSet.clear();
+        for (int i = 0; i < len - mid + 1; ++i)
+        {
+            suffix = h[i + mid] - h[i] * p[mid];
+            if (ullSet.find(suffix) == ullSet.end())
+                ullSet.insert(suffix);
+            else
+            {
+                left = mid;
+                idx = i;
+                break;
+            }
+            if (i == len - mid)
+                right = mid - 1;
+        }
+    }
+    return s.substr(idx, left);
+}
+
+int Solution::distinctEchoSubstrings(string text)
+{
+    int len = text.size(), base = 131;
+    vector<ull> p(len + 1), h(len + 1);
+    p[0] = 1;
+    for (int i = 0; i < len; ++i)
+    {
+        int t = text[i] - 'a' + 1;
+        p[i + 1] = p[i] * base;
+        h[i + 1] = h[i] * base + t;
+    }
+    unordered_set<ull> ullSet;
+    for (int i = 0; i < len - 1; ++i)
+        for (int j = i + 1; j < len; j += 2)
+        {
+            int k = i + j >> 1;
+            ull a = h[k + 1] - h[i] * p[k + 1 - i];         // i 到 k
+            ull b = h[j + 1] - h[k + 1] * p[j + 1 - k - 1]; // k + 1 到 j + 1
+            if (a == b)
+                ullSet.insert(a);
+        }
+    return ullSet.size();
 }

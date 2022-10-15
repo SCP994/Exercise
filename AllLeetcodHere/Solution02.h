@@ -1,37 +1,19 @@
 ﻿#include <iostream>
 #include <vector>
-#include <set>
+#include <stack>
+#include <deque>
 #include <unordered_set>
 #include <algorithm>
-#include <stack>
 #include <cmath>
-#include <queue>
+#include "BinaryIndexedTree.h"
+#include "TrieTree.h"
 using namespace std;
 
-class BinaryIndexedTree
-{
-public:
-	BinaryIndexedTree(int l) : length(l), v(l + 1) {}
-
-	void update(int index, int value);
-
-	int query(int index);
-
-	int lowbit(int x)
-	{
-		return x & -x;
-	}
-
-private:
-	int length;
-	vector<int> v;
-};
+typedef unsigned long long ull;
 
 class Solution
 {
 public:
-	const int inf = 0x3f3f3f3f;
-
 	vector<int> getModifiedArray(int length, vector<vector<int>>& updates);	// leetcode 370 9/25/22 未提交
 
 	vector<int> getModifiedArray_(int length, vector<vector<int>>& updates);	// 树状数组（BIT）和差分思想
@@ -82,18 +64,28 @@ public:
 
 	int shortestSubarray(vector<int>& nums, int k);	// leetcode 862 10/9/22 单调队列
 
-	int constrainedSubsetSum(vector<int>& nums, int k);	// leetcode 1425 10/11/22 DP + 单调队列 ***
+	int constrainedSubsetSum(vector<int>& nums, int k);	// leetcode 1425 10/11/22 DP 单调队列 ***
 
-	void printV(vector<vector<int> >& t)
-	{
-		for (auto i : t)
-		{
-			for (auto j : i)
-				cout << j << " ";
-			cout << endl;
-		}
-	}
+	bool wordPatternMatch(string pattern, string s);	// leetcode 291 不会
+
+	string shortestPalindrome(string s);	// leetcode 214 10/12/22
+
+	string shortestPalindrome_(string s);	// 字符串哈希
+
+	vector<vector<int> > palindromePairs(vector<string>& words);	// leetcode 336 10/13/22
+
+	bool isPalindrome(string& str, int left, int right);	// 判断是否是回文串
+
+	vector<vector<int> > palindromePairs_(vector<string>& words);	// 字典树
+
+	vector<pair<int, int> > manacher(string& s);
+
+	vector<vector<int> > palindromePairs__(vector<string>& words);	// 字典树 Manacher
+
+	string longestDupSubstring(string s);	// leetcode 1044 10/14/22 字符串哈希 二分查找
+	
+	int distinctEchoSubstrings(string text);	// leetcode 1316 10/15/22 字符串哈希 *
 
 private:
-
+	const int inf = 0x3f3f3f3f;
 };
