@@ -1,4 +1,5 @@
-﻿#include <vector>
+﻿#pragma once
+#include <vector>
 #include <iostream>
 #include <chrono>
 using namespace std;
@@ -22,6 +23,9 @@ using namespace std;
 	结构体：将不同类型的数据组合成一个整体，是自定义类型;  共同体：不同类型的几个变量共同占用一段内存
 		1）结构体中的每个成员都有自己独立的地址，它们是同时存在的； 共同体中的所有成员占用同一段内存，它们不能同时存在
 		2）sizeof(struct)是内存对齐后所有成员长度的总和，sizeof(union)是内存对齐后最长数据成员的长度
+	void pointer in C / C++:
+		A void pointer is a pointer that has no associated data type with it.
+		A void pointer can hold address of any type and can be typecasted to any type.
 
 */
 

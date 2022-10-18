@@ -1,8 +1,10 @@
-﻿#include <iostream>
+﻿#pragma once
+#include <iostream>
 #include <vector>
 #include <stack>
 #include <deque>
 #include <unordered_set>
+#include <unordered_map>
 #include <algorithm>
 #include <cmath>
 #include "BinaryIndexedTree.h"
@@ -66,8 +68,6 @@ public:
 
 	int constrainedSubsetSum(vector<int>& nums, int k);	// leetcode 1425 10/11/22 DP 单调队列 ***
 
-	bool wordPatternMatch(string pattern, string s);	// leetcode 291 不会
-
 	string shortestPalindrome(string s);	// leetcode 214 10/12/22
 
 	string shortestPalindrome_(string s);	// 字符串哈希
@@ -85,6 +85,10 @@ public:
 	string longestDupSubstring(string s);	// leetcode 1044 10/14/22 字符串哈希 二分查找
 	
 	int distinctEchoSubstrings(string text);	// leetcode 1316 10/15/22 字符串哈希 *
+
+	bool dfs_291(int i, int j, string& p, string& s, unordered_set<string>& vis, unordered_map<char, string>& d);
+
+	bool wordPatternMatch(string pattern, string s);	// leetcode 291 10/16/22 哈希表 ***
 
 private:
 	const int inf = 0x3f3f3f3f;

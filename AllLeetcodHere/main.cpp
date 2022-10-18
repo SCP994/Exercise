@@ -1,4 +1,5 @@
-﻿#include "Solution02.h"
+﻿#include <iostream>
+#include "Solution03.h"
 //#include "Notes.h"
 
 template <typename T>
@@ -23,11 +24,15 @@ void printVV(vector<vector<T> >& t)
 void test()
 {
 	Solution s;
+	vector<vector<int> > v1 = { {1, 1, 1}, {1, 1, 1}, {1, 1, 0} };
+	vector<vector<int> > v2 = s.updateMatrix_(v1);
+	printVV<int>(v1);
+	printVV<int>(v2);
 
 }
 
 int main(void)
 {
-
+	
 	test();
 }
