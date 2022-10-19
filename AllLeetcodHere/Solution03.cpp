@@ -96,3 +96,33 @@ vector<vector<int>> Solution::updateMatrix_(vector<vector<int>>& mat)
     }
     return result;
 }
+
+vector<vector<int>> Solution::highestPeak(vector<vector<int>>& isWater)
+{
+    int m = isWater.size(), n = isWater[0].size();
+    vector<vector<int> > result(m, vector<int>(n, -1));
+    deque<pair<int, int> > q;
+    for (int i = 0; i < m; ++i)
+        for (int j = 0; j < n; ++j)
+            if (isWater[i][j])
+            {
+                result[i][j] = 0;
+                q.emplace_back(i, j);
+            }
+    vector<int> dis = { 0, 1, 0, -1, 0 };
+    while (!q.empty())
+    {
+        auto p = q.front();
+        q.pop_front();
+        for (int i = 0; i < 4; ++i)
+        {
+            int x = p.first + dis[i], y = p.second + dis[i + 1];
+            if (x >= 0 && x < m && y >= 0 && y < n && result[x][y] == -1)
+            {
+                result[x][y] = result[p.first][p.second] + 1;
+                q.emplace_back(x, y);
+            }
+        }
+    }
+    return result;
+}

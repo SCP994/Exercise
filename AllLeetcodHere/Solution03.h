@@ -16,6 +16,8 @@ public:
 
 	vector<vector<int> > updateMatrix_(vector<vector<int> >& mat);	// 多源 BFS
 
+	vector<vector<int>> highestPeak(vector<vector<int>>& isWater);	// leetcode 1765 10/19/22 多源 BFS
+
 private:
 	const int inf = 0x3f3f3f3f;
 };
