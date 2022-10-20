@@ -1,6 +1,7 @@
-﻿
+﻿#pragma once
 #include <vector>
 #include <deque>
+#include <unordered_map>
 using namespace std;
 
 typedef unsigned long long ull;
@@ -17,6 +18,12 @@ public:
 	vector<vector<int> > updateMatrix_(vector<vector<int> >& mat);	// 多源 BFS
 
 	vector<vector<int>> highestPeak(vector<vector<int>>& isWater);	// leetcode 1765 10/19/22 多源 BFS
+
+	int minKnightMoves(int x, int y);	// leetcode 1197 10/20/22 BFS
+
+	int minKnightMoves_(int x, int y);	// 双向 BFS
+
+	int extend(unordered_map<int, int>& m1, unordered_map<int, int>& m2, deque<pair<int, int> >& q);
 
 private:
 	const int inf = 0x3f3f3f3f;

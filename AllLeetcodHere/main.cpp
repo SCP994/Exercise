@@ -24,10 +24,7 @@ void printVV(vector<vector<T> >& t)
 void test()
 {
 	Solution s;
-	vector<vector<int> > v1 = { { 0, 0, 1 }, { 1, 0, 0 }, { 0, 0, 0 } };
-	vector<vector<int> > v2 = s.highestPeak(v1);
-	printVV<int>(v1);
-	printVV<int>(v2);
+	cout << s.minKnightMoves_(5, 5) << endl;
 }
 
 int main(void)

@@ -126,3 +126,76 @@ vector<vector<int>> Solution::highestPeak(vector<vector<int>>& isWater)
     }
     return result;
 }
+
+int Solution::minKnightMoves(int x, int y)
+{
+    x += 310;
+    y += 310;
+    vector<pair<int, int> > dis = { { 1, 2 }, { 1, -2 }, { 2, 1 }, { 2, -1 }, { -1, 2 }, { -1, -2 }, { -2, 1 }, { -2, -1 } };
+    vector<vector<bool> > vis(600, vector<bool>(600));
+    deque<pair<int, int> > q;
+    q.emplace_back(310, 310);
+    int result = 0;
+    if (x == 310 && y == 310) return result;
+    while (!q.empty())
+    {
+        for (int i = q.size(); i; --i)
+        {
+            auto p = q.front();
+            q.pop_front();
+            vis[p.first][p.second] = true;
+            for (auto& j : dis)
+            {
+                int tx = p.first + j.first;
+                int ty = p.second + j.second;
+                if (tx == x && ty == y)
+                    return result;
+                if (!vis[tx][ty])
+                    q.emplace_back(tx, ty);
+            }
+        }
+        ++result;
+    }
+    return -1;
+}
+
+int Solution::minKnightMoves_(int x, int y)
+{
+    if (x == 0 && y == 0) return 0;
+    x += 310;
+    y += 310;
+    deque<pair<int, int> > q1, q2;
+    q1.emplace_back(310, 310);
+    q2.emplace_back(x, y);
+    unordered_map<int, int> m1, m2;
+    m1[310 * 700 + 310] = 0;
+    m2[x * 700 + y] = 0;
+    while (!q1.empty() && !q2.empty())  // 有一个队列为空说明当前方向的搜索进行不下去，这题应该不会出现这个情况
+    {
+        int t = q2.size() > q1.size() ? extend(m2, m1, q1) : extend(m1, m2, q2);
+        if (t != -1)
+            return t;
+    }
+    return -1;
+}
+
+int Solution::extend(unordered_map<int, int>& m1, unordered_map<int, int>& m2, deque<pair<int, int>>& q)
+{
+    vector<pair<int, int> > dis = { { 1, 2 }, { 1, -2 }, { 2, 1 }, { 2, -1 }, { -1, 2 }, { -1, -2 }, { -2, 1 }, { -2, -1 } };
+    for (int i = q.size(); i; --i)
+    {
+        auto p = q.front();
+        q.pop_front();
+        for (auto& i : dis)
+        {
+            int x = p.first + i.first, y = p.second + i.second;
+            if (m2.count(x * 700 + y)) continue;
+            if (m1.count(x * 700 + y))
+                return m1[x * 700 + y] + m2[p.first * 700 + p.second] + 1;
+            m2[x * 700 + y] = m2[p.first * 700 + p.second] + 1;
+            q.emplace_back(x, y);
+        }
+    }
+    return -1;
+}
+
