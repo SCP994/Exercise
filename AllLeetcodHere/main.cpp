@@ -29,6 +29,7 @@ void test()
 
 int main(void)
 {
-	
-	test();
+	int a = -1;
+	cout << a << " " << !(a) << " " << !!(a) << endl;
+//	test();
 }

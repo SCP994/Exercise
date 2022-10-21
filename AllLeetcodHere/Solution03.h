@@ -23,7 +23,11 @@ public:
 
 	int minKnightMoves_(int x, int y);	// 双向 BFS
 
-	int extend(unordered_map<int, int>& m1, unordered_map<int, int>& m2, deque<pair<int, int> >& q);
+	int extend_1197(unordered_map<int, int>& m1, unordered_map<int, int>& m2, deque<pair<int, int> >& q);
+
+	int shortestPathBinaryMatrix(vector<vector<int>>& grid); // leetcode 1091 10/21/22 双向 BFS，朴素 BFS 可能更快
+
+	int extend_1091(unordered_map<int, int>& m_oppo, unordered_map<int, int>& m, deque<pair<int, int> >& q, int n, vector<vector<int> >& grid);
 
 private:
 	const int inf = 0x3f3f3f3f;

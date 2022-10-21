@@ -172,14 +172,14 @@ int Solution::minKnightMoves_(int x, int y)
     m2[x * 700 + y] = 0;
     while (!q1.empty() && !q2.empty())  // 有一个队列为空说明当前方向的搜索进行不下去，这题应该不会出现这个情况
     {
-        int t = q2.size() > q1.size() ? extend(m2, m1, q1) : extend(m1, m2, q2);
+        int t = q2.size() > q1.size() ? extend_1197(m2, m1, q1) : extend_1197(m1, m2, q2);
         if (t != -1)
             return t;
     }
     return -1;
 }
 
-int Solution::extend(unordered_map<int, int>& m1, unordered_map<int, int>& m2, deque<pair<int, int>>& q)
+int Solution::extend_1197(unordered_map<int, int>& m1, unordered_map<int, int>& m2, deque<pair<int, int>>& q)
 {
     vector<pair<int, int> > dis = { { 1, 2 }, { 1, -2 }, { 2, 1 }, { 2, -1 }, { -1, 2 }, { -1, -2 }, { -2, 1 }, { -2, -1 } };
     for (int i = q.size(); i; --i)
@@ -197,5 +197,54 @@ int Solution::extend(unordered_map<int, int>& m1, unordered_map<int, int>& m2, d
         }
     }
     return -1;
+}
+
+int Solution::shortestPathBinaryMatrix(vector<vector<int>>& grid)
+{
+    int n = grid.size();
+    if (grid[0][0] == 1 || grid[n - 1][n - 1] == 1)
+        return -1;
+    if (n == 1)
+        return 1;
+
+    unordered_map<int, int> m1, m2;
+    m1[0 * n + 0] = 1;
+    m2[(n - 1) * n + n - 1] = 0;
+    deque<pair<int, int> > q1, q2;
+    q1.emplace_back(0, 0);
+    q2.emplace_back(n - 1, n - 1);
+    while (!q1.empty() && !q2.empty())
+    {
+        int t = q1.size() > q2.size() ? extend_1091(m1, m2, q2, n, grid) : extend_1091(m2, m1, q1, n, grid);
+        if (t)
+            return t;
+    }
+    return -1;
+}
+
+int Solution::extend_1091(unordered_map<int, int>& m_oppo, unordered_map<int, int>& m, deque<pair<int, int> >& q, int n, vector<vector<int> >& grid)
+{
+    vector<pair<int, int> > dis = { { 0, 1 }, { 0, -1 }, { 1, 0 }, { -1, 0 }, { 1, 1 }, { 1, -1 }, { -1, 1 }, { -1, -1 } };
+    for (int i = q.size(); i; --i)
+    {
+        auto p = q.front();
+        q.pop_front();
+        int step = p.first * n + p.second;
+        for (auto& j : dis)
+        {
+            int x = p.first + j.first, y = p.second + j.second;
+            if (x >= 0 && x < n && y >= 0 && y < n && !grid[x][y])
+            {
+                int newStep = x * n + y;
+                if (m.count(newStep))
+                    continue;
+                if (m_oppo.count(newStep))
+                    return m_oppo[newStep] + m[step] + 1;
+                m[newStep] = m[step] + 1;
+                q.emplace_back(x, y);
+            }
+        }
+    }
+    return 0;
 }
 
