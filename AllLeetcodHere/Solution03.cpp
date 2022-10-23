@@ -248,3 +248,84 @@ int Solution::extend_1091(unordered_map<int, int>& m_oppo, unordered_map<int, in
     return 0;
 }
 
+int Solution::nearestExit(vector<vector<char>>& maze, vector<int>& entrance)
+{
+    int m = maze.size(), n = maze[0].size(), result = 0;
+    deque<vector<int> > q;
+    q.push_back(entrance);
+    maze[entrance[0]][entrance[1]] = '+'; // 不用设置标志数组，访问过的直接改为 '+'
+
+    vector<int> dis = { 0, 1, 0, -1, 0 };
+    while (!q.empty())
+    {
+        for (int i = q.size(); i; --i)
+        {
+            auto p = q.front();
+            q.pop_front();
+            for (int j = 0; j < 4; ++j)
+            {
+                int x = p[0] + dis[j], y = p[1] + dis[j + 1];
+                if (x >= 0 && x < m && y >= 0 && y < n && maze[x][y] == '.')
+                {
+                    if (x == 0 || x == m - 1 || y == 0 || y == n - 1)
+                        return result + 1;
+                    maze[x][y] = '+';
+                    q.push_back({ x, y });
+                }
+            }
+        }
+        ++result;
+    }
+    return -1;
+}
+
+int Solution::shortestPath(vector<vector<int>>& grid, int k)
+{
+    int m = grid.size(), n = grid[0].size();
+    if (m == 1 && n == 1)
+        return grid[0][0] > k ? -1 : 0;
+    if (k >= m + n - 3) // 这种情况可直接返回
+        return m + n - 2;
+    deque<vector<int> > q;
+    q.push_back({ 0, 0 });
+    unordered_map<int, int> sign;
+    sign[0] = grid[0][0];
+
+    vector<int> dis = { 0, 1, 0, -1, 0 };
+    int result = 0;
+    while (!q.empty())
+    {
+        ++result;
+        for (int i = q.size(); i; --i)
+        {
+            auto p = q.front();
+            q.pop_front();
+            int key_p = p[0] * n + p[1]; // 横坐标乘以列
+
+            for (int j = 0; j < 4; ++j)
+            {
+                int x = p[0] + dis[j], y = p[1] + dis[j + 1];
+                if (x >= 0 && x < m && y >= 0 && y < n)
+                {
+                    int key = x * n + y;
+                    if (!sign.count(key))
+                    {
+                        if (sign[key_p] + grid[x][y] > k)
+                            continue;
+                        if (x == m - 1 && y == n - 1)
+                            return result;
+                        q.push_back({ x, y });
+                        sign[key] = sign[key_p] + grid[x][y];
+                    }
+                    else if (sign[key_p] + grid[x][y] < sign[key])
+                    {
+                        q.push_back({ x, y });
+                        sign[key] = sign[key_p] + grid[x][y];
+                    }
+                }
+            }
+        }
+    }
+    return -1;
+}
+

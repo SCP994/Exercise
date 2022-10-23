@@ -29,6 +29,10 @@ public:
 
 	int extend_1091(unordered_map<int, int>& m_oppo, unordered_map<int, int>& m, deque<pair<int, int> >& q, int n, vector<vector<int> >& grid);
 
+	int nearestExit(vector<vector<char>>& maze, vector<int>& entrance); // leetcode 1926 10/22/22 BFS
+
+	int shortestPath(vector<vector<int>>& grid, int k); // leetcode 1293 10/23/22 BFS 最短路
+
 private:
 	const int inf = 0x3f3f3f3f;
 };

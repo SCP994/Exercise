@@ -24,12 +24,12 @@ void printVV(vector<vector<T> >& t)
 void test()
 {
 	Solution s;
-	cout << s.minKnightMoves_(5, 5) << endl;
+	vector<vector<int> > vv = { { 0, 0, 0 }, { 1, 1, 0 }, { 0, 0, 0 }, { 0, 1, 1 }, { 0, 0, 0 } };
+	cout << s.shortestPath(vv, 1) << endl;
 }
 
 int main(void)
 {
-	int a = -1;
-	cout << a << " " << !(a) << " " << !!(a) << endl;
-//	test();
+
+	test();
 }
