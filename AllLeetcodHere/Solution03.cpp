@@ -329,3 +329,129 @@ int Solution::shortestPath(vector<vector<int>>& grid, int k)
     return -1;
 }
 
+int Solution::openLock(vector<string>& deadends, string target)
+{
+    int n = deadends.size();
+    unordered_set<string> dead(deadends.begin(), deadends.end());
+    if (dead.count("0000"))
+        return -1;
+    if (target == "0000")
+        return 0;
+    deque<string> q { { "0000" } };
+    dead.insert("0000");
+
+    int result = 0;
+    string temp = "";
+    while (!q.empty())
+    {
+        ++result;
+        for (int i = q.size(); i; --i)
+        {
+            auto p = q.front();
+            q.pop_front();
+            for (int j = 0; j < 4; ++j)
+                for (int k = -1; k < 2; k += 2)
+                {
+                    temp = p;
+                    int t = (p[j] - '0' + k + 10) % 10;
+                    temp[j] = '0' + t;
+                    if (!dead.count(temp))
+                    {
+                        q.push_back(temp);
+                        dead.insert(temp); // 注意这里把被访问过的插入集合中，防止重复访问！
+                    }
+                    if (temp == target)
+                        return result;
+                }
+        }
+    }
+    return -1;
+}
+
+int Solution::openLock_(vector<string>& deadends, string target)
+{
+    unordered_set<string> dead(deadends.begin(), deadends.end());
+    if (dead.count("0000"))
+        return -1;
+    if (target == "0000")
+        return 0;
+    typedef pair<int, string> PIS;
+    priority_queue<PIS, vector<PIS>, greater<PIS> > q; // 小根堆（优先队列）
+    q.emplace(f("0000", target), "0000");
+    unordered_map<string, int> dist;
+    dist["0000"] = 0;
+
+    string temp = "";
+    while (!q.empty())
+    {
+        auto p = q.top();
+        q.pop();
+
+        for (int i = 0; i < 4; ++i)
+            for (int j = -1; j < 2; j += 2)
+            {
+                temp = p.second;
+                int t = (temp[i] - '0' + 10 + j) % 10;
+                temp[i] = '0' + t;
+                if (dead.count(temp))
+                    continue;
+                if (temp == target)
+                    return dist[p.second] + 1;
+                if (!dist.count(temp))
+                {
+                    dist[temp] = dist[p.second] + 1;
+                    q.emplace(f(temp, target) + dist[temp], temp);
+                }
+            }
+    }
+    return -1;
+}
+
+int Solution::f(string state, string& target)
+{
+    int result = 0;
+    for (int i = 0; i < 4; ++i)
+    {
+        int a = state[i] - '0', b = target[i] - '0';
+        int t = abs(a - b);
+        result += min(t, 10 - t);
+    }
+    return result;
+}
+
+int Solution::ladderLength(string beginWord, string endWord, vector<string>& wordList)
+{
+    unordered_set<string> words(wordList.begin(), wordList.end());
+    if (!words.count(endWord))
+        return 0;
+    unordered_set<string> vis { beginWord };
+    deque<string> q { beginWord };
+
+    string temp = "";
+    int result = 1;
+    while (!q.empty())
+    {
+        ++result;
+        for (int i = q.size(); i; --i)
+        {
+            auto p = q.front();
+            q.pop_front();
+
+            for (int j = p.size() - 1; j >= 0; --j)
+                for (int k = 0; k < 26; ++k)
+                {
+                    temp = p;
+                    temp[j] = 'a' + k;
+                    if (temp == endWord)
+                        return result;
+                    if (!vis.count(temp) && words.count(temp))
+                    {
+                        vis.insert(temp);
+                        q.push_back(temp);
+                    }
+                }
+        }
+    }
+    return 0;
+}
+

@@ -24,8 +24,8 @@ void printVV(vector<vector<T> >& t)
 void test()
 {
 	Solution s;
-	vector<vector<int> > vv = { { 0, 0, 0 }, { 1, 1, 0 }, { 0, 0, 0 }, { 0, 1, 1 }, { 0, 0, 0 } };
-	cout << s.shortestPath(vv, 1) << endl;
+	vector<string> vs = { "hot","dot","dog","lot","log","cog" };
+	cout << s.ladderLength("hit", "cog", vs) << endl;
 }
 
 int main(void)
@@ -33,3 +33,4 @@ int main(void)
 
 	test();
 }
+

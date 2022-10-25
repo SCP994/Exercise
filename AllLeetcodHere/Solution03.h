@@ -2,6 +2,8 @@
 #include <vector>
 #include <deque>
 #include <unordered_map>
+#include <unordered_set>
+#include <queue>
 using namespace std;
 
 typedef unsigned long long ull;
@@ -32,6 +34,14 @@ public:
 	int nearestExit(vector<vector<char>>& maze, vector<int>& entrance); // leetcode 1926 10/22/22 BFS
 
 	int shortestPath(vector<vector<int>>& grid, int k); // leetcode 1293 10/23/22 BFS 最短路
+
+	int openLock(vector<string>& deadends, string target); // leetcode 752 10/24/22
+
+	int openLock_(vector<string>& deadends, string target); // A* 算法
+
+	int f(string state, string& target);
+
+	int ladderLength(string beginWord, string endWord, vector<string>& wordList); // leetcode 127 10/25/22 （双向）BFS
 
 private:
 	const int inf = 0x3f3f3f3f;
