@@ -43,6 +43,17 @@ public:
 
 	int ladderLength(string beginWord, string endWord, vector<string>& wordList); // leetcode 127 10/25/22 （双向）BFS
 
+	int minimumOperations(vector<int>& nums, int start, int goal); // leetcode 2059 10/26/22 双向 BFS
+
+	int extend_2059(unordered_map<int, int>& m_q, unordered_map<int, int>& m, deque<int>& q, vector<int>& nums);
+
+	int slidingPuzzle(vector<vector<int>>& board); // leetcode 773 10/27/22 A * 算法
+
+	bool check(string& str);
+
+	int f_773(string& state); // 估价函数
+
 private:
 	const int inf = 0x3f3f3f3f;
 };
+

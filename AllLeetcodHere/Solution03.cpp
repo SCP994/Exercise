@@ -455,3 +455,122 @@ int Solution::ladderLength(string beginWord, string endWord, vector<string>& wor
     return 0;
 }
 
+int Solution::minimumOperations(vector<int>& nums, int start, int goal)
+{
+    if (start == goal)
+        return 0;
+
+    unordered_map<int, int> m1, m2;
+    m1[start] = 0;
+    m2[goal] = 0;
+    deque<int> q1 { start }, q2 { goal };
+
+    while (!q1.empty() && !q2.empty())
+    {
+        int t = q1.size() > q2.size() ? extend_2059(m2, m1, q2, nums) : extend_2059(m1, m2, q1, nums);
+        if (t)
+            return t;
+    }
+    return -1;
+}
+
+int Solution::extend_2059(unordered_map<int, int>& m_q, unordered_map<int, int>& m, deque<int>& q, vector<int>& nums)
+{
+    for (int i = q.size(); i; --i)
+    {
+        auto p = q.front();
+        q.pop_front();
+        for (int j = nums.size() - 1; j >= 0; --j)
+        {
+            for (int k = 0; k < 3; ++k)
+            {
+                int temp = p;
+                if (k == 0)
+                    temp += nums[j];
+                else if (k == 1)
+                    temp -= nums[j];
+                else
+                    temp ^= nums[j];
+                if (m.count(temp))
+                    return m_q[p] + m[temp] + 1;
+                if (temp < 0 || temp > 1000 || m_q.count(temp))
+                    continue;
+                m_q[temp] = m_q[p] + 1;
+                q.emplace_back(temp);
+            }
+        }
+    }
+    return 0;
+}
+
+int Solution::slidingPuzzle(vector<vector<int>>& board)
+{
+    int m = 2, n = 3;
+    string start, seq;
+    string end = "123450";
+    for (int i = 0; i < m; ++i)
+        for (int j = 0; j < n; ++j)
+        {
+            start += char(board[i][j] + '0');
+            if (board[i][j] != 0)
+                seq += char(board[i][j] + '0');
+        }
+    if (!check(seq))
+        return -1;
+
+    typedef pair<int, string> PIS;
+    priority_queue<PIS, vector<PIS>, greater<PIS> > q;
+    unordered_map<string, int> dist;
+    dist[start] = 0;
+    q.push({ f_773(start), start });
+    vector<int> dis = { -1, 0, 1, 0, -1 };
+    while (!q.empty())
+    {
+        auto p = q.top();
+        q.pop();
+        int step = dist[p.second];
+        if (p.second == end)
+            return step;
+        int zero = p.second.find('0');
+        int i = zero / n, j = zero % n;
+        for (int k = 0; k < 4; ++k)
+        {
+            int x = i + dis[k], y = j + dis[k + 1];
+            if (x >= 0 && x < m && y >= 0 && y < n)
+            {
+                string str = p.second;
+                swap(str[i * n + j], str[x * n + y]);
+                if (dist.count(str))
+                    continue;
+                dist[str] = step + 1;
+                q.push({ step + f_773(str), str });
+            }
+        }
+    }
+    return -1;
+}
+
+bool Solution::check(string& str)
+{
+    int len = str.size();
+    int cnt = 0;
+    for (int i = 0; i < len; ++i)
+        for (int j = i + 1; j < len; ++j)
+            if (str[i] > str[j])
+                ++cnt;
+    return cnt % 2 == 0;
+}
+
+int Solution::f_773(string& state)
+{
+    int m = 2, n = 3, result = 0;
+    for (int i = 0; i < m * n; ++i)
+    {
+        if (state[i] == '0')
+            continue;
+        int num = state[i] - '1';
+        result += abs(num / n - i / n) + abs(num % n - i % n);
+    }
+    return result;
+}
+
