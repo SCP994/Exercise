@@ -24,13 +24,12 @@ void printVV(vector<vector<T> >& t)
 void test()
 {
 	Solution s;
-	vector<string> vs = { "hot","dot","dog","lot","log","cog" };
-	cout << s.ladderLength("hit", "cog", vs) << endl;
+	vector<vector<int> > vs = { {7},{3},{3, 9},{1, 2, 4, 5, 7, 11},{3},{3},{9},{3, 10, 8, 0},{7},{11, 6, 2},{7},{3, 9} };
+	cout << s.shortestPathLength(vs) << endl;
 }
 
 int main(void)
 {
-
-	//test();
+	test();
 }
 

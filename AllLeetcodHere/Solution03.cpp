@@ -574,3 +574,34 @@ int Solution::f_773(string& state)
     return result;
 }
 
+int Solution::shortestPathLength(vector<vector<int>>& graph)
+{
+    int n = graph.size();
+    vector<vector<bool> > vis(n, vector<bool>(1 << n)); // 用数组保存路径，0 1 2 3 等被表示为 1 2 3 8
+    deque<tuple<int, int, int> > q;
+    for (int i = 0; i < n; ++i)
+    {
+        q.emplace_back(i, 1 << i, 0);
+        vis[i][1 << i] = true;
+    }
+
+    while (!q.empty())
+    {
+        auto [p, state, step] = q.front();
+        q.pop_front();
+        if (state == (1 << n) - 1)
+            return step;
+
+        for (auto& i : graph[p])
+        {
+            int t = state | (1 << i);
+            if (!vis[i][t])
+            {
+                q.emplace_back(i, t, step + 1);
+                vis[i][state] = true;
+            }
+        }
+    }
+    return 0;
+}
+

@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <iostream>
 #include <vector>
 #include <deque>
 #include <unordered_map>
@@ -52,6 +53,8 @@ public:
 	bool check(string& str);
 
 	int f_773(string& state); // 估价函数
+
+	int shortestPathLength(vector<vector<int>>& graph); // leetcode 847 10/29/22 BFS ***
 
 private:
 	const int inf = 0x3f3f3f3f;
