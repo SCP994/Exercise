@@ -65,3 +65,4 @@ void Notes::malloc_free()
 	cout << ptr << endl;	// abcdefg
 	free(ptr);
 }
+

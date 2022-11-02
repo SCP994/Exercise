@@ -577,7 +577,7 @@ int Solution::f_773(string& state)
 int Solution::shortestPathLength(vector<vector<int>>& graph)
 {
     int n = graph.size();
-    vector<vector<bool> > vis(n, vector<bool>(1 << n)); // 用数组保存路径，0 1 2 3 等被表示为 1 2 3 8
+    vector<vector<bool> > vis(n, vector<bool>(1 << n)); // 用数组保存路径，0 1 2 3 等被表示为 1 2 4 8
     deque<tuple<int, int, int> > q;
     for (int i = 0; i < n; ++i)
     {
@@ -603,5 +603,84 @@ int Solution::shortestPathLength(vector<vector<int>>& graph)
         }
     }
     return 0;
+}
+
+int Solution::cutOffTree(vector<vector<int>>& forest)
+{
+    int m = forest.size(), n = forest[0].size();
+    vector<vector<int> > trees;
+    for (int i = 0; i < m; ++i)
+        for (int j = 0; j < n; ++j)
+            if (forest[i][j] > 1) trees.push_back({ forest[i][j], i, j });
+
+    int heapSize = trees.size();
+    for (int i = heapSize >> 1; i >= 0; --i) // 建堆
+        maxHeapify(trees, heapSize, i);
+    for (int i = heapSize; i; --i) // 堆排序
+    {
+        --heapSize;
+        swap(trees[0], trees[i - 1]);
+        maxHeapify(trees, heapSize, 0);
+    }
+    heapSize = trees.size();
+
+    vector<int> vis(m * n, inf); // 保存访问过的节点，存入步数
+    typedef tuple<int, int, int> T;
+    priority_queue<T, vector<T>, greater<T> > q; // 小根堆，保存估计步数、坐标，存入 tuple 比存入 vector 访问更快，还可以将坐标改为 x * n + y
+    
+    vector<int> dis = { 0, 1, 0, -1, 0 };
+    int idx = 0, target = trees[idx][0], targetX = trees[idx][1], targetY = trees[idx][2];
+    q.push({ f_675(0, 0, targetX, targetY), 0, 0 });
+    vis[0] = 0;
+    while (true)
+    {
+        if (q.empty()) break;
+        while (!q.empty())
+        {
+            auto [_, px, py] = q.top(); // _ 只用于估计步数
+            q.pop();
+            int trueStep = vis[px * n + py];
+            if (forest[px][py] == target)
+            {
+                if (++idx == heapSize) return trueStep;
+                target = trees[idx][0], targetX = trees[idx][1], targetY = trees[idx][2];
+                q = priority_queue<T, vector<T>, greater<T> >(); // 清空栈
+                q.push({ trueStep + f_675(px, py, targetX, targetY), px, py});
+                vis = vector<int>(m * n, inf);
+                vis[px * n + py] = trueStep;
+                break;
+            }
+            for (int i = 0; i < 4; ++i)
+            {
+                int x = px + dis[i], y = py + dis[i + 1];
+                if (x >= 0 && x < m && y >= 0 && y < n && forest[x][y] && trueStep + 1 < vis[x * n + y]) // 注意 trueStep + 1 < vis[x * n + y] 条件，启发式算法独有
+                {
+                    vis[x * n + y] = trueStep + 1;
+                    q.push({ trueStep + 1 + f_675(x, y, targetX, targetY), x, y });
+                }
+            }
+        }
+    }
+    return -1;
+}
+
+void Solution::maxHeapify(vector<vector<int> >& v, int heapSize, int i) // 维护堆（大根堆）的性质
+{
+    while (true)
+    {
+        int rightChild = (i + 1) << 1, leftChild = rightChild - 1, largest = i;
+        if (leftChild < heapSize && v[leftChild][0] > v[largest][0])
+            largest = leftChild;
+        if (rightChild < heapSize && v[rightChild][0] > v[largest][0])
+            largest = rightChild;
+        if (largest == i) break;
+        swap(v[largest], v[i]);
+        i = largest;
+    }
+}
+
+inline int Solution::f_675(int x1, int y1, int x2, int y2)
+{
+    return abs(x1 - x2) + abs(y1 - y2);
 }
 

@@ -56,6 +56,12 @@ public:
 
 	int shortestPathLength(vector<vector<int>>& graph); // leetcode 847 10/29/22 BFS ***
 
+	int cutOffTree(vector<vector<int>>& forest); // leetcode 675 11/1-2/22 A *
+
+	void maxHeapify(vector<vector<int> >& v, int heapSize, int i);
+
+	int f_675(int x1, int y1, int x2, int y2);
+
 private:
 	const int inf = 0x3f3f3f3f;
 };
