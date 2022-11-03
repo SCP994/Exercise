@@ -684,3 +684,38 @@ inline int Solution::f_675(int x1, int y1, int x2, int y2)
     return abs(x1 - x2) + abs(y1 - y2);
 }
 
+int Solution::minCost(vector<vector<int>>& grid)
+{
+    int m = grid.size(), n = grid[0].size();
+    deque<tuple<int, int, int> > q { { 0, 0, 0 } };
+    vector<pair<int, int> > orient = { { -1, -1 }, { 0, 1 }, { 0, -1 }, { 1, 0 }, { -1, 0 } };
+    vector<vector<int> > vis(m, vector<int>(n, inf)); // 可设为布尔型，将四个方向的节点加入队列才算访问过
+    vis[0][0] = 0;
+    while (!q.empty())
+    {
+        auto [tx, ty, cost] = q.front();
+        if (tx == m - 1 && ty == n - 1)
+            return cost;
+        q.pop_front();
+        auto [orientX, orientY] = orient[grid[tx][ty]];
+        for (int i = 1; i <= 4; ++i)
+        {
+            int x = tx + orient[i].first, y = ty + orient[i].second;
+            if (x >= 0 && x < m && y >= 0 && y < n)
+            {
+                if (i == grid[tx][ty] && cost < vis[x][y])
+                {
+                    vis[x][y] = cost;
+                    q.emplace_front(x, y, cost);
+                }
+                else if (cost + 1 < vis[x][y])
+                {
+                    vis[x][y] = cost + 1;
+                    q.emplace_back(x, y, cost + 1);
+                }
+            }
+        }
+    }
+    return -1;
+}
+

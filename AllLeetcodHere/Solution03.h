@@ -62,6 +62,8 @@ public:
 
 	int f_675(int x1, int y1, int x2, int y2);
 
+	int minCost(vector<vector<int>>& grid); // leetcode 1368 11/3/22 双端队列 BFS
+
 private:
 	const int inf = 0x3f3f3f3f;
 };

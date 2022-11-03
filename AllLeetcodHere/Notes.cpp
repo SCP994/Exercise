@@ -44,6 +44,18 @@ void Notes::check()
 	cout << b << endl;	// 与 a 的输出正好相反
 }
 
+void Notes::check_()
+{
+	union UN
+	{
+		int i;
+		char c;
+	} un;
+	un.i = 0x11223344;
+	un.c = 0x55;
+	printf("%x\n", un.i); // 小端：11223355，大端：55223344
+}
+
 float Notes::testTime()
 {
 	auto t_start = chrono::high_resolution_clock::now();

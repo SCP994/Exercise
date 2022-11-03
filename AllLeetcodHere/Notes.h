@@ -58,6 +58,8 @@ public:
 
 	void check();	// 判断系统大小端存储
 
+	void check_();
+
 	float testTime();	// 测试代码运行时间
 
 	void malloc_free();
