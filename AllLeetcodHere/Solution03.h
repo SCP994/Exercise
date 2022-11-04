@@ -48,7 +48,7 @@ public:
 
 	int extend_2059(unordered_map<int, int>& m_q, unordered_map<int, int>& m, deque<int>& q, vector<int>& nums);
 
-	int slidingPuzzle(vector<vector<int>>& board); // leetcode 773 10/27/22 A * 算法
+	int slidingPuzzle(vector<vector<int>>& board); // leetcode 773 10/27/22 A* 算法
 
 	bool check(string& str);
 
@@ -56,13 +56,15 @@ public:
 
 	int shortestPathLength(vector<vector<int>>& graph); // leetcode 847 10/29/22 BFS ***
 
-	int cutOffTree(vector<vector<int>>& forest); // leetcode 675 11/1-2/22 A *
+	int cutOffTree(vector<vector<int>>& forest); // leetcode 675 11/1-2/22 A* 算法
 
 	void maxHeapify(vector<vector<int> >& v, int heapSize, int i);
 
 	int f_675(int x1, int y1, int x2, int y2);
 
 	int minCost(vector<vector<int>>& grid); // leetcode 1368 11/3/22 双端队列 BFS
+
+	int minimumObstacles(vector<vector<int>>& grid); // leetcode 2290 11/4/22 双端队列 BFS *
 
 private:
 	const int inf = 0x3f3f3f3f;

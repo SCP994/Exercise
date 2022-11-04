@@ -687,7 +687,7 @@ inline int Solution::f_675(int x1, int y1, int x2, int y2)
 int Solution::minCost(vector<vector<int>>& grid)
 {
     int m = grid.size(), n = grid[0].size();
-    deque<tuple<int, int, int> > q { { 0, 0, 0 } };
+    deque<tuple<int, int, int> > q{ { 0, 0, 0 } };
     vector<pair<int, int> > orient = { { -1, -1 }, { 0, 1 }, { 0, -1 }, { 1, 0 }, { -1, 0 } };
     vector<vector<int> > vis(m, vector<int>(n, inf)); // 可设为布尔型，将四个方向的节点加入队列才算访问过
     vis[0][0] = 0;
@@ -717,5 +717,35 @@ int Solution::minCost(vector<vector<int>>& grid)
         }
     }
     return -1;
+}
+
+int Solution::minimumObstacles(vector<vector<int>>& grid)
+{
+    int m = grid.size(), n = grid[0].size();
+    vector<vector<bool> > vis(m, vector<bool>(n));
+    deque<pair<int, int> > q{ { 0, 0 } };
+    vector<int> dis = { 0, 1, 0, -1, 0 };
+    int count = 0;
+    while (!q.empty())
+    {
+        auto [p, ret] = q.front();
+        q.pop_front();
+        int px = p / n, py = p % n;
+        if (px == m - 1 && py == n - 1)
+            return ret;
+        if (vis[px][py]) continue; // 这个条件是关键，同一个位置可能会被多次添加
+        vis[px][py] = true;
+        cout << ": " << ++count << endl;
+        for (int i = 0; i < 4; ++i)
+        {
+            int x = px + dis[i], y = py + dis[i + 1];
+            if (x >= 0 && x < m && y >= 0 && y < n && !vis[px][py]) // !vis[px][py] 不与 if (vis[px][py]) continue; 矛盾
+                if (!grid[x][y]) // 没有遇到障碍物
+                    q.emplace_front(x * n + y, ret);
+                else // 遇到障碍物
+                    q.emplace_back(x * n + y, ret + 1);
+        }
+    }
+    return 0;
 }
 

@@ -1,8 +1,6 @@
 ﻿#include <iostream>
-#include <vector>
 #include "Solution03.h"
 //#include "Notes.h"
-using namespace std;
 
 template <typename T>
 void printV(vector<T>& v)
@@ -26,8 +24,8 @@ void printVV(vector<vector<T> >& t)
 void test()
 {
 	Solution s;
-	vector<vector<int> > vv = { {1, 2},{4, 3} };
-	std::cout << s.minCost(vv) << endl;
+	vector<vector<int> > vv = { { 0, 1 },{ 1, 0 } };
+	cout << s.minimumObstacles(vv) << endl;
 }
 
 int main(void)
