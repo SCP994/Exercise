@@ -66,6 +66,8 @@ public:
 
 	int minimumObstacles(vector<vector<int>>& grid); // leetcode 2290 11/4/22 双端队列 BFS *
 
+	bool hasPath(vector<vector<int>>& maze, vector<int>& start, vector<int>& destination); // leetcode 490 11/5/22 DFS BFS
+
 private:
 	const int inf = 0x3f3f3f3f;
 };

@@ -23,9 +23,9 @@ void printVV(vector<vector<T> >& t)
 
 void test()
 {
-	Solution s;
-	vector<vector<int> > vv = { { 0, 1 },{ 1, 0 } };
-	cout << s.minimumObstacles(vv) << endl;
+	vector<vector<int> > maze = { {0, 0, 1, 0, 0},{0, 0, 0, 0, 0},{0, 0, 0, 1, 0},{1, 1, 0, 1, 1},{0, 0, 0, 0, 0} };
+	vector<int> start = { 0, 4 }, destination = { 4, 4 };
+	cout << Solution().hasPath(maze, start, destination) << endl;
 }
 
 int main(void)

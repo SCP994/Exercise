@@ -749,3 +749,30 @@ int Solution::minimumObstacles(vector<vector<int>>& grid)
     return 0;
 }
 
+bool Solution::hasPath(vector<vector<int>>& maze, vector<int>& start, vector<int>& destination)
+{
+    int m = maze.size(), n = maze[0].size();
+    deque<pair<int, int> > s{ { start[0], start[1] } }; // 栈 DFS，队列 BFS
+    vector<vector<bool> > vis(m, vector<bool>(n));
+    vector<int> dis = { 0, 1, 0, -1, 0 };
+    while (!s.empty())
+    {
+        auto [px, py] = s.front();
+        s.pop_front();
+        if (vis[px][py]) continue;
+        if (px == destination[0] && py == destination[1])
+            return true;
+        vis[px][py] = true;
+        for (int i = 0; i < 4; ++i)
+        {
+            int x = px, y = py;
+            do
+                x += dis[i], y += dis[i + 1];
+            while (x >= 0 && x < m && y >= 0 && y < n && !maze[x][y]); // 别加 !vis[x][y] 条件
+            if (x - dis[i] == px && y - dis[i + 1] == py) continue;
+            s.emplace_front(x - dis[i], y - dis[i + 1]); // emplace_back 就成了 BFS
+        }
+    }
+    return false;
+}
+
