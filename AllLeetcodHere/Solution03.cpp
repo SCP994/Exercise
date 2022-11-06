@@ -776,3 +776,30 @@ bool Solution::hasPath(vector<vector<int>>& maze, vector<int>& start, vector<int
     return false;
 }
 
+bool Solution::exist(vector<vector<char>>& board, string word)
+{
+    int m = board.size(), n = board[0].size(), len = word.size();
+    for (int i = 0; i < m; ++i)
+        for (int j = 0; j < n; ++j)
+            if (board[i][j] == word[0] && dfs_79(i, j, 0, m, n, len, board, word))
+                return true;
+    return false;
+}
+
+bool Solution::dfs_79(int i, int j, int idx, int m, int n, int len, vector<vector<char> >& board, string& word)
+{
+    if (idx == len) return true;
+    if (i < 0 || i >= m || j < 0 || j >= n || board[i][j] != word[idx]) return false;
+    char t = board[i][j];
+    board[i][j] = '0';
+    vector<int> dis = { 0, 1, 0, -1, 0 };
+    for (int k = 0; k < 4; ++k)
+    {
+        int x = i + dis[k], y = j + dis[k + 1];
+        if (dfs_79(x, y, idx + 1, m, n, len, board, word))
+            return true;
+    }
+    board[i][j] = t;
+    return false;
+}
+

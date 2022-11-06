@@ -23,9 +23,9 @@ void printVV(vector<vector<T> >& t)
 
 void test()
 {
-	vector<vector<int> > maze = { {0, 0, 1, 0, 0},{0, 0, 0, 0, 0},{0, 0, 0, 1, 0},{1, 1, 0, 1, 1},{0, 0, 0, 0, 0} };
-	vector<int> start = { 0, 4 }, destination = { 4, 4 };
-	cout << Solution().hasPath(maze, start, destination) << endl;
+	vector<vector<char> > board = { {'A', 'B', 'C', 'E'},{'S', 'F', 'C', 'S'},{'A', 'D', 'E', 'E'} };
+	string word = "ABCCED";
+	cout << Solution().exist(board, word) << endl;
 }
 
 int main(void)

@@ -68,6 +68,10 @@ public:
 
 	bool hasPath(vector<vector<int>>& maze, vector<int>& start, vector<int>& destination); // leetcode 490 11/5/22 DFS BFS
 
+	bool exist(vector<vector<char>>& board, string word); // leetcode 79 11/6/22 回溯 ***
+
+	bool dfs_79(int i, int j, int idx, int m, int n, int len, vector<vector<char> >& board, string& word);
+
 private:
 	const int inf = 0x3f3f3f3f;
 };
