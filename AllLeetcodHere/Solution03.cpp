@@ -803,3 +803,42 @@ bool Solution::dfs_79(int i, int j, int idx, int m, int n, int len, vector<vecto
     return false;
 }
 
+int Solution::getMaximumGold(vector<vector<int>>& grid)
+{
+    int m = grid.size(), n = grid[0].size(), ret = 0;
+    vector<vector<bool> > vis(m, vector<bool>(n));
+    for (int i = 0; i < m; ++i)
+        for (int j = 0; j < n; ++j)
+        {
+            if (!grid[i][j]) continue;
+            for (int k = 0; k < 4; ++k)
+            {
+                int x = i + dis[k], y = j + dis[k + 1];
+                if (x < 0 || x == m || y < 0 || y == n || !grid[x][y])
+                {
+                    vis[i][j] = true; // 将边上的点设为 true，从边上进行 DFS 搜索，能快一些
+                    break;
+                }
+            }
+        }
+    for (int i = 0; i < m; ++i)
+        for (int j = 0; j < n; ++j)
+            if (vis[i][j])
+                ret = max(dfs_1219(grid, m, n, i, j), ret);
+    return ret;
+}
+
+int Solution::dfs_1219(vector<vector<int> >& grid, int m, int n, int x, int y)
+{
+    int t = grid[x][y], ret = t;
+    grid[x][y] = 0;
+    for (int i = 0; i < 4; ++i)
+    {
+        int tx = x + dis[i], ty = y + dis[i + 1];
+        if (tx >= 0 && tx < m && ty >= 0 && ty < n && grid[tx][ty])
+            ret = max(ret, t + dfs_1219(grid, m, n, tx, ty));
+    }
+    grid[x][y] = t;
+    return ret;
+}
+

@@ -23,9 +23,8 @@ void printVV(vector<vector<T> >& t)
 
 void test()
 {
-	vector<vector<char> > board = { {'A', 'B', 'C', 'E'},{'S', 'F', 'C', 'S'},{'A', 'D', 'E', 'E'} };
-	string word = "ABCCED";
-	cout << Solution().exist(board, word) << endl;
+	vector<vector<int> > grid = { { 0, 6, 0 }, { 5, 8, 7 }, { 0, 9, 0 } };
+	cout << Solution().getMaximumGold(grid) << endl;
 }
 
 int main(void)

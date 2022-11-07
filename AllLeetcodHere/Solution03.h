@@ -72,7 +72,13 @@ public:
 
 	bool dfs_79(int i, int j, int idx, int m, int n, int len, vector<vector<char> >& board, string& word);
 
+	int getMaximumGold(vector<vector<int>>& grid); // leetcode 1219 11/7/22 回溯 DFS
+
+	int dfs_1219(vector<vector<int> >& grid, int m, int n, int x, int y);
+
 private:
 	const int inf = 0x3f3f3f3f;
+
+	vector<int> dis = { 0, 1, 0, -1, 0 };
 };
 
