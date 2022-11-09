@@ -5,6 +5,8 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <queue>
+#include <algorithm>
+#include <numeric>
 using namespace std;
 
 typedef unsigned long long ull;
@@ -75,6 +77,16 @@ public:
 	int getMaximumGold(vector<vector<int>>& grid); // leetcode 1219 11/7/22 回溯 DFS
 
 	int dfs_1219(vector<vector<int> >& grid, int m, int n, int x, int y);
+
+	bool makesquare(vector<int>& matchsticks); // leetcode 473 11/8/22 DFS 回溯
+
+	bool dfs_473(vector<int>& matchsticks, int len, int idx, int count, int sum, int avg);
+
+	bool makesquare_(vector<int>& matchsticks); // 排序 回溯
+
+	bool dfs_473_(int idx, int avg, int len, vector<int>& matchsticks, vector<int>& edges);
+
+	bool makesquare__(vector<int>& matchsticks); // 状态压缩 DP ***
 
 private:
 	const int inf = 0x3f3f3f3f;

@@ -837,3 +837,86 @@ int Solution::dfs_1219(vector<vector<int> >& grid, int m, int n, int x, int y)
     return ret;
 }
 
+bool Solution::makesquare(vector<int>& matchsticks)
+{
+    int sum = 0, mx = 0, len = matchsticks.size();
+    for (auto& i : matchsticks)
+    {
+        sum += i;
+        if (i > mx) mx = i;
+    }
+    int avg = sum >> 2;
+    if (sum % 4 || mx > avg) return false;
+    return dfs_473(matchsticks, len, 0, 0, 0, avg);
+}
+
+bool Solution::dfs_473(vector<int>& matchsticks, int len, int idx, int count, int sum, int avg)
+{
+    int t = matchsticks[idx], idx_t = idx;
+    matchsticks[idx] = 0;
+    sum += t;
+    if (sum == avg)
+    {
+        if (count + 1 == 3) return true;
+        if (dfs_473(matchsticks, len, 0, count + 1, 0, avg)) return true;
+    }
+    else if (sum < avg)
+        while (++idx < len)
+        {
+            if (!matchsticks[idx]) continue; // 没有这个条件不通过，要跳过遍历过的节点
+            if (dfs_473(matchsticks, len, idx, count, sum, avg)) return true;
+        }
+    matchsticks[idx_t] = t;
+    return false;
+}
+
+bool Solution::makesquare_(vector<int>& matchsticks)
+{
+    int len = matchsticks.size(), sum = 0, mx = 0;
+    for (auto& i : matchsticks)
+    {
+        sum += i;
+        if (i > mx) mx = i;
+    }
+    int avg = sum >> 2;
+    if (sum % 4 || mx > avg) return false;
+    sort(matchsticks.begin(), matchsticks.end(), greater<int>()); // 逆序
+    vector<int> edges(4);
+    return dfs_473_(0, avg, len, matchsticks, edges);
+}
+
+bool Solution::dfs_473_(int idx, int avg, int len, vector<int>& matchsticks, vector<int>& edges)
+{
+    if (idx == len) return true;
+    for (int i = 0; i < 4; ++i)
+    {
+        if (i && edges[i - 1] == edges[i]) continue; // edges[i - 1] + matchsticks[idx] 失败，edges[i] 和 edges[i - 1] 相等
+        edges[i] += matchsticks[idx];
+        if (edges[i] <= avg && dfs_473_(idx + 1, avg, len, matchsticks, edges)) return true;
+        edges[i] -= matchsticks[idx];
+    }
+    return false;
+}
+
+bool Solution::makesquare__(vector<int>& matchsticks)
+{
+    int sum = accumulate(matchsticks.begin(), matchsticks.end(), 0), avg = sum >> 2, len = matchsticks.size();
+    sort(matchsticks.begin(), matchsticks.end());
+    if (sum % 4 || matchsticks[len - 1] > avg) return false;
+    int total = 1 << len;
+    vector<int> dp(total, -1);
+    dp[0] = 0;
+    for (int i = 1; i < total; ++i)
+        for (int j = 0; j < len; ++j)
+        {
+            if ((i & 1 << j) == 0) continue;
+            int t = i & ~(1 << j);
+            if (dp[t] >= 0 && dp[t] + matchsticks[j] <= avg)
+            {
+                dp[i] = (dp[t] + matchsticks[j]) % avg;
+                break;
+            }
+        }
+    return dp[total - 1] == 0;
+}
+

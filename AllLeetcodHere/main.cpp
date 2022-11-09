@@ -23,8 +23,8 @@ void printVV(vector<vector<T> >& t)
 
 void test()
 {
-	vector<vector<int> > grid = { { 0, 6, 0 }, { 5, 8, 7 }, { 0, 9, 0 } };
-	cout << Solution().getMaximumGold(grid) << endl;
+	vector<int> matchsticks = { 1, 1, 2, 2, 2 };
+	cout << Solution().makesquare__(matchsticks) << endl;
 }
 
 int main(void)
