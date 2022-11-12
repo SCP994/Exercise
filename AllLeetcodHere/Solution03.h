@@ -88,6 +88,13 @@ public:
 
 	bool makesquare__(vector<int>& matchsticks); // 状态压缩 DP ***
 
+	bool canPartitionKSubsets(vector<int>& nums, int k); // leetcode 698 11/10/22  状态压缩 DP ***，与 leetcode 473 类似
+
+	int count_dfs_1723 = 0;
+	int minimumTimeRequired(vector<int>& jobs, int k); // leetcode 1723 11/11/22 DFS 剪枝 *** 不会
+
+	int dfs_1723(vector<int>& jobs, vector<int>& edges, int len, int k, int idx, int ret);
+
 private:
 	const int inf = 0x3f3f3f3f;
 

@@ -900,9 +900,9 @@ bool Solution::dfs_473_(int idx, int avg, int len, vector<int>& matchsticks, vec
 
 bool Solution::makesquare__(vector<int>& matchsticks)
 {
-    int sum = accumulate(matchsticks.begin(), matchsticks.end(), 0), avg = sum >> 2, len = matchsticks.size();
-    sort(matchsticks.begin(), matchsticks.end());
-    if (sum % 4 || matchsticks[len - 1] > avg) return false;
+    int len = matchsticks.size(), sum = accumulate(matchsticks.begin(), matchsticks.end(), 0), avg = sum >> 2;
+    int mx =  *max_element(matchsticks.begin(), matchsticks.end());
+    if (sum % 4 || mx > avg) return false;
     int total = 1 << len;
     vector<int> dp(total, -1);
     dp[0] = 0;
@@ -918,5 +918,61 @@ bool Solution::makesquare__(vector<int>& matchsticks)
             }
         }
     return dp[total - 1] == 0;
+}
+
+bool Solution::canPartitionKSubsets(vector<int>& nums, int k)
+{
+    int len = nums.size(), sum = accumulate(nums.begin(), nums.end(), 0), avg = sum / k;
+    int mx = *max_element(nums.begin(), nums.end());
+    if (sum % k || mx > avg) return false;
+    int total = 1 << len;
+    vector<int> dp(total, -1);
+    dp[0] = 0;
+    for (int i = 1; i < total; ++i)
+        for (int j = 0; j < len; ++j)
+        {
+            if (!(i & 1 << j)) continue; // 跳过第 j 个数没有被放入的情形
+            int t = i & ~(1 << j); // 第 j 个数没有被放入的情形 
+            if (dp[t] != -1 && dp[t] + nums[j] <= avg)
+            {
+                dp[i] = (dp[t] + nums[j]) % avg;
+                break; // 找到就可以 break，没有这条件也能通过
+            }
+        }
+    return dp[total - 1] == 0;
+}
+
+int Solution::minimumTimeRequired(vector<int>& jobs, int k)
+{
+    int ret = inf, len = jobs.size();
+    vector<int> edges(k);
+    //sort(jobs.begin(), jobs.end(), greater<int>());
+    sort(jobs.begin(), jobs.end()); // 注意这里应该正序排序而非逆序，这样能更快收敛，而且要和 973 行 break 一起使用才有效果
+    ret = dfs_1723(jobs, edges, len, k, 0, ret);
+    cout << count_dfs_1723 << endl;
+    return ret;
+}
+
+int Solution::dfs_1723(vector<int>& jobs, vector<int>& edges, int len, int k, int idx, int ret)
+{
+    ++count_dfs_1723;
+    if (idx == len)
+    {
+        ret = min(ret, *max_element(edges.begin(), edges.end()));
+        return ret;
+    }
+    for (int i = 0; i < k; ++i)
+    {
+        if (edges[i] + jobs[idx] >= ret) continue; // 找到最小的 ret 值
+        edges[i] += jobs[idx];
+        ret = dfs_1723(jobs, edges, len, k, idx + 1, ret);
+        edges[i] -= jobs[idx];
+        if (edges[i] == 0)
+        {
+            cout << jobs[idx] << " ";
+            break; // 这里的目的是 edges[0] 到 0 后不用再从 edges[1] 重新开始，否则有重复计算，同理适应于 edges[1]、edges[2] 等
+        }
+    }
+    return ret;
 }
 
