@@ -976,3 +976,28 @@ int Solution::dfs_1723(vector<int>& jobs, vector<int>& edges, int len, int k, in
     return ret;
 }
 
+int Solution::distributeCookies(vector<int>& cookies, int k)
+{
+    int len = cookies.size();
+    ret_2305 = inf;
+    sort(cookies.begin(), cookies.end());
+    vector<int> edges(k);
+    dfs_2305(cookies, edges, 0, len, k);
+    return ret_2305;
+}
+
+void Solution::dfs_2305(vector<int>& cookies, vector<int>& edges, int idx, int len, int k)
+{
+    if (idx == len)
+        ret_2305 = min(ret_2305, *max_element(edges.begin(), edges.end()));
+    else
+        for (int i = 0; i < k; ++i)
+        {
+            if (edges[i] + cookies[idx] >= ret_2305) continue;
+            edges[i] += cookies[idx];
+            dfs_2305(cookies, edges, idx + 1, len, k);
+            edges[i] -= cookies[idx];
+            if (!edges[i]) break;
+        }
+}
+

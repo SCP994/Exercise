@@ -24,7 +24,7 @@ void printVV(vector<vector<T> >& t)
 void test()
 {
 	vector<int> jobs = { 1, 8, 2, 4, 7 };
-	cout << Solution().minimumTimeRequired(jobs, 4) << endl;
+	cout << Solution().distributeCookies(jobs, 4) << endl;
 }
 
 int main(void)

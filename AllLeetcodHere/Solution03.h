@@ -91,9 +91,14 @@ public:
 	bool canPartitionKSubsets(vector<int>& nums, int k); // leetcode 698 11/10/22  状态压缩 DP ***，与 leetcode 473 类似
 
 	int count_dfs_1723 = 0;
-	int minimumTimeRequired(vector<int>& jobs, int k); // leetcode 1723 11/11/22 DFS 剪枝 *** 不会
+	int minimumTimeRequired(vector<int>& jobs, int k); // leetcode 1723 11/11-12/22 DFS 剪枝 *** 不会
 
 	int dfs_1723(vector<int>& jobs, vector<int>& edges, int len, int k, int idx, int ret);
+
+	int ret_2305;
+	int distributeCookies(vector<int>& cookies, int k); // leetcode 2305 11/13/22 DFS 剪枝 与 leetcode 1723 类似
+
+	void dfs_2305(vector<int>& cookies, vector<int>& edges, int idx, int len, int k);
 
 private:
 	const int inf = 0x3f3f3f3f;
