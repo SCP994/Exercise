@@ -23,8 +23,8 @@ void printVV(vector<vector<T> >& t)
 
 void test()
 {
-	vector<int> jobs = { 1, 8, 2, 4, 7 };
-	cout << Solution().distributeCookies(jobs, 4) << endl;
+	vector<vector<int> > matrix = { { 9, 9, 4 }, { 6, 6, 8}, { 2, 1, 1 } };
+	cout << Solution().longestIncreasingPath(matrix) << endl;
 }
 
 int main(void)

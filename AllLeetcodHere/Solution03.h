@@ -100,9 +100,18 @@ public:
 
 	void dfs_2305(vector<int>& cookies, vector<int>& edges, int idx, int len, int k);
 
+	int longestIncreasingPath(vector<vector<int>>& matrix); // leetcode 329 11/14/22 记忆化搜索 ***
+
+	int dfs_329(int x, int y);
+
 private:
 	const int inf = 0x3f3f3f3f;
 
+	int m, n;
+
 	vector<int> dis = { 0, 1, 0, -1, 0 };
+
+	vector<vector<int> > memo, matrix;
+	
 };
 

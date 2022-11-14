@@ -1001,3 +1001,30 @@ void Solution::dfs_2305(vector<int>& cookies, vector<int>& edges, int idx, int l
         }
 }
 
+int Solution::longestIncreasingPath(vector<vector<int>>& matrix)
+{
+    int ret = 1;
+    m = matrix.size(), n = matrix[0].size();
+    memo.resize(m, vector<int>(n));
+    this->matrix = matrix;
+    
+    for (int i = 0; i < m; ++i)
+        for (int j = 0; j < n; ++j)
+            ret = max(ret, dfs_329(i, j));
+    return ret;
+}
+
+int Solution::dfs_329(int x, int y)
+{
+    if (memo[x][y]) return memo[x][y];
+    int ret = 1;
+    for (int i = 0; i < 4; ++i)
+    {
+        int tx = x + dis[i], ty = y + dis[i + 1];
+        if (tx >= 0 && tx < m && ty >= 0 && ty < n && matrix[tx][ty] > matrix[x][y])
+            ret = max(ret, dfs_329(tx, ty) + 1);
+    }
+    memo[x][y] = ret;
+    return ret;
+}
+
