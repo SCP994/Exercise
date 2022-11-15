@@ -29,9 +29,6 @@ void test()
 
 int main(void)
 {
-	ull a = 859542476;
-	int b = a % (ull)(10e9 + 7);
-	cout << b << endl;
 	test();
 }
 

@@ -1048,7 +1048,7 @@ ull Solution::dfs_2328(int x, int y)
     {
         int tx = x + dis[i], ty = y + dis[i + 1];
         if (tx >= 0 && tx < m && ty >= 0 && ty < n && matrix[tx][ty] > matrix[x][y])
-            sum += dfs_2328(tx, ty) % mod;
+            sum += dfs_2328(tx, ty) % mod;  // 注意这里和 leetcode 329 的区别
     }
     memo[x][y] = sum;
     return sum;
