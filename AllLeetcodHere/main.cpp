@@ -23,12 +23,15 @@ void printVV(vector<vector<T> >& t)
 
 void test()
 {
-	vector<vector<int> > matrix = { { 9, 9, 4 }, { 6, 6, 8}, { 2, 1, 1 } };
-	cout << Solution().longestIncreasingPath(matrix) << endl;
+	vector<vector<int> > grid = { { 1, 1 }, { 3, 4 } };
+	cout << Solution().countPaths(grid) << endl;
 }
 
 int main(void)
 {
+	ull a = 859542476;
+	int b = a % (ull)(10e9 + 7);
+	cout << b << endl;
 	test();
 }
 

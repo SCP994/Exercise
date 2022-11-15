@@ -104,14 +104,14 @@ public:
 
 	int dfs_329(int x, int y);
 
+	int countPaths(vector<vector<int>>& grid);  // leetcode 2328 11/15/22 记忆化搜索，与 leetcode 329 类似
+
+	ull dfs_2328(int x, int y);
+
 private:
-	const int inf = 0x3f3f3f3f;
-
+	const int inf = 0x3f3f3f3f, mod = 1e9 + 7;
 	int m, n;
-
 	vector<int> dis = { 0, 1, 0, -1, 0 };
-
 	vector<vector<int> > memo, matrix;
-	
 };
 

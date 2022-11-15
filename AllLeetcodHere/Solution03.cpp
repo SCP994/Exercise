@@ -1005,7 +1005,7 @@ int Solution::longestIncreasingPath(vector<vector<int>>& matrix)
 {
     int ret = 1;
     m = matrix.size(), n = matrix[0].size();
-    memo.resize(m, vector<int>(n));
+    memo.resize(m, vector<int>(n, 0));
     this->matrix = matrix;
     
     for (int i = 0; i < m; ++i)
@@ -1026,5 +1026,31 @@ int Solution::dfs_329(int x, int y)
     }
     memo[x][y] = ret;
     return ret;
+}
+
+int Solution::countPaths(vector<vector<int>>& grid)
+{
+    m = grid.size(), n = grid[0].size();
+    memo.resize(m, vector<int>(n, 0));
+    matrix = grid;
+    int sum = 0;
+    for (int i = 0; i < m; ++i)
+        for (int j = 0; j < n; ++j)
+            sum = (sum + dfs_2328(i, j)) % mod;
+    return sum;
+}
+
+ull Solution::dfs_2328(int x, int y)
+{
+    if (memo[x][y]) return memo[x][y];
+    int sum = 1;
+    for (int i = 0; i < 4; ++i)
+    {
+        int tx = x + dis[i], ty = y + dis[i + 1];
+        if (tx >= 0 && tx < m && ty >= 0 && ty < n && matrix[tx][ty] > matrix[x][y])
+            sum += dfs_2328(tx, ty) % mod;
+    }
+    memo[x][y] = sum;
+    return sum;
 }
 
