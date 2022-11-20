@@ -1054,3 +1054,54 @@ ull Solution::dfs_2328(int x, int y)
     return sum;
 }
 
+bool Solution::canWin(string currentState)
+{
+    len = currentState.size();
+    return dfs_294(currentState);
+}
+
+bool Solution::dfs_294(string& currentState)
+{
+    for (int i = 0; i < len - 1; ++i)
+    {
+        if (currentState[i] == '+' && currentState[i + 1] == '+')
+        {
+            currentState[i] = '-';
+            currentState[i + 1] = '-';
+            if (!dfs_294(currentState))
+            {
+                currentState[i] = '+';  // 注意这里也要恢复！
+                currentState[i + 1] = '+';
+                return true;
+            }
+            currentState[i] = '+';
+            currentState[i + 1] = '+';
+       }
+    }
+    return false;
+}
+
+bool Solution::canWin_(string currentState)
+{
+    len = currentState.size();
+    ll mask = 0;
+    for (int i = 0; i < len; ++i)
+        if (currentState[i] == '+') mask |= 1ll << i;  // 注意 1 要转换成 long long 类型
+    dfs_294_(mask);
+    return memo_294[mask];
+}
+
+void Solution::dfs_294_(ll mask)
+{
+    for (int i = 0; i < len - 1; ++i)
+        if (mask & 1ll << i && mask & 1ll << (i + 1))
+        {
+            ll temp = mask ^ (1ll << i) ^ (1ll << (i + 1));
+            if (!memo_294.count(temp)) dfs_294_(temp);
+            if (memo_294[temp]) continue;
+            memo_294[mask] = true;
+            return;
+        }
+    memo_294[mask] = false;
+}
+

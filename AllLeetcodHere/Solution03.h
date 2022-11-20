@@ -11,6 +11,8 @@ using namespace std;
 
 typedef unsigned long long ull;
 
+typedef long long ll;
+
 class Solution
 {
 public:
@@ -108,9 +110,18 @@ public:
 
 	ull dfs_2328(int x, int y);
 
+	bool canWin(string currentState);  // leetcode 294 11/20/22 DFS 没有记忆化的方法 效率较低 ***
+
+	bool dfs_294(string& currentState);
+
+	unordered_map<ll, bool> memo_294;
+	bool canWin_(string currentState);  // 状态压缩，记忆化搜索 ***
+
+	void dfs_294_(ll mask);
+
 private:
 	const int inf = 0x3f3f3f3f, mod = 1e9 + 7;
-	int m, n;
+	int m, n, len;
 	vector<int> dis = { 0, 1, 0, -1, 0 };
 	vector<vector<int> > memo, matrix;
 };

@@ -70,6 +70,13 @@ public:
 		return a;
 	}
 
+	void t(int* p)
+	{
+		cout << p << endl;
+		p = nullptr;
+		cout << p << endl;  // 在外面访问指针，不会是空指针
+	}
+
 private:
 
 };

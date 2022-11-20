@@ -23,8 +23,8 @@ void printVV(vector<vector<T> >& t)
 
 void test()
 {
-	vector<vector<int> > grid = { { 1, 1 }, { 3, 4 } };
-	cout << Solution().countPaths(grid) << endl;
+	string currentState = "++++";
+	cout << Solution().canWin_(currentState) << endl;
 }
 
 int main(void)
