@@ -119,10 +119,16 @@ public:
 
 	void dfs_294_(ll mask);
 
+	bool canWin__(string currentState);  // 11/23/22 Sprague-Grundy 定理 ***
+
+	int win__(int i);
+
+
+
 private:
 	const int inf = 0x3f3f3f3f, mod = 1e9 + 7;
 	int m, n, len;
-	vector<int> dis = { 0, 1, 0, -1, 0 };
+	vector<int> dis = { 0, 1, 0, -1, 0 }, sg;
 	vector<vector<int> > memo, matrix;
 };
 

@@ -1105,3 +1105,28 @@ void Solution::dfs_294_(ll mask)
     memo_294[mask] = false;
 }
 
+bool Solution::canWin__(string currentState)
+{
+    len = currentState.size();
+    sg.resize(len + 1, -1);
+
+    int ret = 0, i = 0;
+    while (i < len)
+    {
+        int j = i;
+        while (j < len && currentState[j] == '+') ++j;
+        ret ^= win__(j - i);  // 子状态异或
+        i = j + 1;
+    }
+    return ret > 0;  // 0 为败态，正整数为胜态
+}
+
+int Solution::win__(int i)
+{
+    if (sg[i] != -1) return sg[i];
+    vector<bool> vis(len);
+    for (int j = 0; j < i - 1; ++j) vis[win__(j) ^ win__(i - j - 2)] = true;  // 子状态异或
+    for (int j = 0; j < len; ++j) if (!vis[j]) return sg[i] = j;  // vis 下表为 SG 值
+    return 0; 
+}
+
