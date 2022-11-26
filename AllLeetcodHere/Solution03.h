@@ -123,7 +123,9 @@ public:
 
 	int win__(int i);
 
+	int countRoutes(vector<int>& locations, int start, int finish, int fuel);  // leetcode 1575 11/26/22 记忆化搜索 不会 ***
 
+	void dfs_1575(int idx, int finish, int fuel, vector<int>& locations, vector<vector<int> >& fuels);
 
 private:
 	const int inf = 0x3f3f3f3f, mod = 1e9 + 7;

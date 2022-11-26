@@ -1130,3 +1130,29 @@ int Solution::win__(int i)
     return 0; 
 }
 
+int Solution::countRoutes(vector<int>& locations, int start, int finish, int fuel)
+{
+    len = locations.size();
+    vector<vector<int> > fuels(len + 1, vector<int>(fuel + 1, -1));  // 记忆化搜索
+    dfs_1575(start, finish, fuel, locations, fuels);
+    return fuels[len][fuel];
+}
+
+void Solution::dfs_1575(int idx, int finish, int fuel, vector<int>& locations, vector<vector<int> >& fuels)
+{
+    int ret = idx == finish;  // 判断 idx 是否等于 finish
+    if (fuel < abs(locations[finish] - locations[idx]))  // 肯定到不了的情况
+    {
+        fuels[idx][fuel] = 0;
+        return;
+    }
+    for (int i = 0; i < len; ++i)
+    {
+        int sub = fuel - abs(locations[i] - locations[idx]);
+        if (i == idx || sub < 0) continue;
+        if (fuels[i][sub] == -1) dfs_1575(i, finish, sub, locations, fuels);
+        ret = (ret + fuels[i][sub]) % mod;
+    }
+    fuels[idx][fuel] = ret;
+}
+

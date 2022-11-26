@@ -4,6 +4,8 @@
 #include <chrono>
 using namespace std;
 
+#define mins(a,b,c) min(min(a,b),c)
+
 /* notes
 	vector<int> a(2, 8); // 这样生成含有两个元素且值为8的向量
 	3 >> 1 右移（左移）操作只适用于整数，比除法快，优先级比除法低，答案与整数除法相同：3 >> 1 为 1
@@ -26,6 +28,8 @@ using namespace std;
 	void pointer in C / C++:
 		A void pointer is a pointer that has no associated data type with it.
 		A void pointer can hold address of any type and can be typecasted to any type.
+
+	貌似 resize 第二次分配有点问题，直接 = vector<int>(m, vector<int>(n)); 重新赋值好了
 
 */
 
