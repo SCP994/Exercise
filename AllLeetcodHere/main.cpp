@@ -21,14 +21,23 @@ void printVV(vector<vector<T> >& t)
 	}
 }
 
-void test()
+void* test(void*)
 {
 	string currentState = "++++";
 	cout << Solution().canWin_(currentState) << endl;
+	return NULL;
 }
+
+void t(void* (*f)(void*))
+{
+	(*f)(NULL);
+}
+
+typedef void (*FUNC1)(void* (*)(void*));
 
 int main(void)
 {
-	test();
+	FUNC1 p = t;
+	p(test);
 }
 

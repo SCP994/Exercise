@@ -127,6 +127,8 @@ public:
 
 	void dfs_1575(int idx, int finish, int fuel, vector<int>& locations, vector<vector<int> >& fuels);
 
+	int ways(vector<string>& pizza, int k);  // leetcode 1444 11/27/22
+
 private:
 	const int inf = 0x3f3f3f3f, mod = 1e9 + 7;
 	int m, n, len;

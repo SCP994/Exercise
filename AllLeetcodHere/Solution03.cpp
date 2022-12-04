@@ -1156,3 +1156,17 @@ void Solution::dfs_1575(int idx, int finish, int fuel, vector<int>& locations, v
     fuels[idx][fuel] = ret;
 }
 
+int Solution::ways(vector<string>& pizza, int k)
+{
+    m = pizza.size(), n = pizza[0].size();
+    vector<vector<bool> > p(m, vector<bool>(n));
+    for (int i = 0; i < m; ++i)
+        for (int j = 0; j < n; ++j)
+            if (pizza[i][j] == 'A') p[i][j] = true;
+
+
+
+
+    return 0;
+}
+

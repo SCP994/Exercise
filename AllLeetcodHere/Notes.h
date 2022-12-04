@@ -7,9 +7,14 @@ using namespace std;
 #define mins(a,b,c) min(min(a,b),c)
 
 /* notes
-	vector<int> a(2, 8); // 这样生成含有两个元素且值为8的向量
-	3 >> 1 右移（左移）操作只适用于整数，比除法快，优先级比除法低，答案与整数除法相同：3 >> 1 为 1
-	非静态变量不能在类外定义
+	typedef void* (*FUNC1)(void*);  // 声明一种函数类型
+	FUNC1 p = test; 或者 FUNC1 p = &test;
+
+	栈是先进后出的线性表，具有记忆作用，但不只能顺序存储，也可链式存储
+    struct 结构体名 变量名;  // 声明结构体
+    void* (*f)(void*); 函数指针声明，前一个 void 为返回类型，后一个 void 为参数类型
+    常量必须要初始化（包括常量指针）
+    typeid(i).name();  // 查看变量 i 的类型
 	int i; 变量类型：typeid(i).name();
 	string s; 长度：s.size(); 或者 s.length(); char* s; 长度：strlen(s);
 	string 类型，s += a; 比 s = s + a; 快
@@ -74,6 +79,11 @@ public:
 		return a;
 	}
 
+	void fun(void* (*f)(void*))  // 传入函数指针
+	{
+		(*f)(NULL);  // 执行函数
+	}
+
 	void t(int* p)
 	{
 		cout << p << endl;
@@ -86,13 +96,42 @@ private:
 };
 
 /*
-	char* 是变量，值可以改变，char[] 是常量，值不能改变。
+	char* 是变量，值可以改变，char[] 是常量，所以必须要初始化
 	比如：
 	char* a = "string1";
 	char b[] = "string2";
 	char* 本身是一个字符指针变量，但是它既可以指向字符串常量，又可以指向字符串变量，指向的类型决定了对应的字符串能不能改变。
 	注意：上面的 a, b 都会在末尾加上 '\0'，所以使用 strcpy_s 等函数时，注意要复制的长度是 strlen(a) + 1！！！
 */
+void test0()
+{  // 注意以下三种区别
+	int n = 10;
+	char* str;
+	str = new char[5];
+
+	char** ch1;
+	ch1 = new char* [n];
+	ch1[0] = new char[n];
+
+	char* ch2[] = { str, str };  // 在第一个维度是常量，需要初始化，即几个字符串
+	delete[] ch2[0];
+	ch2[0] = new char[n];  // 第二个维度是变量，可后续赋值
+
+	char ch3[][10] = { "abc", "abc" };
+
+	for (int i = 0; i < n; ++i)
+		delete[] ch1[i];
+	delete[] ch1;
+
+	for (int i = 0; i < 2; ++i)
+		delete[] ch2[i];
+}
+
+void test1(void* t)
+{  // 注意为什么(int)*t不行，不知道 t 所指变量的类型，就不知道要取几个字节
+	//int a = (int)*t;  // 报错
+	int a = *(int*)t;  // 正常
+}
 
 // https ://blog.csdn.net/whahu1989/article/details/118880075
 /*
