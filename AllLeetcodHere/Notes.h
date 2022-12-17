@@ -7,9 +7,12 @@ using namespace std;
 #define mins(a,b,c) min(min(a,b),c)
 
 /* notes
+	NULL 有二义性（C++中），空指针最好用 nullptr，NULL 可当成 0
+    可能导致缓冲区溢出：strcpy, strcat, sprintf, vsprintf, gets, scanf, strncpy 等等
 	typedef void* (*FUNC1)(void*);  // 声明一种函数类型
 	FUNC1 p = test; 或者 FUNC1 p = &test;
 
+	静态成员变量在类外定义
 	栈是先进后出的线性表，具有记忆作用，但不只能顺序存储，也可链式存储
     struct 结构体名 变量名;  // 声明结构体
     void* (*f)(void*); 函数指针声明，前一个 void 为返回类型，后一个 void 为参数类型

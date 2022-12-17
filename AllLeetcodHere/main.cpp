@@ -1,6 +1,29 @@
 ﻿#include <iostream>
 #include "Solution03.h"
+#include <array>
+#include <vector>
+#include <string>
 //#include "Notes.h"
+
+struct ListNode {
+	int val;
+	struct ListNode* next;
+};
+
+struct ListNode* ReverseList(struct ListNode* pHead)
+{
+	if (pHead == nullptr || pHead->next == nullptr) return pHead;
+
+	struct ListNode* temp = pHead->next, * ret = nullptr;
+	while (temp)
+	{
+		temp = pHead->next;
+		pHead->next = ret;
+		ret = pHead;
+		pHead = temp;
+	}
+	return ret;
+}
 
 template <typename T>
 void printV(vector<T>& v)
@@ -35,9 +58,28 @@ void t(void* (*f)(void*))
 
 typedef void (*FUNC1)(void* (*)(void*));
 
+void fun(char* str, int n)
+{
+	int len = strlen(str);
+	n = n % len;
+	if (n == 0) return;
+
+	char* temp = (char*)malloc(sizeof(char) * n);
+	for (int i = 0; i < n; ++i)
+		temp[i] = str[len - n + i];
+	for (int i = len - 1; i >= n; --i)
+		str[i] = str[i - n];
+	for (int i = 0; i < n; ++i)
+		str[i] = temp[i];
+	free(temp);
+}
+
 int main(void)
 {
 	FUNC1 p = t;
-	p(test);
+	//p(test);
+
+
+
 }
 
