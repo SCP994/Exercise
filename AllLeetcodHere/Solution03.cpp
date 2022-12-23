@@ -1159,14 +1159,31 @@ void Solution::dfs_1575(int idx, int finish, int fuel, vector<int>& locations, v
 int Solution::ways(vector<string>& pizza, int k)
 {
     m = pizza.size(), n = pizza[0].size();
-    vector<vector<bool> > p(m, vector<bool>(n));
+    p.assign(m + 1, vector<int>(n + 1));  // 二维差分数组
+    mem.assign(m, vector<vector<int> >(n, vector<int>(k, -1)));
     for (int i = 0; i < m; ++i)
         for (int j = 0; j < n; ++j)
-            if (pizza[i][j] == 'A') p[i][j] = true;
+        {
+            p[i + 1][j + 1] = p[i + 1][j] + p[i][j + 1] - p[i][j];
+            if (pizza[i][j] == 'A') ++p[i + 1][j + 1];
+        }
 
+    return dfs_1444(0, 0, k - 1);
+}
 
+int Solution::dfs_1444(int x, int y, int k)
+{
+    if (mem[x][y][k] != -1) return mem[x][y][k];
+    if (k == 0) return p[m][n] - p[m][y] - p[x][n] + p[x][y] > 0;
+    int ret = 0;
+    for (int i = x + 1; i < m; ++i)
+        if (p[i][n] - p[i][y] - p[x][n] + p[x][y])  // 被切除的部分是否含有苹果
+            ret = (ret + dfs_1444(i, y, k - 1)) % mod;
+    for (int j = y + 1; j < n; ++j)
+        if (p[m][j] - p[m][y] - p[x][j] + p[x][y])
+            ret = (ret + dfs_1444(x, j, k - 1)) % mod;
 
-
-    return 0;
+    mem[x][y][k] = ret;
+    return ret;
 }
 

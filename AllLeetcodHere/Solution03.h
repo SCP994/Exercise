@@ -127,7 +127,11 @@ public:
 
 	void dfs_1575(int idx, int finish, int fuel, vector<int>& locations, vector<vector<int> >& fuels);
 
-	int ways(vector<string>& pizza, int k);  // leetcode 1444 11/27/22
+	int ways(vector<string>& pizza, int k);  // leetcode 1444 12/23/22 二维前缀和 记忆化搜索
+	vector<vector<vector<int> > > mem;
+	vector<vector<int> > p;
+
+	int dfs_1444(int x, int y, int k);
 
 private:
 	const int inf = 0x3f3f3f3f, mod = 1e9 + 7;

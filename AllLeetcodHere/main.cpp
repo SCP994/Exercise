@@ -46,8 +46,11 @@ void printVV(vector<vector<T> >& t)
 
 void* test(void*)
 {
-	string currentState = "++++";
-	cout << Solution().canWin_(currentState) << endl;
+	vector<string> pizza;
+	pizza.push_back("A..");
+	pizza.push_back("AA.");
+	pizza.push_back("...");
+	cout << Solution().ways(pizza, 3) << endl;
 	return NULL;
 }
 
@@ -77,7 +80,7 @@ void fun(char* str, int n)
 int main(void)
 {
 	FUNC1 p = t;
-	//p(test);
+	p(test);
 
 
 
