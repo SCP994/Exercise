@@ -98,6 +98,27 @@ private:
 
 };
 
+// 翻转单链表
+struct ListNode {
+	int val;
+	struct ListNode* next;
+};
+
+struct ListNode* ReverseList(struct ListNode* pHead)
+{
+	if (pHead == nullptr || pHead->next == nullptr) return pHead;
+
+	struct ListNode* temp = pHead->next, * ret = nullptr;
+	while (temp)
+	{
+		temp = pHead->next;
+		pHead->next = ret;
+		ret = pHead;
+		pHead = temp;
+	}
+	return ret;
+}
+
 /*
 	char* 是变量，值可以改变，char[] 是常量，所以必须要初始化
 	比如：

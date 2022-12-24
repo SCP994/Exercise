@@ -147,6 +147,7 @@
     <ClCompile Include="Solution01.cpp" />
     <ClCompile Include="Solution02.cpp" />
     <ClCompile Include="Solution03.cpp" />
+    <ClCompile Include="Solution04.cpp" />
     <ClCompile Include="TrieTree.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +156,7 @@
     <ClInclude Include="Solution02.h" />
     <ClInclude Include="Solution01.h" />
     <ClInclude Include="Solution03.h" />
+    <ClInclude Include="Solution04.h" />
     <ClInclude Include="TrieTree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
