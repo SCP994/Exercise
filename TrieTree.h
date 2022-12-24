@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <vector>
 #include <string>
+#include <cstring>  // memset
 
 class TrieTree	// 字典树（前缀树）
 {

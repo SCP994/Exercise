@@ -57,3 +57,4 @@ TrieTree::TrieNode::TrieNode()
 {
     memset(ch, 0, sizeof(ch));
 }
+
