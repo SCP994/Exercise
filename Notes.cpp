@@ -137,3 +137,97 @@ void CLRValue<T>::test()
 	testRValue(forward<int>(nValue));  // 左 右 右
 }
 
+void pre_order(TreeNode* node)
+{
+	stack<TreeNode*> s;
+	s.emplace(node);
+	while (!s.empty())
+	{
+		TreeNode* p = s.top();
+		s.pop();
+		cout << p->value << endl;
+		if (p->right) s.emplace(p->right);
+		if (p->left) s.emplace(p->left);
+	}
+}
+
+void in_order(TreeNode* node)
+{
+	stack<TreeNode*> s;
+	while (node)
+	{
+		s.emplace(node);
+		node = node->left;
+	}
+	while (!s.empty())
+	{
+		TreeNode* p = s.top();
+		s.pop();
+		cout << p->value << endl;
+		p = p->right;
+		while (p)
+		{
+			s.emplace(p);
+			p = p->left;
+		}
+	}
+}
+
+void post_order(TreeNode* node)
+{
+	stack<TreeNode*> s;
+	TreeNode* temp = nullptr;  // 辅助结点，判断右子树是否已经被访问过
+	while (node)
+	{
+		s.emplace(node);
+		node = node->left;
+	}
+	while (!s.empty())
+	{
+		TreeNode* p = s.top();
+		if (!p->right || temp == p->right)  // 不存在右子树或者右子树被访问过，则打印当前结点并弹出
+		{
+			cout << p->value << endl;
+			temp = p;
+			s.pop();
+		}
+		else
+		{
+			p = p->right;
+			while (p)
+			{
+				s.emplace(p);
+				p = p->left;
+			}
+		}
+	}
+}
+
+void BFS_tree(TreeNode* node)
+{
+	deque<TreeNode*> q;
+	q.emplace_back(node);
+	while (!q.empty())
+	{
+		TreeNode* p = q.front();
+		q.pop_front();
+		cout << p->value << endl;
+		if (p->left) q.emplace_back(p->left);
+		if (p->right) q.emplace_back(p->right);
+	}
+}
+
+void DFS_tree(TreeNode* node)
+{
+	stack<TreeNode*> s;
+	s.emplace(node);
+	while (!s.empty())
+	{
+		TreeNode* p = s.top();
+		s.pop();
+		cout << p->value << endl;
+		if (p->right) s.emplace(p->right);
+		if (p->left) s.emplace(p->left);
+	}
+}
+
