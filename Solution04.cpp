@@ -27,3 +27,37 @@ int Solution04::cherryPickup(vector<vector<int> >& grid)
 	return max(0, dp[n * 2 - 2][n - 1][n - 1]);
 }
 
+int Solution04::cherryPickup_(vector<vector<int>>& grid)
+{
+	m = grid.size();
+	n = grid[0].size();
+	vector<vector<vector<int> > > dp(m, vector<vector<int> >(n, vector<int>(n, -inf)));  // 每个机器人做多走 m 步
+	dp[0][0][n - 1] = grid[0][0] + grid[0][n - 1];
+	if (n == 1) dp[0][0][n - 1] >>= 1;
+
+	for (int steps = 1; steps < m; ++steps)  // 步数即代表着行数
+		for (int j1 = 0; j1 <= steps; ++j1)  // 两个机器人的活动范围是一个三角形
+		{
+			if (j1 >= n) continue;
+			int ret = grid[steps][j1];
+			grid[steps][j1] = 0;
+			for (int j2 = n - 1 - steps; j2 < n; ++j2)
+			{
+				if (j2 < 0) continue;
+				ret += grid[steps][j2];
+				for (int j1_up = j1 - 1; j1_up <= j1 + 1; ++j1_up)
+					for (int j2_up = j2 - 1; j2_up <= j2 + 1; ++j2_up)
+						if (j1_up < 0 || j2_up < 0 || j1_up >= n || j2_up >= n) continue;
+						else dp[steps][j1][j2] = max(dp[steps][j1][j2], ret + dp[steps - 1][j1_up][j2_up]);
+				ret -= grid[steps][j2];  // 恢复
+			}
+			grid[steps][j1] = ret;  // 恢复
+		}
+
+	int ret = 0;
+	for (int i = 0; i < n; ++i)
+		for (int j = 0; j < n; ++j)
+			ret = max(ret, dp[m - 1][i][j]);
+	return ret;
+}
+
