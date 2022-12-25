@@ -8,4 +8,5 @@
 
 // TODO: Reference additional headers your program requires here.
 #include "Solution04.h"
+#include "Notes.h"
 
