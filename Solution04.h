@@ -30,7 +30,7 @@ namespace s04
 
 		int lengthOfLIS_(std::vector<int>& nums);  // 贪心 二分查找 O(nlogn)
 
-		int lengthOfLIS__(std::vector<int>& nums);  // 树状数组 O(n^2) ***
+		int lengthOfLIS__(std::vector<int>& nums);  // 树状数组 O(nlogn) ***
 
 	private:
 		int m, n, inf;
