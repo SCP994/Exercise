@@ -136,13 +136,13 @@ namespace s04
 		set<int> s(nums.begin(), nums.end());
 		int idx = 1;
 		unordered_map<int, int> m;
-		for (int v : s) m[v] = idx++;  // 树状数组按序保存所有数，没有重复，给每个数定义一个下标
-		MyBITree tree(m.size());  // 树状数组保存以某个值结尾的最长序列值
+		for (int v : s) m[v] = idx++;  // 去重并排序，给每个数字进行编号
+		MyBITree tree(m.size());  // 树状数组保存以某个值为结尾的最长上升子序列长度
 		int ret = 1;
 		for (int v : nums)
 		{
 			int x = m[v];
-			int t = tree.query(x - 1) + 1;  // 比当前数小的所有数中的序列最长值加 1
+			int t = tree.query(x - 1) + 1;
 			ret = max(ret, t);
 			tree.update(x, t);
 		}

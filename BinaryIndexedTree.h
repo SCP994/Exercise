@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-class BinaryIndexedTree	// 树状数组（二叉索引树）
+class BinaryIndexedTree  // 树状数组（二叉索引树）
 {
 public:
 	BinaryIndexedTree(int len);
@@ -15,4 +15,6 @@ public:
 protected:
 	int length;
 	std::vector<int> v;
+
 };
+

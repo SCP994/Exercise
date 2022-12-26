@@ -7,17 +7,17 @@ typedef long long ll;
 
 namespace s03
 {
-    vector<vector<int> > Solution::updateMatrix(vector<vector<int> >& mat)
-    {
-        int m = mat.size(), n = mat[0].size();
-        vector<vector<int> > result(m, vector<int>(n, -1)), vis(m, vector<int>(n));
-        for (int i = 0; i < m; ++i)
-            for (int j = 0; j < n; ++j)
-                if (!mat[i][j] && result[i][j] == -1)
-                    bfs_542_1(i, j, mat, vis, result);
-        bfs_542_2(mat, vis, result);
-        return result;
-    }
+	vector<vector<int> > Solution::updateMatrix(vector<vector<int> >& mat)
+	{
+		int m = mat.size(), n = mat[0].size();
+		vector<vector<int> > result(m, vector<int>(n, -1)), vis(m, vector<int>(n));
+		for (int i = 0; i < m; ++i)
+			for (int j = 0; j < n; ++j)
+				if (!mat[i][j] && result[i][j] == -1)
+					bfs_542_1(i, j, mat, vis, result);
+		bfs_542_2(mat, vis, result);
+		return result;
+	}
 
 	void Solution::bfs_542_1(int x, int y, vector<vector<int> >& mat, vector<vector<int> >& vis, vector<vector<int> >& result)
 	{
@@ -344,7 +344,7 @@ namespace s03
 			return -1;
 		if (target == "0000")
 			return 0;
-		deque<string> q { { "0000" } };
+		deque<string> q{ { "0000" } };
 		dead.insert("0000");
 
 		int result = 0;
@@ -431,8 +431,8 @@ namespace s03
 		unordered_set<string> words(wordList.begin(), wordList.end());
 		if (!words.count(endWord))
 			return 0;
-		unordered_set<string> vis { beginWord };
-		deque<string> q { beginWord };
+		unordered_set<string> vis{ beginWord };
+		deque<string> q{ beginWord };
 
 		string temp = "";
 		int result = 1;
@@ -470,7 +470,7 @@ namespace s03
 		unordered_map<int, int> m1, m2;
 		m1[start] = 0;
 		m2[goal] = 0;
-		deque<int> q1 { start }, q2 { goal };
+		deque<int> q1{ start }, q2{ goal };
 
 		while (!q1.empty() && !q2.empty())
 		{
@@ -634,7 +634,7 @@ namespace s03
 		vector<int> vis(m * n, inf); // 保存访问过的节点，存入步数
 		typedef tuple<int, int, int> T;
 		priority_queue<T, vector<T>, greater<T> > q; // 小根堆，保存估计步数、坐标，存入 tuple 比存入 vector 访问更快，还可以将坐标改为 x * n + y
-		
+
 		vector<int> dis = { 0, 1, 0, -1, 0 };
 		int idx = 0, target = trees[idx][0], targetX = trees[idx][1], targetY = trees[idx][2];
 		q.push({ f_675(0, 0, targetX, targetY), 0, 0 });
@@ -652,7 +652,7 @@ namespace s03
 					if (++idx == heapSize) return trueStep;
 					target = trees[idx][0], targetX = trees[idx][1], targetY = trees[idx][2];
 					q = priority_queue<T, vector<T>, greater<T> >(); // 清空栈
-					q.push({ trueStep + f_675(px, py, targetX, targetY), px, py});
+					q.push({ trueStep + f_675(px, py, targetX, targetY), px, py });
 					vis = vector<int>(m * n, inf);
 					vis[px * n + py] = trueStep;
 					break;
@@ -908,7 +908,7 @@ namespace s03
 	bool Solution::makesquare__(vector<int>& matchsticks)
 	{
 		int len = matchsticks.size(), sum = accumulate(matchsticks.begin(), matchsticks.end(), 0), avg = sum >> 2;
-		int mx =  *max_element(matchsticks.begin(), matchsticks.end());
+		int mx = *max_element(matchsticks.begin(), matchsticks.end());
 		if (sum % 4 || mx > avg) return false;
 		int total = 1 << len;
 		vector<int> dp(total, -1);
@@ -1014,7 +1014,7 @@ namespace s03
 		m = matrix.size(), n = matrix[0].size();
 		memo.resize(m, vector<int>(n, 0));
 		this->matrix = matrix;
-		
+
 		for (int i = 0; i < m; ++i)
 			for (int j = 0; j < n; ++j)
 				ret = max(ret, dfs_329(i, j));
@@ -1083,7 +1083,7 @@ namespace s03
 				}
 				currentState[i] = '+';
 				currentState[i + 1] = '+';
-		   }
+			}
 		}
 		return false;
 	}
@@ -1121,7 +1121,7 @@ namespace s03
 		while (i < len)
 		{
 			int j = i;
-			while (j < len && currentState[j] == '+') ++j;
+			while (j < len&& currentState[j] == '+') ++j;
 			ret ^= win__(j - i);  // 子状态异或
 			i = j + 1;
 		}
@@ -1134,7 +1134,7 @@ namespace s03
 		vector<bool> vis(len);
 		for (int j = 0; j < i - 1; ++j) vis[win__(j) ^ win__(i - j - 2)] = true;  // 子状态异或
 		for (int j = 0; j < len; ++j) if (!vis[j]) return sg[i] = j;  // vis 下表为 SG 值
-		return 0; 
+		return 0;
 	}
 
 	int Solution::countRoutes(vector<int>& locations, int start, int finish, int fuel)
