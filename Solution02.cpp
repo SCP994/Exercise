@@ -1,4 +1,4 @@
-﻿#include "Solution02.h"
+#include "Solution02.h"
 
 using namespace std;
 

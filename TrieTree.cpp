@@ -1,4 +1,4 @@
-﻿#include "TrieTree.h"
+#include "TrieTree.h"
 
 using namespace std;
 

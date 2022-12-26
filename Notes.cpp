@@ -1,4 +1,4 @@
-﻿#include "Notes.h"
+#include "Notes.h"
 
 using namespace std;
 

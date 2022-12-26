@@ -28,9 +28,9 @@ namespace s04
 
 		int lengthOfLIS(std::vector<int>& nums);  // leetcode 300 12/26/22 DP O(n^2)
 
-		int lengthOfLIS_(std::vector<int>& nums);  // 贪心 二分查找 O(nlogn)
+		int lengthOfLIS_(std::vector<int>& nums);  // 璐績 浜屽垎鏌ユ壘 O(nlogn)
 
-		int lengthOfLIS__(std::vector<int>& nums);  // 树状数组 O(n^2) ***
+		int lengthOfLIS__(std::vector<int>& nums);  // 鏍戠姸鏁扮粍 O(n^2) ***
 
 	private:
 		int m, n, inf;

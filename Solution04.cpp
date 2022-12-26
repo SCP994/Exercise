@@ -13,7 +13,7 @@ namespace s04
 		n = grid.size();
 		vector<vector<vector<int> > > dp(n * 2, vector<vector<int> >(n, vector<int>(n, -inf)));
 		dp[0][0][0] = grid[0][0];
-		for (int k = 1; k < n * 2 - 1; ++k)  // k ´ú±í×ß¹ıµÄ²½Êı
+		for (int k = 1; k < n * 2 - 1; ++k)  // k ä»£è¡¨èµ°è¿‡çš„æ­¥æ•°
 			for (int i1 = 0; i1 < n; ++i1)
 				for (int i2 = 0; i2 < n; ++i2)
 				{
@@ -21,7 +21,7 @@ namespace s04
 					if (j1 < 0 || j1 >= n || j2 < 0 || j2 >= n || grid[i1][j1] == -1 || grid[i2][j2] == -1) continue;
 					int t = grid[i1][j1];
 					if (i1 != i2) t += grid[i2][j2];
-					for (int x1 = i1 - 1; x1 <= i1; ++x1)  // ´ÓËÄÖÖÇé¿ö×ªÒÆ¶øÀ´
+					for (int x1 = i1 - 1; x1 <= i1; ++x1)  // ä»å››ç§æƒ…å†µè½¬ç§»è€Œæ¥
 						for (int x2 = i2 - 1; x2 <= i2; ++x2)
 							if (x1 >= 0 && x2 >= 0)
 								dp[k][i1][i2] = max(dp[k][i1][i2], dp[k - 1][x1][x2] + t);
@@ -33,12 +33,12 @@ namespace s04
 	{
 		m = grid.size();
 		n = grid[0].size();
-		vector<vector<vector<int> > > dp(m, vector<vector<int> >(n, vector<int>(n, -inf)));  // Ã¿¸ö»úÆ÷ÈË×ö¶à×ß m ²½
+		vector<vector<vector<int> > > dp(m, vector<vector<int> >(n, vector<int>(n, -inf)));  // æ¯ä¸ªæœºå™¨äººæœ€å¤šèµ° m æ­¥
 		dp[0][0][n - 1] = grid[0][0] + grid[0][n - 1];
 		if (n == 1) dp[0][0][n - 1] >>= 1;
 
-		for (int steps = 1; steps < m; ++steps)  // ²½Êı¼´´ú±í×ÅĞĞÊı
-			for (int j1 = 0; j1 <= steps; ++j1)  // Á½¸ö»úÆ÷ÈËµÄ»î¶¯·¶Î§ÊÇÒ»¸öÈı½ÇĞÎ
+		for (int steps = 1; steps < m; ++steps)  // æ­¥æ•°å³ä»£è¡¨ç€è¡Œæ•°
+			for (int j1 = 0; j1 <= steps; ++j1)  // ä¸¤ä¸ªæœºå™¨äººçš„æ´»åŠ¨èŒƒå›´æ˜¯ä¸€ä¸ªä¸‰è§’å½¢
 			{
 				if (j1 >= n) continue;
 				int ret = grid[steps][j1];
@@ -51,9 +51,9 @@ namespace s04
 						for (int j2_up = j2 - 1; j2_up <= j2 + 1; ++j2_up)
 							if (j1_up < 0 || j2_up < 0 || j1_up >= n || j2_up >= n) continue;
 							else dp[steps][j1][j2] = max(dp[steps][j1][j2], ret + dp[steps - 1][j1_up][j2_up]);
-					ret -= grid[steps][j2];  // »Ö¸´
+					ret -= grid[steps][j2];  // æ¢å¤
 				}
-				grid[steps][j1] = ret;  // »Ö¸´
+				grid[steps][j1] = ret;  // æ¢å¤
 			}
 
 		int ret = 0;
@@ -85,7 +85,7 @@ namespace s04
 	int Solution::lengthOfLIS_(vector<int>& nums)
 	{
 		int n = nums.size(), size = 1;
-		vector<int> d(n + 1);  // ³¤¶ÈÎª i ×î³¤ÉÏÉı×ÓĞòÁĞÄ©Î²ÔªËØµÄ×îĞ¡Öµ£¬ÊÇµ¥ÔöÊı×é
+		vector<int> d(n + 1);  // é•¿åº¦ä¸º i æœ€é•¿ä¸Šå‡å­åºåˆ—æœ«å°¾å…ƒç´ çš„æœ€å°å€¼ï¼Œæ˜¯å•å¢æ•°ç»„
 		d[1] = nums[0];
 
 		for (int i = 0; i < n; ++i)
@@ -136,13 +136,13 @@ namespace s04
 		set<int> s(nums.begin(), nums.end());
 		int idx = 1;
 		unordered_map<int, int> m;
-		for (int v : s) m[v] = idx++;
-		MyBITree tree(m.size());
+		for (int v : s) m[v] = idx++;  // æ ‘çŠ¶æ•°ç»„æŒ‰åºä¿å­˜æ‰€æœ‰æ•°ï¼Œæ²¡æœ‰é‡å¤ï¼Œç»™æ¯ä¸ªæ•°å®šä¹‰ä¸€ä¸ªä¸‹æ ‡
+		MyBITree tree(m.size());  // æ ‘çŠ¶æ•°ç»„ä¿å­˜ä»¥æŸä¸ªå€¼ç»“å°¾çš„æœ€é•¿åºåˆ—å€¼
 		int ret = 1;
 		for (int v : nums)
 		{
 			int x = m[v];
-			int t = tree.query(x - 1) + 1;  // ±Èµ±Ç°ÊıĞ¡µÄËùÓĞÊıÖĞĞòÁĞ×î³¤Öµ¼Ó 1
+			int t = tree.query(x - 1) + 1;  // æ¯”å½“å‰æ•°å°çš„æ‰€æœ‰æ•°ä¸­çš„åºåˆ—æœ€é•¿å€¼åŠ  1
 			ret = max(ret, t);
 			tree.update(x, t);
 		}
