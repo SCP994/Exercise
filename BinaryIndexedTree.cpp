@@ -29,3 +29,4 @@ int BinaryIndexedTree::lowbit(int x) const
 {
     return x & -x;
 }
+
