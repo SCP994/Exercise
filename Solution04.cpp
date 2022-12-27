@@ -149,10 +149,10 @@ namespace s04
 		return ret;
 	}
 
-	int Solution::eraseOverlapIntervals(vector<vector<int>>& intervals)
+	int Solution::eraseOverlapIntervals(vector<vector<int>>& intervals)  // O(nlogn)
 	{
 		int n = intervals.size(), ret = 0;
-		sort(intervals.begin(), intervals.end(), [](const auto& a, const auto& b) { return a[1] < b[1]; });
+		sort(intervals.begin(), intervals.end(), [](const auto& a, const auto& b) { return a[1] < b[1]; });  // 一定要按右边界排序
 		int t = intervals[0][1];
 		for (int i = 1; i < n; ++i)
 			if (intervals[i][0] >= t)
@@ -160,6 +160,18 @@ namespace s04
 			else
 				++ret;
 		return ret;
+	}
+
+	int Solution::eraseOverlapIntervals_(std::vector<std::vector<int>>& intervals)  // O(n^2) 超时
+	{
+		int n = intervals.size();
+		sort(intervals.begin(), intervals.end());
+		vector<int> dp(n, 1);  // 以区间 i 为最后的一个区间，可以选出的区间数量的最大值
+		for (int i = 1; i < n; ++i)
+			for (int j = 0; j < i; ++j)
+				if (intervals[j][1] <= intervals[i][0])
+					dp[i] = max(dp[i], dp[j] + 1);
+		return n - *max_element(dp.begin(), dp.end());
 	}
 
 }

@@ -34,6 +34,8 @@ namespace s04
 
 		int eraseOverlapIntervals(std::vector<std::vector<int>>& intervals);  // leetcode 435 12/27/22 排序 贪心 ***
 
+		int eraseOverlapIntervals_(std::vector<std::vector<int>>& intervals);  // DP
+
 	private:
 		int m, n, inf;
 
