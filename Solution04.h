@@ -32,6 +32,8 @@ namespace s04
 
 		int lengthOfLIS__(std::vector<int>& nums);  // 树状数组 O(nlogn) ***
 
+		int eraseOverlapIntervals(std::vector<std::vector<int>>& intervals);  // leetcode 435 12/27/22 排序 贪心 ***
+
 	private:
 		int m, n, inf;
 
