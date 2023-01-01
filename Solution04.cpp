@@ -174,5 +174,54 @@ namespace s04
 		return n - *max_element(dp.begin(), dp.end());
 	}
 
+	int Solution::minDeletionSize(vector<string>& strs)
+	{
+		m = strs.size();
+		n = strs[0].size();
+		int sign = 0;
+		vector<vector<bool> > dp(n + 1, vector<bool>(n));  // 记录长度为 1 到 n 时，以各个位置的字符作为最后一个字符能否构成长度为 1 - n 的单增字符串
+
+		for (int i = 0; i < n; ++i)
+			dp[1][i] = true;
+
+		for (int i = 2; i <= n; ++i)
+		{
+			for (int j = i - 1; j < n; ++j)
+				if (dp[i - 1][j - 1])
+					for (int k = j; k < n; ++k)
+						if (judge_960(strs, j - 1, k))
+						{
+							dp[i][k] = true;
+							sign = 1;
+						}
+			if (sign == 0)
+				return n - i + 1;
+			sign = 0;
+		}
+		return 0;
+	}
+
+	bool Solution::judge_960(std::vector<std::string>& strs, int x, int y)
+	{
+		for (string& str : strs)
+			if (str[x] > str[y]) return false;
+		return true;
+	}
+
+	int Solution::minDeletionSize_(std::vector<std::string>& strs)
+	{
+		int n = strs[0].size(), ret = 1;  // ret 最小为 1
+		vector<int> dp(n, 1);
+
+		for (int i = 1; i < n; ++i)
+		{
+			for (int j = 0; j < i; ++j)
+				if (judge_960(strs, j, i))
+					dp[i] = max(dp[i], dp[j] + 1);
+			ret = max(ret, dp[i]);
+		}
+		return n - ret;
+	}
+
 }
 

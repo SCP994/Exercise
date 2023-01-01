@@ -1,7 +1,9 @@
 #pragma once
+#include <iostream>
 #include <vector>
 #include <set>
 #include <unordered_map>
+#include <algorithm>
 #include "BinaryIndexedTree.h"
 
 namespace s04
@@ -35,6 +37,12 @@ namespace s04
 		int eraseOverlapIntervals(std::vector<std::vector<int>>& intervals);  // leetcode 435 12/27/22 排序 贪心 ***
 
 		int eraseOverlapIntervals_(std::vector<std::vector<int>>& intervals);  // DP
+
+		int minDeletionSize(std::vector<std::string>& strs);  // leetcode 960 1/1/23 DP 最长上升子序列模型
+
+		bool judge_960(std::vector<std::string>& strs, int x, int y);
+
+		int minDeletionSize_(std::vector<std::string>& strs);
 
 	private:
 		int m, n, inf;
