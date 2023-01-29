@@ -223,5 +223,34 @@ namespace s04
 		return n - ret;
 	}
 
+	int Solution::maxEnvelopes(vector<vector<int>>& envelopes)
+	{
+		int n = envelopes.size();
+		sort(envelopes.begin(), envelopes.end(), [](const auto& a, const auto& b)
+			{
+				return a[0] < b[0] || a[0] == b[0] && a[1] > b[1];
+			});
+
+		vector<int> dp{ envelopes[0][1] };
+		for (int i = 1; i < n; ++i)
+		{
+			int x = envelopes[i][1];
+			if (dp[dp.size() - 1] < x)
+				dp.push_back(x);
+			else
+			{
+				int s = 0, e = dp.size() - 1;
+				while (s <= e)
+				{
+					int m = (s + e) / 2;
+					if (dp[m] < x) s = m + 1;
+					else e = m - 1;
+				}
+				dp[s] = x;
+			}
+		}
+		return dp.size();
+	}
+
 }
 

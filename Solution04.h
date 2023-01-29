@@ -44,6 +44,8 @@ namespace s04
 
 		int minDeletionSize_(std::vector<std::string>& strs);
 
+		int maxEnvelopes(std::vector<std::vector<int>>& envelopes);  // leetcode 354 1/29/23 DP 最长上升子序列模型 贪心 二分查找
+
 	private:
 		int m, n, inf;
 
