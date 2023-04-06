@@ -252,5 +252,38 @@ namespace s04
 		return dp.size();
 	}
 
+	int Solution::maxHeight(std::vector<std::vector<int>>& cuboids)
+	{
+		int n = cuboids.size();
+		vector<int> dp(n);
+		auto func = [](vector<int>& v1, vector<int>& v2) -> bool
+		{
+			if (v1[0] <= v2[0] && v1[1] <= v2[1] && v1[2] <= v2[2])
+				return true;
+			return false;
+		};
+
+		for (auto &i : cuboids)
+			sort(i.begin(), i.end());
+		sort(cuboids.begin(), cuboids.end());
+
+		for (int i = 0; i < n; ++i)
+		{
+			dp[i] = cuboids[i][2];
+			for (int j = i - 1; j >= 0; --j)
+				if (func(cuboids[j], cuboids[i]))
+					dp[i] = max(dp[i], dp[j] + cuboids[i][2]);
+		}
+
+		for (const auto i : cuboids)
+		{
+			for (const auto j : i)
+				cout << j << " ";
+			cout << endl;
+		}
+
+		return *max_element(dp.begin(), dp.end());
+	}
+
 }
 

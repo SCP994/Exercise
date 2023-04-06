@@ -7,9 +7,12 @@ using namespace std;
 
 void test()
 {
-	vector<vector<int> > envelopes = { {15,8},{2,20},{2,14},{4,17},{8,19},{8,9},{5,7},{11,19},{8,11},{13,11},{2,13},{11,19},{8,11},{13,11},{2,13},{11,19},{16,1},{18,13},{14,17},{18,19} };
-	s04::Solution s;
-	cout << s.maxEnvelopes(envelopes) << endl;
+	vector<vector<int> > cuboids = { { 50, 45, 20 }, { 95, 37, 53 }, { 45, 23, 12 } };
+	s04::Solution solution;
+	int ret;
+
+	ret = solution.maxHeight(cuboids);
+	cout << ret << endl;
 }
 
 int main(void)

@@ -46,6 +46,8 @@ namespace s04
 
 		int maxEnvelopes(std::vector<std::vector<int>>& envelopes);  // leetcode 354 1/29/23 DP 最长上升子序列模型 贪心 二分查找
 
+		int maxHeight(std::vector<std::vector<int>>& cuboids);  // leetcode 1691 4/6/23 DP 最长上升子序列 排序 动规
+
 	private:
 		int m, n, inf;
 
