@@ -1,19 +1,12 @@
-#include "main.h"
+#include <cstdio>
 
-using namespace std;
-
-void test()
-{
-	vector<vector<int> > cuboids = { { 50, 45, 20 }, { 95, 37, 53 }, { 45, 23, 12 } };
-	s04::Solution solution;
-	int ret;
-
-	ret = solution.maxHeight(cuboids);
-	cout << ret << endl;
-}
+#include "pat.h"
 
 int main(void)
 {
-	test();
+	int n;
+	scanf("%d", &n);
+	printf("%d\n", NS_PAT_B::pat_1001(n));
 
+	return 0;
 }
