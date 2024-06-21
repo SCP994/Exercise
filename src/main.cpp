@@ -1,7 +1,4 @@
-// Leetcode.cpp : Defines the entry point for the application.
-//
-
-#include "Leetcode.h"
+#include "main.h"
 
 using namespace std;
 
@@ -20,4 +17,3 @@ int main(void)
 	test();
 
 }
-

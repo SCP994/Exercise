@@ -1,15 +1,15 @@
-﻿# CMakeList.txt : CMake project for Leetcode, include source and define
-# project specific logic here.
-#
-cmake_minimum_required (VERSION 3.8)
+﻿cmake_minimum_required(VERSION 3.26)
 
-project ("Leetcode")
+project(EXERCISE)
 
-# Add source to this project's executable.
-add_executable (Leetcode "Leetcode.cpp" "Leetcode.h" "BinaryIndexedTree.cpp" "BinaryIndexedTree.h"  "Notes.cpp" "Notes.h" "Solution01.cpp" "Solution01.h" "Solution02.cpp" "Solution02.h" "Solution03.cpp" "Solution03.h" "Solution04.cpp" "Solution04.h" "TrieTree.cpp" "TrieTree.h")
+set(CMAKE_CXX_STANDARD 17)
 
-if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET Leetcode PROPERTY CXX_STANDARD 20)
-endif()
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# TODO: Add tests and install targets if needed.
+aux_source_directory(${PROJECT_SOURCE_DIR}/src SRC)
+
+include_directories(${PROJECT_SOURCE_DIR}/include)
+
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+
+add_executable(main ${SRC})

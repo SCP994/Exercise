@@ -1,4 +1,3 @@
-#pragma once
 #include <iostream>
 #include <vector>
 #include <unordered_set>
@@ -9,6 +8,7 @@
 #include <queue>
 #include <numeric>
 #include <string>
+#include <algorithm>
 
 namespace s01
 {

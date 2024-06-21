@@ -1,9 +1,9 @@
-#pragma once
 #include <vector>
 #include <iostream>
 #include <chrono>
 #include <stack>
 #include <deque>
+#include <utility>
 
 namespace notes
 {
@@ -59,7 +59,7 @@ namespace notes
 	void CLRValue<T>::testRValue(T&& nValue)
 	{
 		printX(nValue);
-		printX(forward<T>(nValue));
+		printX(std::forward<T>(nValue));
 		printX(move(nValue));
 	}
 
@@ -73,7 +73,7 @@ namespace notes
 		T nValue = 100;
 		testRValue(4);  // 左 右 右
 		testRValue(nValue);  // 左 左 右
-		testRValue(forward<T>(nValue));  // 左 右 右
+		testRValue(std::forward<T>(nValue));  // 左 右 右
 	}
 
 	typedef struct TreeNode
