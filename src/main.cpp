@@ -1,12 +1,10 @@
 #include <cstdio>
+#include <cstring>
 
 #include "pat.h"
 
-int main(void)
+int main()
 {
-	int n;
-	scanf("%d", &n);
-	printf("%d\n", NS_PAT_B::pat_1001(n));
 
 	return 0;
 }
