@@ -1,8 +1,4 @@
 #include "pat.h"
-#include <algorithm>
-#include <cstdio>
-#include <unordered_map>
-#include <utility>
 
 int pat_b_1001(int n)
 {
@@ -51,15 +47,15 @@ void pat_b_1026(int C1, int C2)
     int duration = C2 - C1;
     int h = 0, m = 0, s = 0;
     const int BASE = 60;
-    const int CLK_TCK = 100;
+    const int clk_tck = 100;
 
-    s = duration % (BASE * CLK_TCK);
-    duration /= (BASE * CLK_TCK);
+    s = duration % (BASE * clk_tck );
+    duration /= (BASE * clk_tck );
     m = duration % BASE;
     duration /= BASE;
     h = duration % BASE;
 
-    printf("%02d:%02d:%02d\n", h, m, (s + (CLK_TCK / 2))/ CLK_TCK);
+    printf("%02d:%02d:%02d\n", h, m, (s + (clk_tck / 2))/ clk_tck);
 }
 
 int pat_b_1046(int a, int b, int c, int d)
@@ -72,11 +68,14 @@ int pat_b_1046(int a, int b, int c, int d)
     return 0;
 }
 
-static int gcd(int a, int b)
+namespace
 {
-    if (b == 0)
-        return a;
-    return gcd(b, a % b);
+    int gcd(int a, int b)
+    {
+        if (b == 0)
+            return a;
+        return gcd(b, a % b);
+    }
 }
 
 void pat_b_1008(int arr[], int n, int m)
@@ -171,13 +170,16 @@ void pat_b_1012(int arr[])
     }
 }
 
-static int win_1018(char a, char b)
+namespace
 {
-    if (a == b)
-        return 0;
-    if (a == 'C' && b == 'J' || a == 'J' && b == 'B' || a == 'B' && b == 'C')
-        return 1;
-    return -1;
+    int win_1018(char a, char b)
+    {
+        if (a == b)
+            return 0;
+        if (a == 'C' && b == 'J' || a == 'J' && b == 'B' || a == 'B' && b == 'C')
+            return 1;
+        return -1;
+    }
 }
 
 void pat_b_1018()
@@ -224,4 +226,75 @@ void pat_b_1018()
     }
 
     printf("%c %c\n", arr[cA], arr[cB]);
+}
+
+void pat_a_1042()
+{
+    const char strs[][5] = {
+        "",
+        "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13",
+        "H1", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9", "H10", "H11", "H12", "H13",
+        "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "C11", "C12", "C13",
+        "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "D11", "D12", "D13",
+        "J1", "J2",
+    };
+    int order[55];
+    for (int i = 1; i < 55; ++i)
+        order[i] = i;
+
+    int k;
+    scanf("%d", &k);
+
+    int shuffleOrder[55];
+    for (int i = 1; i < 55; ++i)
+        scanf("%d", shuffleOrder + i);
+
+    int tmpOrder[55];
+    while (k--)
+    {
+        for (int i = 1; i < 55; ++i)
+            tmpOrder[shuffleOrder[i]] = order[i];
+        std::swap(order, tmpOrder);
+    }
+
+    for (int i = 1; i < 55; ++i)
+    {
+        if (i > 1)
+            printf(" ");
+        printf("%s", strs[order[i]]);
+    }
+}
+
+namespace
+{
+    int shortest_1046(int arr[], int n, int totalDistance, int s, int e)
+    {
+        int dis = arr[e] - arr[s];
+        return dis < totalDistance - dis ? dis : totalDistance - dis;
+    }
+}
+
+void pat_a_1046(int arr[])
+{
+    int n;
+    scanf("%d", &n);
+    int totalDistance = 0;
+    for (int i = 1; i <= n; ++i)
+    {
+        scanf("%d", arr + i);
+        totalDistance += arr[i];
+        arr[i] += arr[i - 1];
+    }
+
+    int m, s, e;
+    scanf("%d", &m);
+    for (int i = 0; i < m; ++i)
+    {
+        scanf("%d%d", &s, &e);
+        --s;
+        --e;
+        if (s > e)
+            std::swap(s, e);
+        printf("%d\n", shortest_1046(arr, n, totalDistance, s, e));
+    }
 }

@@ -2,6 +2,7 @@
 #include <utility>
 #include <algorithm>
 #include <unordered_map>
+#include <cmath>
 
 // 简单模拟
 
@@ -24,3 +25,5 @@ void pat_b_1012(int arr[]);
 void pat_b_1018();
 
 void pat_a_1042();
+
+void pat_a_1046(int arr[]);
