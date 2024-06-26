@@ -7,7 +7,7 @@
 #include <cmath>
 #include <cstring>
 
-// 简单模拟
+// 3.1 简单模拟
 
 int pat_b_1001(int n);
 
@@ -38,3 +38,7 @@ void pat_b_1010();
 void pat_a_1002();
 
 void pat_a_1009();
+
+// 3.2 查找元素
+
+void pat_b_1041();

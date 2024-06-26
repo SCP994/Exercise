@@ -380,5 +380,64 @@ void pat_a_1002()
 
 void pat_a_1009()
 {
+    const float eps = 1e-5;
+    const int maxn = 2001;
 
+    float arr1[maxn] = {0};
+    float arr2[maxn] = {0};
+    int k, a;
+    float b;
+
+    scanf("%d", &k);
+    for (int i = 0; i < k; ++i)
+    {
+        scanf("%d%f", &a, &b);
+        arr1[a] = b;
+    }
+
+    int total = 0;
+    scanf("%d", &k);
+    for (int i = 0; i < k; ++i)
+    {
+        scanf("%d%f", &a, &b);
+        for (int j = 0; j < maxn; ++j)
+            if (abs(arr1[j]) > eps)
+            {
+                int t = a + j;
+                if (abs(arr2[t]) < eps)
+                    ++total;
+                arr2[t] += arr1[j] * b;
+                if (abs(arr2[t]) < eps)
+                    --total;
+            }
+    }
+
+    printf("%d", total);
+    for (int i = maxn - 1; i >= 0; --i)
+        if (abs(arr2[i]) > eps)
+            printf(" %d %.1f", i, arr2[i]);
+}
+
+void pat_b_1041()
+{
+    std::unordered_map<int, std::pair<std::string, int>> map; // 数据量不大，可以直接用数组映射
+
+    char license[20];
+    int trial, real;
+
+    int n;
+    scanf("%d", &n);
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%s%d%d", license, &trial, &real);
+        map[trial] = {std::string(license), real};
+    }
+
+    int m;
+    scanf("%d", &m);
+    for (int i = 0; i < m; ++i)
+    {
+        scanf("%d", &trial);
+        printf("%s %d\n", map[trial].first.c_str(), map[trial].second);
+    }
 }
