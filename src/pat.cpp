@@ -298,3 +298,87 @@ void pat_a_1046(int arr[])
         printf("%d\n", shortest_1046(arr, n, totalDistance, s, e));
     }
 }
+
+namespace
+{
+    bool judge_1065(long long a, long long b, long long c)
+    {
+        if (a >= 0 && b < 0 || a < 0 && b >= 0)
+            return a + b > c;
+        if (a >= 0 && c < 0 || a < 0 && c >= 0)
+            return a >= 0;
+        return a > c - b;
+    }
+}
+
+void pat_a_1065()
+{
+    int n;
+    scanf("%d", &n);
+    long long a, b, c;
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%lld%lld%lld", &a, &b, &c);
+        if (judge_1065(a, b, c))
+            printf("Case #%d: true\n", i + 1);
+        else
+            printf("Case #%d: false\n", i + 1);
+    }
+}
+
+void pat_b_1010()
+{
+    int a, b;
+    int i = 0;
+
+    while (scanf("%d%d", &a, &b) != EOF) // 或者读入一行
+    {
+        if (b == 0)
+            continue;
+        if (i)
+            printf(" ");
+        ++i;
+        printf("%d %d", a * b, b - 1);
+    }
+
+    if (i == 0) // 零多项式：系数全为零的多项式
+        printf("0 0");
+}
+
+void pat_a_1002()
+{
+    const float eps = 1e-5;
+
+    float arr[1001] = {0};
+    int k, a;
+    float b;
+
+    scanf("%d", &k);
+    for (int i = 0; i < k; ++i)
+    {
+        scanf("%d%f", &a, &b);
+        arr[a] = b;
+    }
+
+    int total = k;
+    scanf("%d", &k);
+    for (int i = 0; i < k; ++i)
+    {
+        scanf("%d%f", &a, &b);
+        if (abs(arr[a]) < eps)
+            ++total;
+        arr[a] += b;
+        if (abs(arr[a]) < eps)
+            --total;
+    }
+
+    printf("%d", total);
+    for (int i = 1000; i >= 0; --i)
+        if (abs(arr[i]) > eps)
+            printf(" %d %.1f", i, arr[i]);
+}
+
+void pat_a_1009()
+{
+
+}

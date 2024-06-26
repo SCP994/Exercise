@@ -1,8 +1,11 @@
 #include <cstdio>
+#include <cstdlib>
 #include <utility>
 #include <algorithm>
 #include <unordered_map>
+#include <iostream>
 #include <cmath>
+#include <cstring>
 
 // 简单模拟
 
@@ -27,3 +30,11 @@ void pat_b_1018();
 void pat_a_1042();
 
 void pat_a_1046(int arr[]);
+
+void pat_a_1065();
+
+void pat_b_1010();
+
+void pat_a_1002();
+
+void pat_a_1009();

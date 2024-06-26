@@ -4,6 +4,7 @@
 
 int main()
 {
+	pat_a_1009();
 
 	return 0;
 }
