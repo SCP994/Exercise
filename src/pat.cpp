@@ -441,3 +441,284 @@ void pat_b_1041()
         printf("%s %d\n", map[trial].first.c_str(), map[trial].second);
     }
 }
+
+void pat_b_1004()
+{
+    char maxName[11], maxID[11], minName[11], minID[11];
+    int maxScore = -1, minScore = 101;
+
+    int n, score;
+    scanf("%d", &n);
+
+    char name[11], ID[11];
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%s%s%d", name, ID, &score);
+        if (score > maxScore)
+        {
+            maxScore = score;
+            strcpy(maxName, name);
+            strcpy(maxID, ID);
+        }
+        if (score < minScore)
+        {
+            minScore = score;
+            strcpy(minName, name);
+            strcpy(minID, ID);
+        }
+    }
+
+    printf("%s %s\n", maxName, maxID);
+    printf("%s %s\n", minName, minID);
+}
+
+void pat_b_1028()
+{
+    const int limitYear = 2014 - 200;
+    const int limitMonth = 9;
+    const int limitDay = 6;
+    const int nowYear = 2014;
+    const int nowMonth = 9;
+    const int nowDay = 6;
+
+    char maxName[6], minName[6], name[6];
+    int maxYear = -1, minYear = 2015;
+    int maxMonth = -1, minMonth = 13;
+    int maxDay = -1, minDay = 32;
+    int year, month, day;
+    int total = 0;
+
+    int n;
+    scanf("%d", &n);
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%s%d/%d/%d", name, &year, &month, &day);
+
+        if ((year > limitYear
+        || year == limitYear && month > limitMonth
+        || year == limitYear && month == limitMonth && day >= limitDay)
+        && (year < nowYear
+        || year == nowYear && month < nowMonth
+        || year == nowYear && month == nowMonth && day <= nowDay))
+            ++total;
+        else
+            continue;
+
+        if (year > maxYear
+        || year == maxYear && month > maxMonth
+        || year == maxYear && month == maxMonth && day > maxDay)
+        {
+            strcpy(maxName, name);
+            maxYear = year;
+            maxMonth = month;
+            maxDay = day;
+        }
+
+        if (year < minYear
+        || year == minYear && month < minMonth
+        || year == minYear && month == minMonth && day < minDay)
+        {
+            strcpy(minName, name);
+            minYear = year;
+            minMonth = month;
+            minDay = day;
+        }
+    }
+
+    if (total == 0) // 可能输入的日期都是不合理的
+        printf("%d\n", total);
+    else
+        printf("%d %s %s\n", total, minName, maxName);
+}
+
+void pat_a_1011()
+{
+    const char arr[] = {'W', 'T', 'L'};
+
+    float wtl[3][3];
+    char results[3];
+    float profit = 1.0;
+    for (int i = 0; i < 3; ++i)
+    {
+        scanf("%f%f%f", wtl[i], wtl[i] + 1, wtl[i] + 2);
+        float* p = std::max_element(wtl[i], wtl[i] + 3);
+        results[i] = arr[p - wtl[i]];
+        profit *= *p;
+    }
+
+    printf("%c %c %c %.2f\n", results[0], results[1], results[2], ((profit * 0.65) - 1.0) * 2.0);
+}
+
+void pat_a_1006()
+{
+    int n;
+    scanf("%d", &n);
+
+    int maxTime = -1, minTime = 24 * 60 * 60 + 1;
+    int time, h, m, s;
+    char maxName[16], minName[16], name[16];
+
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%s", name);
+
+        scanf("%d:%d:%d", &h, &m, &s);
+        time = h * 60 * 60 + m * 60 + s;
+
+        if (time < minTime)
+        {
+            minTime = time;
+            strcpy(minName, name);
+        }
+
+        scanf("%d:%d:%d", &h, &m, &s);
+        time = h * 60 * 60 + m * 60 + s;
+
+        if (time > maxTime)
+        {
+            maxTime = time;
+            strcpy(maxName, name);
+        }
+    }
+
+    printf("%s %s\n", minName, maxName);
+}
+
+namespace
+{
+    struct Student_1036
+    {
+        char name[11];
+        char ID[11];
+        char gender;
+        int grade;
+        Student_1036() : grade(-1) {}
+        Student_1036(int grade) : grade(grade) {}
+    };
+}
+
+void pat_a_1036()
+{
+    Student_1036 maxStudent(-1), minStudent(101), student;
+
+    int n;
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%s %c%s%d", student.name, &student.gender, student.ID, &student.grade); // 接收字符之前加个空格
+        if (student.gender == 'M')
+        {
+            if (student.grade < minStudent.grade)
+                minStudent = student;
+        }
+        else
+        {
+            if (student.grade > maxStudent.grade)
+                maxStudent = student;
+        }
+    }
+
+    bool sign = true;
+
+    if (maxStudent.grade == -1)
+    {
+        sign = false;
+        printf("Absent\n");
+    }
+    else
+        printf("%s %s\n", maxStudent.name, maxStudent.ID);
+
+    if (minStudent.grade == 101)
+    {
+        sign = false;
+        printf("Absent\n");
+    }
+    else
+        printf("%s %s\n", minStudent.name, minStudent.ID);
+
+    if (sign)
+        printf("%d\n", maxStudent.grade - minStudent.grade);
+    else
+        printf("NA\n");
+}
+
+void pat_b_1036()
+{
+    int n;
+    char c;
+    scanf("%d %c", &n, &c);
+
+    int m = (n + 1) / 2;
+    for (int i = 0; i < m; ++i)
+    {
+        if (i == 0 || i == m - 1)
+        {
+            for (int j = 0; j < n; ++j)
+                printf("%c", c);
+            printf("\n");
+        }
+        else
+        {
+            printf("%c", c);
+            for (int j = 1; j < n - 1; ++j)
+                printf(" ");
+            printf("%c\n", c);
+        }
+    }
+}
+
+void pat_b_1027()
+{
+    int n;
+    char c;
+    scanf("%d %c", &n, &c);
+
+    int bottom = static_cast<int>(sqrt((n + 1) * 2)) - 1;
+    if (bottom % 2 == 0) // 注意可能是偶数
+        --bottom;
+    int used = (bottom + 1) * (bottom + 1) / 2 - 1;
+
+    for (int i = bottom; i > 0; i -= 2)
+    {
+        for (int j = 0; j < (bottom - i) / 2; ++j)
+            printf(" ");
+        for (int j = 0; j < i; ++j)
+            printf("%c", c);
+        printf("\n");
+    }
+    for (int i = 3; i <= bottom; i += 2)
+    {
+        for (int j = 0; j < (bottom - i) / 2; ++j)
+            printf(" ");
+        for (int j = 0; j < i; ++j)
+            printf("%c", c);
+        printf("\n");
+    }
+
+    printf("%d\n", n - used);
+}
+
+void pat_a_1031()
+{
+    char str[100];
+    scanf("%s", str);
+
+    int n = strlen(str);
+    int n1 = (n + 2) / 3;
+    int n2 = n + 2 - n1 * 2;
+
+    for (int i = 0; i < n1 - 1; ++i)
+    {
+        printf("%c", str[i]);
+        for (int j = 0; j < n2 - 2; ++j)
+            printf(" ");
+        printf("%c", str[n - i - 1]);
+        printf("\n");
+    }
+
+    for (int i = n1 - 1; i < n1 - 1 + n2; ++i)
+        printf("%c", str[i]);
+
+    printf("\n");
+}

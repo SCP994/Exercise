@@ -3,6 +3,7 @@
 #include <utility>
 #include <algorithm>
 #include <unordered_map>
+#include <deque>
 #include <iostream>
 #include <cmath>
 #include <cstring>
@@ -42,3 +43,21 @@ void pat_a_1009();
 // 3.2 查找元素
 
 void pat_b_1041();
+
+void pat_b_1004();
+
+void pat_b_1028();
+
+void pat_a_1011();
+
+void pat_a_1006();
+
+void pat_a_1036();
+
+// 3.3 图形输出
+
+void pat_b_1036();
+
+void pat_b_1027();
+
+void pat_a_1031();
