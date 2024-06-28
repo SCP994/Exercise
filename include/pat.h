@@ -61,3 +61,21 @@ void pat_b_1036();
 void pat_b_1027();
 
 void pat_a_1031();
+
+// 3.5 进制转换
+
+void pat_b_1022();
+
+void pat_b_1037();
+
+void pat_a_1019();
+
+void pat_a_1027();
+
+void pat_a_1058();
+
+// 3.6 字符串处理
+
+void pat_b_1009();
+
+void pat_b_1009_1();

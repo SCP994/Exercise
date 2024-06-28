@@ -722,3 +722,160 @@ void pat_a_1031()
 
     printf("\n");
 }
+
+void pat_b_1022()
+{
+    int a, b, base;
+    scanf("%d%d%d", &a, &b, &base);
+
+    int c = a + b;
+    int i = 0;
+    int arr[100];
+
+    do // 用 while 语句则要特判 c = 0
+    {
+        arr[i++] = c % base;
+        c /= base;
+    } while (c);
+
+    for (int j = i - 1; j >= 0; --j)
+        printf("%d", arr[j]);
+    printf("\n");
+}
+
+void pat_b_1037()
+{
+    int g[3], s[3], k[3];
+    int total[2];
+    for (int i = 0; i < 2; ++i)
+    {
+        scanf("%d.%d.%d", g + i, s + i, k + i);
+        total[i] = g[i] * 17 * 29 + s[i] * 29 + k[i];
+    }
+
+    int left = total[1] - total[0];
+    bool minus = left < 0;
+    left = left < 0 ? -left : left;
+
+    g[2] = left / (17 * 29);
+    left %= 17 * 29;
+    s[2] = left / 29;
+    left %= 29;
+    k[2] = left;
+
+    if (minus)
+        printf("-");
+    printf("%d.%d.%d\n", g[2], s[2], k[2]);
+}
+
+namespace
+{
+    struct Bit_a_1019
+    {
+        int num;
+        int exp;
+        Bit_a_1019(int num = 0, int exp = 0) : num(num), exp(exp) {}
+    };
+}
+
+void pat_a_1019()
+{
+    int n, b;
+    scanf("%d%d", &n, &b);
+
+    Bit_a_1019 bits[32];
+
+    int index = 0;
+    do
+    {
+        bits[index].num = n % b;
+        bits[index].exp = index;
+        n /= b;
+        ++index;
+    } while (n);
+
+    bool result = true;
+    for (int i = 0; i < index / 2; ++i)
+        if (bits[i].num != bits[index - i - 1].num)
+        {
+            result = false;
+            break;
+        }
+
+    printf(result ? "Yes\n" : "No\n");
+    for (int i = index - 1; i >= 0; --i)
+    {
+        if (i < index - 1)
+            printf(" ");
+        printf("%d", bits[i].num);
+    }
+}
+
+void pat_a_1027()
+{
+    char bits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C'};
+    int base = 13;
+    int r, g, b;
+    char resultR[2], resultG[2], resultB[2];
+    scanf("%d%d%d", &r, &g, &b);
+
+    resultR[1] = bits[r % base];
+    resultR[0] = bits[r / base];
+    resultG[1] = bits[g % base];
+    resultG[0] = bits[g / base];
+    resultB[1] = bits[b % base];
+    resultB[0] = bits[b / base];
+
+    printf("#%c%c%c%c%c%c\n",
+        resultR[0], resultR[1], resultG[0], resultG[1], resultB[0], resultB[1]);
+}
+
+void pat_a_1058()
+{
+    int a[3], b[3], c[3];
+    scanf("%d.%d.%d", a, a + 1, a + 2);
+    scanf("%d.%d.%d", b, b + 1, b + 2);
+    int carry = 0;
+    c[2] = (a[2] + b[2]) % 29;
+    carry = (a[2] + b[2]) / 29;
+    c[1] = (a[1] + b[1] + carry) % 17;
+    carry = (a[1] + b[1] + carry) / 17;
+    c[0] = a[0] + b[0] + carry;
+    printf("%d.%d.%d", c[0], c[1], c[2]);
+}
+
+void pat_b_1009()
+{
+    int num = 0;
+    char strs[90][90];
+    while (scanf("%s", strs[num]) != EOF)
+    {
+        num++;
+    }
+    for (int i = num - 1; i >= 0; --i)
+    {
+        printf("%s", strs[i]);
+        if (i)
+            printf(" ");
+    }
+}
+
+void pat_b_1009_1()
+{
+    char str[100];
+    std::cin.getline(str, 100);
+
+    int len = strlen(str);
+    for (int i = 0; i < len; ++i)
+        if (str[i] == ' ')
+            str[i] = '\0';
+
+    int i = len; // 不是 len - 1，带入 0、1 验证
+    while (i--)
+    {
+        if (str[i] != '\0' && i)
+            continue;
+        printf(i ? "%s " : "%s", i ? str + i + 1 : str);
+    }
+    printf("\n");
+}
