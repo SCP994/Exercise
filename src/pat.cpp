@@ -1,4 +1,5 @@
 #include "pat.h"
+#include <string>
 
 int pat_b_1001(int n)
 {
@@ -878,4 +879,155 @@ void pat_b_1009_1()
         printf(i ? "%s " : "%s", i ? str + i + 1 : str);
     }
     printf("\n");
+}
+
+void pat_b_1006()
+{
+    int n;
+    scanf("%d", &n);
+
+    int numB = n / 100;
+    n %= 100;
+    int numS = n / 10;
+    int numG = n %= 10;
+
+    for (int i = 0; i < numB; ++i)
+        printf("B");
+    for (int i = 0; i < numS; ++i)
+        printf("S");
+    for (int i = 0; i < numG; ++i)
+        printf("%d", i + 1);
+}
+
+void pat_b_1021(char str[])
+{
+    scanf("%s", str);
+
+    int len = strlen(str);
+    int arr[10] = {0};
+
+    for (int i = 0; i < len; ++i)
+        ++arr[str[i] - '0'];
+
+    for (int i = 0; i < 10; ++i)
+        if (arr[i])
+            printf("%d:%d\n", i, arr[i]);
+}
+
+void pat_b_1031()
+{
+    const int weight[] = {7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2};
+    const char rear[] = {'1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2'};
+
+    char str[100][19];
+    int n;
+    bool allPassed = true;
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%s", *(str + i));
+        int total = 0;
+        bool sign = true;
+        for (int j = 0; j < 17; ++j)
+        {
+            if (str[i][j] < '0' || str[i][j] > '9')
+            {
+                sign = false;
+                break;
+            }
+            total += (str[i][j] - '0') * weight[j];
+        }
+        if (sign)
+        {
+            total %= 11;
+            if (str[i][17] != rear[total])
+                sign = false;
+        }
+        if (!sign)
+        {
+            allPassed = false;
+            printf("%s\n", str[i]);
+        }
+    }
+
+    if (allPassed)
+        printf("All passed\n");
+}
+
+void pat_b_1002()
+{
+    const char num[][5] = {"ling", "yi", "er", "san", "si", "wu", "liu", "qi", "ba", "jiu"};
+
+    char str[101];
+    scanf("%s", str);
+
+    int len = strlen(str);
+    int total = 0;
+    while (len--)
+        total += str[len] - '0';
+
+    int idx = 0;
+    int result[5];
+    while (total)
+    {
+        result[idx++] = total % 10;
+        total /= 10;
+    }
+
+    for (int i = idx - 1; i >= 0; --i)
+    {
+        printf("%s", num[result[i] - 0]);
+        if (i)
+            printf(" ");
+    }
+}
+
+void pat_b_1014()
+{
+    const char day[][4] = {"MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"};
+
+    char str[4][61];
+    int len[4];
+
+    for (int i = 0; i < 4; ++i)
+    {
+        scanf("%s", *(str + i));
+        len[i] = strlen(str[i]);
+    }
+
+    char same[3] = {0};
+    for (int i = 0; i < len[0]; ++i)
+    {
+        if (!same[0] && (str[0][i] < 'A' || str[0][i] > 'G')
+            || same[0] && (str[0][i] < '0' || str[0][i] > '9') && (str[0][i] < 'A' || str[0][i] > 'N'))
+            continue;
+        if (str[0][i] == str[1][i])
+        {
+            if (!same[0])
+                same[0] = str[0][i];
+            else
+            {
+                same[1] = str[0][i];
+                break;
+            }
+        }
+    }
+
+    for (int i = 0; i < len[2]; ++i)
+    {
+        if ((str[2][i] < 'a' || str[2][i] > 'z') && (str[2][i] < 'A' || str[2][i] > 'Z'))
+            continue;
+        if (str[2][i] == str[3][i])
+        {
+            same[2] = i;
+            break;
+        }
+    }
+
+    int h = same[1] - '0';
+    if (same[1] >= 'A' && same[1] <= 'N')
+        h = 10 + same[1] - 'A';
+
+    printf("%s %02d:%02d", day[same[0] - 'A'], h, same[2]);
 }

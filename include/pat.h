@@ -79,3 +79,13 @@ void pat_a_1058();
 void pat_b_1009();
 
 void pat_b_1009_1();
+
+void pat_b_1006();
+
+void pat_b_1021(char str[]);
+
+void pat_b_1031();
+
+void pat_b_1002();
+
+void pat_b_1014();
