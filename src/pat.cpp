@@ -985,6 +985,11 @@ void pat_b_1002()
 
 void pat_b_1014()
 {
+    pat_a_1061();
+}
+
+void pat_a_1061()
+{
     const char day[][4] = {"MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"};
 
     char str[4][61];
@@ -1030,4 +1035,226 @@ void pat_b_1014()
         h = 10 + same[1] - 'A';
 
     printf("%s %02d:%02d", day[same[0] - 'A'], h, same[2]);
+}
+
+void pat_a_1073()
+{
+    char str[10000];
+    scanf("%s", str);
+
+    int len = strlen(str);
+
+    bool firstSign, secondSign;
+    int index = 0;
+    int num[10000];
+    int exp = 0;
+
+    for (int i = 0, sign = 0; i < len; ++i)
+        if (sign == 0)
+        {
+            firstSign = str[i] == '+';
+            ++sign;
+        }
+        else if (sign == 1)
+        {
+            if (str[i] < '0' || str[i] > '9')
+            {
+                if (str[i] == '+' || str[i] == '-')
+                {
+                    secondSign = str[i] == '+';
+                    ++sign;
+                }
+                continue;
+            }
+            num[index++] = str[i] - '0';
+        }
+        else
+        {
+            exp *= 10;
+            exp += str[i] - '0';
+        }
+
+    int dotIndex = 1;
+
+    if (!firstSign)
+        printf("-");
+    if (secondSign)
+        dotIndex += exp;
+    else
+        dotIndex -= exp;
+
+    if (dotIndex <= 0)
+    {
+        printf("0.");
+        for (int i = 0; i < -dotIndex; ++i)
+            printf("0");
+    }
+    for (int i = 0; i < index; ++i)
+    {
+        if (i == dotIndex)
+            printf(".");
+        printf("%d", num[i]);
+    }
+    if (dotIndex >= index)
+    {
+        for (int i = 0; i < dotIndex - index; ++i)
+            printf("0");
+    }
+}
+
+void pat_b_1024()
+{
+    pat_a_1073();
+}
+
+void pat_b_1048()
+{
+    const char jqk[] = {'J', 'Q', 'K'};
+
+    char a[101], b[101];
+    scanf("%s%s", a, b);
+
+    int lenA = strlen(a);
+    int lenB = strlen(b);
+
+    if (lenB < lenA) // b 比 a 短，高位要补 0
+    {
+        std::reverse(b, b + lenB); // 不 reverse 会补到低位！
+        for (int i = lenB; i < lenA; ++i)
+            b[i] = '0';
+        lenB = lenA;
+        std::reverse(b, b + lenB);
+    }
+
+    for (int i = lenB - 1, j = lenA - 1; i >= 0 && j >= 0; --i, --j)
+    {
+        int numA = a[j] - '0';
+        int numB = b[i] - '0';
+
+        if ((lenB - i) % 2)
+        {
+            int t = (numB + numA) % 13;
+            if (t < 10)
+                b[i] = '0' + t;
+            else
+                b[i] = jqk[t - 10];
+        }
+        else
+        {
+            int t = numB - numA;
+            if (t < 0)
+                t += 10;
+            b[i] = '0' + t;
+        }
+    }
+
+    for (int i = 0; i < lenB; ++i)
+        printf("%c", b[i]);
+}
+
+void pat_a_1001()
+{
+    int a, b, c;
+    scanf("%d%d", &a, &b);
+    c = a + b;
+    if (c < 0)
+    {
+        printf("-");
+        c = -c;
+    }
+
+    int i = 0, j = 0;
+    char num[15];
+    do
+    {
+        if (i && i % 3 == 0)
+            num[j++] = ',';
+        num[j++] = '0' + c % 10;
+        ++i;
+        c /= 10;
+    } while (c);
+
+    for (int i = j - 1; i >= 0; --i)
+        printf("%c", num[i]);
+    printf("\n");
+}
+
+void pat_a_1005()
+{
+    const char numStrArr[][6] = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+    char str[101];
+    scanf("%s", str);
+
+    int len = strlen(str);
+    int total = 0;
+    for (int i = 0; i < len; ++i)
+        total += str[i] - '0';
+
+    int idx = 0;
+    int numArr[3];
+    do
+    {
+        numArr[idx++] = total % 10;
+        total /= 10;
+    } while (total);
+
+    for (int i = idx - 1; i >= 0; --i)
+    {
+        printf("%s", numStrArr[numArr[i]]);
+        if (i)
+            printf(" ");
+    }
+    printf("\n");
+}
+
+void pat_a_1035()
+{
+    const int maxn = 1000;
+
+    int n;
+    scanf("%d", &n);
+
+    char name[maxn][11];
+    char pwd[maxn][11];
+
+    int changed[maxn] = {0};
+    int changedNum = 0;
+
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%s%s", *(name + i), *(pwd + i));
+        int len = strlen(pwd[i]);
+        bool sign = false;
+        for (int j = 0; j < len; ++j)
+        {
+            char &c = pwd[i][j];
+            if (c != '1' && c!= '0' && c != 'l' && c != 'O')
+                continue;
+            sign = true;
+            if (c == '1')
+                c = '@';
+            else if (c == '0')
+                c = '%';
+            else if (c == 'l')
+                c = 'L';
+            else
+                c = 'o';
+        }
+        if (sign)
+        {
+            changed[i] = 1;
+            ++changedNum;
+        }
+    }
+
+    if (!changedNum)
+        printf("There %s %d %s and no account is modified\n",
+            n > 1 ? "are" : "is", n, n > 1 ? "accounts" : "account");
+    else
+    {
+        printf("%d\n", changedNum);
+        for (int i = 0; i < n; ++i)
+            if (changed[i])
+                printf("%s %s\n", name[i], pwd[i]);
+    }
 }

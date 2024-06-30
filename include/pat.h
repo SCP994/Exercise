@@ -88,4 +88,18 @@ void pat_b_1031();
 
 void pat_b_1002();
 
+void pat_a_1061();
+
 void pat_b_1014();
+
+void pat_a_1073();
+
+void pat_b_1024();
+
+void pat_b_1048(); // *
+
+void pat_a_1001();
+
+void pat_a_1005();
+
+void pat_a_1035();
