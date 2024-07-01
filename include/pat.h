@@ -1,12 +1,15 @@
 #include <cstdio>
 #include <cstdlib>
-#include <utility>
-#include <algorithm>
-#include <unordered_map>
-#include <deque>
-#include <iostream>
-#include <cmath>
 #include <cstring>
+#include <cmath>
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <deque>
+#include <unordered_map>
+#include <utility>
 
 // 3.1 简单模拟
 
@@ -103,3 +106,21 @@ void pat_a_1001();
 void pat_a_1005();
 
 void pat_a_1035();
+
+void pat_a_1077();
+
+void pat_a_1082();
+
+void pat_a_1082_1(); // *
+
+// 4.1 排序
+
+void pat_a_1025();
+
+void pat_a_1062();
+
+void pat_b_1015();
+
+void pat_a_1012();
+
+void pat_a_1016(); // *

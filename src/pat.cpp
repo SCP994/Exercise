@@ -1,5 +1,4 @@
 #include "pat.h"
-#include <string>
 
 int pat_b_1001(int n)
 {
@@ -1256,5 +1255,570 @@ void pat_a_1035()
         for (int i = 0; i < n; ++i)
             if (changed[i])
                 printf("%s %s\n", name[i], pwd[i]);
+    }
+}
+
+void pat_a_1077()
+{
+    const int maxn = 100;
+    const int maxStrLen = 300;
+
+    char strs[maxn][maxStrLen];
+    int len[maxn];
+    int n;
+    scanf("%d", &n);
+
+    getchar();
+    for (int i = 0; i < n; ++i)
+    {
+        std::cin.getline(strs[i], maxStrLen);
+        len[i] = strlen(strs[i]);
+    }
+
+    int idx = 0;
+    char common[maxStrLen] = "";
+
+    for (int i = 1; ; ++i)
+    {
+        int sign = 0;
+        char c = 0;
+        for (int j = 0; j < n; ++j)
+        {
+            int k = len[j] - i;
+            if (k < 0 || c != 0 && strs[j][k] != c)
+            {
+                sign = 1;
+                break;
+            }
+            if (!c)
+                c = strs[j][k];
+        }
+        if (!sign)
+            common[idx++] = c;
+        else
+            break;
+    }
+
+    if (idx == 0)
+        printf("nai");
+    else
+    {
+        // while (common[idx - 1] == ' ')
+            // --idx;
+        for (int i = idx - 1; i >= 0; --i)
+            printf("%c", common[i]);
+    }
+    printf("\n");
+}
+
+namespace
+{
+    void printNum_1082(int n, const char num[][5])
+    {
+        if (n / 1000)
+            printf("%s Qian", num[n / 1000]);
+        if (n / 1000 && (n % 1000) && (n % 1000) < 100)
+            printf(" %s", num[0]);
+        if (n % 1000 / 100)
+        {
+            if (n / 1000)
+                printf(" ");
+            printf("%s Bai", num[n % 1000 / 100]);
+        }
+        if (n % 1000 / 100 && n % 100 && n % 100 < 10)
+            printf(" %s", num[0]);
+        if (n % 100 / 10)
+        {
+            if (n > 100)
+                printf(" ");
+            printf("%s Shi", num[n % 100 / 10]);
+        }
+        if (n % 10)
+        {
+            if (n > 10)
+                printf(" ");
+            printf("%s", num[n % 10]);
+        }
+    };
+}
+
+void pat_a_1082()
+{
+    const char num[][5] = {"ling", "yi", "er", "san", "si", "wu", "liu", "qi", "ba", "jiu"};
+
+    int n;
+    scanf("%d", &n);
+
+    if (n == 0)
+    {
+        printf("%s\n", num[0]);
+        return;
+    }
+    if (n < 0)
+    {
+        printf("Fu ");
+        n = -n;
+    }
+
+    int yiNum = n / 100000000;
+    int wanNum = n / 10000 % 10000;
+    int geNum = n % 10000;
+
+    if (yiNum)
+        printf("%s Yi", num[yiNum]);
+    if (yiNum && wanNum && wanNum < 1000)
+        printf(" %s", num[0]);
+    if (yiNum && wanNum)
+        printf(" ");
+    if (wanNum)
+    {
+        printNum_1082(wanNum, num);
+        printf(" Wan");
+    }
+    if (wanNum && wanNum % 10 == 0 && geNum || geNum && geNum < 1000) // 100008000 读作 一亿八千
+        printf(" %s", num[0]);
+    if (yiNum || wanNum)
+        printf(" ");
+    printNum_1082(geNum, num);
+}
+
+void pat_a_1082_1()
+{
+    const char num[][5] = {"ling", "yi", "er", "san", "si", "wu", "liu", "qi", "ba", "jiu"};
+    const char wei[][5] = {"Shi", "Bai", "Qian", "Wan", "Yi"};
+
+    char str[15];
+    scanf("%s", str);
+
+    int len = strlen(str);
+    int left = 0, right = len - 1;
+
+    if (str[0] == '-')
+    {
+        printf("Fu");
+        ++left;
+    }
+
+    while (left + 4 <= right)
+        right -= 4;
+
+    while (left < len)
+    {
+        bool flag = false;
+        bool isPrinted = false;
+        while (left <= right)
+        {
+            int n = str[left] - '0';
+            if (left && n == 0) // left 条件是为了应对 str 为 "0" 的情况
+                flag = true;
+            else
+            {
+                if (flag)
+                {
+                    printf(" %s", num[0]);
+                    flag = false;
+                }
+                if (left)
+                    printf(" ");
+                printf("%s", num[n]);
+                isPrinted = true;
+                if (left < right)
+                    printf(" %s", wei[right - left - 1]);
+            }
+            ++left;
+        }
+        if (isPrinted && right != len - 1) // 不是个位
+            printf(" %s", wei[(len - left) / 4 + 2]);
+        right += 4;
+    }
+}
+
+namespace
+{
+    struct Testee
+    {
+        char name[14];
+        int score;
+        int rank;
+        int localRank;
+        int room;
+    };
+}
+
+void pat_a_1025()
+{
+    Testee testees[30000];
+
+    int n, k;
+    scanf("%d", &n);
+
+    int idx = 0;
+    int room = 1;
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%d", &k);
+        for (int j = 0; j < k; ++j)
+        {
+            scanf("%s%d", testees[idx].name, &testees[idx].score);
+            testees[idx].room = room;
+            ++idx;
+        }
+        ++room;
+
+        std::sort(testees + idx - k, testees + idx, [](const auto &a, const auto &b)
+        {
+            if (a.score == b.score)
+                return strcmp(a.name, b.name) < 0;
+            return a.score > b.score;
+        });
+
+        int num = 0;
+        for (auto it = testees + idx - k; it < testees + idx; ++it)
+        {
+            ++num;
+            if (it == testees + idx - k)
+                it->localRank = 1;
+            else
+            {
+                if (it->score == (it - 1)->score)
+                    it->localRank = (it - 1)->localRank;
+                else
+                    it->localRank = num;
+            }
+        }
+    }
+
+    std::sort(testees, testees + idx, [](const auto &a, const auto &b)
+    {
+        if (a.score == b.score)
+            return strcmp(a.name, b.name) < 0;
+        return a.score > b.score;
+    });
+
+    int num = 0;
+    for (auto it = testees; it < testees + idx; ++it)
+    {
+        ++num;
+        if (it == testees)
+            it->rank = 1;
+        else
+        {
+            if (it->score == (it - 1)->score)
+                it->rank = (it - 1)->rank;
+            else
+                it->rank = num;
+        }
+    }
+
+    printf("%d\n", idx);
+    for (auto it = testees; it < testees + idx; ++it)
+        printf("%s %d %d %d\n", it->name, it->rank, it->room, it->localRank);
+}
+
+namespace
+{
+    struct Person_1062
+    {
+        int id;
+        int virtue;
+        int talent;
+        int sort;
+    };
+}
+
+void pat_a_1062()
+{
+    Person_1062 people[100000];
+
+    int n, l, h;
+    scanf("%d%d%d", &n, &l, &h);
+
+    int total = 0;
+    int id, virtue, talent;
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%d%d%d", &id, &virtue, &talent);
+        if (talent < l || virtue < l)
+            continue;
+        people[total].id = id;
+        people[total].virtue = virtue;
+        people[total].talent = talent;
+
+        if (virtue >= h && talent >= h)
+            people[total].sort = virtue + talent + 900;
+        else if (virtue >= h && talent < h)
+            people[total].sort = virtue + talent + 600;
+        else if (virtue < h && talent < h && virtue >= talent)
+            people[total].sort = virtue + talent + 300;
+        else
+            people[total].sort = virtue + talent;
+
+        ++total;
+    }
+
+    std::sort(people, people + total, [](const auto &a, const auto &b)
+    {
+        if (a.sort == b.sort)
+        {
+            if (a.virtue == b.virtue)
+                return a.id < b.id;
+            return a.virtue > b.virtue;
+        }
+        return a.sort > b.sort;
+    });
+
+    printf("%d\n", total);
+    for (int i = 0; i < total; ++i)
+        printf("%d %d %d\n", people[i].id, people[i].virtue, people[i].talent);
+}
+
+void pat_b_1015()
+{
+    pat_a_1062();
+}
+
+namespace
+{
+    struct Student_1012
+    {
+        int id;
+        int C, M, E, A;
+        int rankC, rankM, rankE, rankA;
+    };
+}
+
+void pat_a_1012()
+{
+    Student_1012 students[2000];
+    std::unordered_map<int, int> map;
+
+    int n, m;
+    scanf("%d%d", &n, &m);
+
+    for (int i = 0; i < n; ++i)
+    {
+        auto &it = students[i];
+        scanf("%d%d%d%d", &it.id, &it.C, &it.M, &it.E);
+        it.A = it.C + it.M + it.E;
+    }
+
+    std::sort(students, students + n, [](const auto &a, const auto &b)
+    {
+        return a.C > b.C;
+    });
+    students[0].rankC = 1;
+    for (int i = 1; i < n; ++i)
+    {
+        if (students[i].C == students[i - 1].C)
+            students[i].rankC = students[i - 1].rankC;
+        else
+            students[i].rankC = i + 1;
+    }
+    std::sort(students, students + n, [](const auto &a, const auto &b)
+    {
+        return a.M > b.M;
+    });
+    students[0].rankM = 1;
+    for (int i = 1; i < n; ++i)
+    {
+        if (students[i].M == students[i - 1].M)
+            students[i].rankM = students[i - 1].rankM;
+        else
+            students[i].rankM = i + 1;
+    }
+    std::sort(students, students + n, [](const auto &a, const auto &b)
+    {
+        return a.E > b.E;
+    });
+    students[0].rankE = 1;
+    for (int i = 0; i < n; ++i)
+    {
+        if (students[i].E == students[i - 1].E)
+            students[i].rankE = students[i - 1].rankE;
+        else
+            students[i].rankE = i + 1;
+    }
+    std::sort(students, students + n, [](const auto &a, const auto &b)
+    {
+        return a.A > b.A;
+    });
+    students[0].rankA = 1;
+    for (int i = 0; i < n; ++i)
+    {
+        if (students[i].A == students[i - 1].A)
+            students[i].rankA = students[i - 1].rankA;
+        else
+            students[i].rankA = i + 1;
+    }
+
+    for (int i = 0; i < n; ++i)
+        map[students[i].id] = i;
+
+    int id;
+    for (int i = 0; i < m; ++i)
+    {
+        scanf("%d", &id);
+        if (map.find(id) == map.end())
+            printf("N/A\n");
+        else
+        {
+            Student_1012 &s = students[map[id]];
+            if (s.rankA <= s.rankC && s.rankA <= s.rankM && s.rankA <= s.rankE)
+                printf("%d A\n", s.rankA);
+            else if (s.rankC <= s.rankA && s.rankC <= s.rankM && s.rankC <= s.rankE)
+                printf("%d C\n", s.rankC);
+            else if (s.rankM <= s.rankA && s.rankM <= s.rankC && s.rankM <= s.rankE)
+                printf("%d M\n", s.rankM);
+            else
+                printf("%d E\n", s.rankE);
+        }
+    }
+}
+
+namespace
+{
+    struct Date_1016
+    {
+        int M, d, h, m;
+        Date_1016(int M = 0, int d = 0, int h = 0, int m = 0)
+            : M(M), d(d), h(h), m(m) {}
+    };
+
+    struct Customer_1016
+    {
+        char name[21];
+        std::vector<std::pair<Date_1016, Date_1016>> records;
+        Customer_1016() {}
+        Customer_1016(const char str[])
+        {
+            strcpy(name, str);
+        }
+    };
+
+    struct Item_1016
+    {
+        char name[21];
+        char state[9];
+        Date_1016 date;
+    };
+}
+
+void pat_a_1016()
+{
+    int hourFee[24] = {0};
+
+    for (int i = 0; i < 24; ++i)
+        scanf("%d", hourFee + i);
+
+    std::unordered_map<std::string, Customer_1016> map;
+    std::unordered_map<std::string, Date_1016> mapOnLine;
+
+    int n;
+    scanf("%d", &n);
+
+    std::vector<Item_1016> items;
+    char name[21];
+    char state[9];
+    int M, d, h, m; // 所有输入中 M 月份相同
+
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%s %d:%d:%d:%d %s", name, &M, &d, &h, &m, state);
+        Item_1016 item;
+        strcpy(item.name, name);
+        strcpy(item.state, state);
+        item.date = Date_1016(M, d, h, m);
+        items.push_back(item);
+    }
+
+    std::sort(items.begin(), items.end(), [](const auto &a, const auto &b)
+    {
+        if (a.date.M != b.date.M)
+            return a.date.M < b.date.M;
+        else if (a.date.d != b.date.d)
+            return a.date.d < b.date.d;
+        else if (a.date.h != b.date.h)
+            return a.date.h < b.date.h;
+        else
+            return a.date.m < b.date.m;
+    });
+
+    for (int i = 0; i < n; ++i)
+    {
+        strcpy(name, items[i].name);
+        strcpy(state, items[i].state);
+        M = items[i].date.M;
+        d = items[i].date.d;
+        h = items[i].date.h;
+        m = items[i].date.m;
+
+        std::string key = name;
+
+        if (map.find(key) == map.end())
+            map[key] = Customer_1016(key.c_str());
+
+        if (strcmp(state, "on-line") == 0)
+            mapOnLine[key] = Date_1016(M, d, h, m);
+        else // off-line
+        {
+            if (mapOnLine.find(key) != mapOnLine.end())
+            {
+                map[key].records.push_back({mapOnLine[key], Date_1016(M, d, h, m)});
+                mapOnLine.erase(mapOnLine.find(key));
+            }
+        }
+    }
+
+    std::vector<std::string> vec;
+    for (auto it = map.begin(); it != map.end(); ++it)
+        vec.push_back(it->first);
+
+    std::sort(vec.begin(), vec.end(), [](const auto &a, const auto &b)
+    {
+        return a < b;
+    });
+
+    for (const auto &it : vec)
+    {
+        Customer_1016 &c = map[it];
+
+        float totalAmount = 0.0;
+
+        if (c.records.empty()) // 不存在有效通话记录的用户不输出！
+            continue;
+        printf("%s %02d\n", c.name, M);
+
+        for (const auto &[first, second] : c.records)
+        {
+            int beginD = first.d, beginH = first.h, beginM = first.m;
+            int endD = second.d, endH = second.h, endM = second.m;
+
+            int minutes = 0;
+            float amount = 0.0;
+
+            while (beginD < endD || beginD == endD && (beginH < endH || beginH == endH && beginM < endM))
+            {
+                ++minutes;
+                amount += hourFee[beginH];
+
+                ++beginM;
+                if (beginM == 60)
+                {
+                    beginM = 0;
+                    ++beginH;
+                    if (beginH == 24)
+                    {
+                        beginH = 0;
+                        ++beginD;
+                    }
+                }
+            }
+
+            printf("%02d:%02d:%02d %02d:%02d:%02d %d $%.2f\n",
+                first.d, first.h, first.m, second.d, second.h, second.m, minutes, amount / 100.0);
+            totalAmount += amount / 100.0;
+        }
+
+        printf("Total amount: $%.2f\n", totalAmount);
     }
 }
