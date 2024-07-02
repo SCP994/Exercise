@@ -200,5 +200,37 @@ namespace notes
 		}
 	}
 
-}
+	void testSort()
+	{
+		int arr[] = { 1, 8, 3, 4, 7, 6, 5, 2 };
+		int n = sizeof(arr) / sizeof(int);
 
+		for (int i = 0; i < n; ++i)
+		{
+			if (i)
+				printf(" ");
+			printf("%d", arr[i]);
+		}
+		printf("\n");
+
+		for (int k = 2; k <= n; k *= 2)
+			for (int j = k / 2; j > 0; j /= 2)
+				for (int i = 0; i < n; ++i)
+				{
+					int l = i ^ j;
+					if (l > i)
+					{
+						if ((i & k) == 0 && arr[i] > arr[l] || (i & k) != 0 && arr[i] < arr[l])
+							swap(arr[i], arr[l]);
+					}
+				}
+
+		for (int i = 0; i < n; ++i)
+		{
+			if (i)
+				printf(" ");
+			printf("%d", arr[i]);
+		}
+		printf("\n");
+	}
+}

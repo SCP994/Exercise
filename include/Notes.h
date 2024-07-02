@@ -92,5 +92,5 @@ namespace notes
 
 	void DFS_tree(TreeNode* node);  // 深度优先遍历
 
+	void testSort();
 }
-
