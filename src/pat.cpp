@@ -1822,3 +1822,365 @@ void pat_a_1016()
         printf("Total amount: $%.2f\n", totalAmount);
     }
 }
+
+namespace
+{
+    struct Student_1028
+    {
+        int ID;
+        char name[9];
+        int grade;
+    };
+}
+
+void pat_a_1028()
+{
+    Student_1028 students[100000];
+
+    int n, c;
+    scanf("%d%d", &n, &c);
+
+    for (int i = 0; i < n; ++i)
+    {
+        auto &stu = students[i];
+        scanf("%d%s%d", &stu.ID, stu.name, &stu.grade);
+    }
+
+    if (c == 1)
+    {
+        std::sort(students, students + n, [](const auto &a, const auto &b)
+        {
+            return a.ID < b.ID;
+        });
+    }
+    else if (c == 2)
+    {
+        std::sort(students, students + n, [](const auto &a, const auto &b)
+        {
+            int result = strcmp(a.name, b.name);
+            if (result == 0)
+                return a.ID < b.ID;
+            return result < 0;
+        });
+    }
+    else // c == 3
+    {
+        std::sort(students, students + n, [](const auto &a,const auto &b)
+        {
+            if (a.grade == b.grade)
+                return a.ID < b.ID;
+            return a.grade < b.grade;
+        });
+    }
+
+    for (int i = 0; i < n; ++i)
+    {
+        auto &stu = students[i];
+        printf("%06d %s %d\n", stu.ID, stu.name, stu.grade);
+    }
+}
+
+namespace
+{
+    struct Person_1055
+    {
+        char name[9];
+        int age;
+        int worth;
+    };
+}
+
+void pat_a_1055()
+{
+    Person_1055 people[100000];
+
+    int n, k;
+    scanf("%d%d", &n, &k);
+
+    for (int i = 0; i < n; ++i)
+    {
+        auto &p = people[i];
+        scanf("%s%d%d", p.name, &p.age, &p.worth);
+    }
+
+    std::sort(people, people + n, [](const auto &a, const auto &b)
+    {
+        if (a.worth == b.worth)
+        {
+            if (a.age == b.age)
+                return strcmp(a.name, b.name) < 0;
+            return a.age < b.age;
+        }
+        return a.worth > b.worth;
+    });
+
+    int m, mi, ma;
+    for (int i = 0; i < k; ++i)
+    {
+        scanf("%d%d%d", &m, &mi, &ma);
+
+        printf("Case #%d:\n", i + 1);
+        int cnt = 0;
+        for (int j = 0; j < n; ++j)
+        {
+            if (cnt >= m)
+                break;
+            auto &p = people[j];
+            if (p.age >= mi && p.age <= ma)
+            {
+                ++cnt;
+                printf("%s %d %d\n", p.name, p.age, p.worth);
+            }
+        }
+        if (!cnt)
+            printf("None\n");
+    }
+}
+
+namespace
+{
+    struct User_1075
+    {
+        int ID;
+        int sort;
+        int rank;
+        int sum;
+        int score[5];
+
+        // 可统一为一个是否有通过编译的提交的标记
+        bool subFlag[5]; // 提交标记
+        bool passFlag[5]; // 通过编译标记
+
+        User_1075() : ID(0), sort(0), rank(0), sum(0)
+        {
+            memset(score, 0, sizeof(score));
+            memset(subFlag, 0, sizeof(subFlag));
+            memset(passFlag, 0, sizeof(passFlag));
+        }
+    };
+}
+
+void pat_a_1075()
+{
+    User_1075 users[10000];
+    int score[5];
+
+    int n, k, m;
+    scanf("%d%d%d", &n, &k, &m);
+
+    for (int i = 0; i < k; ++i)
+        scanf("%d", score + i);
+
+    int ID, p, s;
+    for (int i = 0; i < m; ++i)
+    {
+        scanf("%d%d%d", &ID, &p, &s);
+        auto &u = users[ID - 1];
+
+        u.ID = ID;
+        if (!u.subFlag[p - 1])
+        {
+            u.subFlag[p - 1] = true;
+            if (s == -1)
+            {
+                u.passFlag[p - 1] = false;
+                u.score[p - 1] = 0;
+            }
+            else
+            {
+                u.passFlag[p - 1] = true;
+                u.score[p - 1] = s;
+            }
+        }
+        else
+        {
+            if (s >= u.score[p - 1]) // 编译通过的 0 分和没通过编译的 0 分相等
+            {
+                u.passFlag[p - 1] = true;
+                u.score[p - 1] = s;
+            }
+        }
+    }
+
+    int cnt = 0;
+    for (int i = 0; i < n; ++i)
+    {
+        auto &u = users[i];
+        int sign = false;
+        for (int j = 0; j < k; ++j)
+            if (u.subFlag[j] && u.passFlag[j])
+            {
+                sign = true;
+                break;
+            }
+        if (!sign)
+            u.sort = -1;
+        else
+        {
+            u.sum = std::accumulate(u.score, u.score + k, 0);
+            u.sort = std::accumulate(u.score, u.score + k, 0);
+            u.sort *= 10;
+            for (int j = 0; j < k; ++j)
+                if (u.score[j] == score[j])
+                    u.sort += 1;
+            ++cnt;
+        }
+    }
+
+    std::sort(users, users + n, [](const auto &a, const auto &b)
+    {
+        if (a.sort == b.sort)
+            return a.ID < b.ID;
+        return a.sort > b.sort;
+    });
+
+    users[0].rank = 1;
+    for (int i = 1; i < cnt; ++i)
+    {
+        if (users[i].sum == users[i - 1].sum)
+            users[i].rank = users[i - 1].rank;
+        else
+            users[i].rank = i + 1;
+    }
+
+    for (int i = 0; i < cnt; ++i)
+    {
+        auto &u = users[i];
+        printf("%d %05d", u.rank, u.ID);
+        printf(" %d", u.sum);
+        for (int j = 0; j < k; ++j)
+        {
+            if (u.subFlag[j])
+                printf(" %d", u.score[j]);
+            else
+                printf(" -");
+        }
+        printf("\n");
+    }
+}
+
+namespace
+{
+    struct Student_1083
+    {
+        char name[11], ID[11];
+        int grade;
+    };
+}
+
+void pat_a_1083()
+{
+    Student_1083 students[1000];
+
+    int n;
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; ++i)
+    {
+        auto &stu = students[i];
+        scanf("%s%s%d", stu.name, stu.ID, &stu.grade);
+    }
+
+    std::sort(students, students + n, [](const auto &a, const auto &b)
+    {
+        return a.grade > b.grade;
+    });
+
+    int mi, ma;
+    scanf("%d%d", &mi, &ma);
+
+    int flag = false;
+    for (int i = 0; i < n; ++i)
+    {
+        auto &stu = students[i];
+        if (stu.grade >= mi && stu.grade <= ma)
+        {
+            flag = true;
+            printf("%s %s\n", stu.name, stu.ID);
+        }
+    }
+    if (!flag)
+        printf("NONE\n");
+}
+
+namespace
+{
+    struct Student_1080
+    {
+        int ID;
+        int ge, gi, sum;
+        int choices[5];
+        int rank;
+    };
+}
+
+void pat_a_1080()
+{
+    Student_1080 students[40000];
+    int quota[100];
+
+    int n, m, k;
+    scanf("%d%d%d", &n, &m, &k);
+
+    for (int i = 0; i < m; ++i)
+        scanf("%d", quota + i);
+
+    for (int i = 0; i < n; ++i)
+    {
+        auto &stu = students[i];
+        scanf("%d%d", &stu.ge, &stu.gi);
+        stu.sum = stu.ge + stu.gi;
+        stu.ID = i;
+
+        for (int j = 0; j < k; ++j)
+            scanf("%d", &stu.choices[j]);
+    }
+
+    std::sort(students, students + n, [](const auto &a, const auto &b)
+    {
+        if (a.sum == b.sum)
+            return a.ge > b.ge;
+        return a.sum > b.sum;
+    });
+
+    students[0].rank = 1;
+    for (int i = 1; i < n; ++i)
+    {
+        auto &stu = students[i];
+        auto &preStu = students[i - 1];
+        if (stu.sum == preStu.sum && stu.ge == preStu.ge)
+            stu.rank = preStu.rank;
+        else
+            stu.rank = i + 1;
+    }
+
+    std::vector<int> vec[100];
+    for (int i = 0; i < n; ++i)
+    {
+        auto &stu = students[i];
+        for (int j = 0; j < k; ++j)
+        {
+            int choice = stu.choices[j];
+            if (vec[choice].size() < quota[choice] || students[vec[choice].back()].rank == stu.rank)
+            {
+                vec[choice].push_back(i);
+                break;
+            }
+        }
+    }
+
+    for (int i = 0; i < m; ++i)
+    {
+        std::sort(vec[i].begin(), vec[i].end(), [&](const auto &a, const auto &b)
+        {
+            return students[a].ID < students[b].ID;
+        });
+        for (int j = 0; j < vec[i].size(); ++j)
+        {
+            if (j)
+                printf(" ");
+            printf("%d", students[vec[i][j]].ID);
+        }
+        printf("\n");
+    }
+}

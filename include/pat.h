@@ -10,6 +10,7 @@
 #include <deque>
 #include <unordered_map>
 #include <utility>
+#include <numeric>
 
 // 3.1 简单模拟
 
@@ -124,3 +125,13 @@ void pat_b_1015();
 void pat_a_1012();
 
 void pat_a_1016(); // *
+
+void pat_a_1028();
+
+void pat_a_1055();
+
+void pat_a_1075(); // *
+
+void pat_a_1083();
+
+void pat_a_1080();
