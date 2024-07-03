@@ -5,8 +5,9 @@
 
 int main()
 {
-	// pat_a_1080();
-	notes::testSort();
+	// pat_a_1095();
+
+	// notes::testSort();
 
 	return 0;
 }

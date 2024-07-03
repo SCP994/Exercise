@@ -2184,3 +2184,250 @@ void pat_a_1080()
         printf("\n");
     }
 }
+
+namespace
+{
+    struct Car_1095
+    {
+        char plate[8];
+        int time;
+        bool flag; // false: in, true: out
+        bool valid;
+        Car_1095() {}
+        Car_1095(const char str[], int time, bool flag, bool valid)
+            : time(time), flag(flag), valid(valid)
+        {
+            strcpy(plate, str);
+        }
+    };
+}
+
+void pat_a_1095()
+{
+    Car_1095 cars[10000];
+
+    int n, k;
+    scanf("%d%d", &n, &k);
+
+    int h, m, s;
+    bool flag;
+    char status[4];
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%s%d:%d:%d%s", cars[i].plate, &h, &m, &s, status);
+
+        cars[i].time = h * 60 * 60 + m * 60 + s;
+        cars[i].flag = strcmp(status, "out") == 0;
+        cars[i].valid = true;
+    }
+
+    std::sort(cars, cars + n, [](const auto &a, const auto &b)
+    {
+        return a.time < b.time;
+    });
+
+    std::map<std::string, Car_1095*> map;
+    std::map<std::string, int> mapDuration;
+    std::vector<std::string> result;
+    int maxDuration = -1;
+
+    for (int i = 0; i < n; ++i)
+    {
+        auto &car = cars[i];
+        if (!car.flag) // in
+        {
+            if (map.find(car.plate) != map.end())
+                map[car.plate]->valid = false;
+            map[car.plate] = &car;
+        }
+        else // out
+        {
+            if (map.find(car.plate) != map.end())
+            {
+                int duration = car.time - map[car.plate]->time;
+
+                if (mapDuration.find(car.plate) == mapDuration.end())
+                    mapDuration[car.plate] = duration;
+                else
+                    mapDuration[car.plate] += duration;
+
+                if (mapDuration[car.plate] > maxDuration)
+                {
+                    maxDuration = mapDuration[car.plate];
+                    result.clear();
+                    result.push_back(car.plate);
+                }
+                else if (mapDuration[car.plate] == maxDuration)
+                    result.push_back(car.plate);
+
+                map.erase(map.find(car.plate));
+            }
+            else
+                car.valid = false;
+        }
+    }
+    for (const auto &[s, p] : map)
+        p->valid = false;
+
+    int queries[80000];
+    for (int i = 0; i < k; ++i) // 可以在输入的同时遍历所有车辆，每次遍历从上次遍历结束的位置继续，参考答案见辅导书
+    {
+        scanf("%d:%d:%d", &h, &m, &s);
+        queries[i] = h * 60 * 60 + m * 60 + s;
+    }
+
+    int num = 0;
+    int queryIdx = 0;
+
+    for (int i = 0; i < n; ++i)
+    {
+        auto &car = cars[i];
+
+        if (!car.valid)
+            continue;
+
+        int queryTime = queries[queryIdx];
+
+        if (car.time > queryTime)
+        {
+            printf("%d\n", num);
+            if (++queryIdx == k)
+                break;
+            --i;
+            continue;
+        }
+
+        if (!car.flag) // in
+            ++num;
+        else // out
+            --num;
+    }
+    for (int i = queryIdx; i < k; ++i) // 别漏了这里！
+        printf("%d\n", num);
+
+    std::sort(result.begin(), result.end());
+    for (const auto &plate : result)
+        printf("%s ", plate.c_str());
+    printf("%02d:%02d:%02d\n", maxDuration / (60 * 60), maxDuration % (60 * 60) / 60, maxDuration % 60);
+}
+
+void pat_a_1084()
+{
+    char str1[80], str2[80];
+    scanf("%s%s", str1, str2);
+    int len1 = strlen(str1);
+    int len2 = strlen(str2);
+
+
+    std::vector<char> result;
+
+    int map[256] = {0};
+
+    for (int i = 0; i < len2; ++i)
+    {
+        str2[i] = std::toupper(str2[i]);
+        map[str2[i]] = 1;
+    }
+    for (int i = 0; i < len1; ++i)
+    {
+        str1[i] = std::toupper(str1[i]);
+        if (!map[str1[i]])
+        {
+            map[str1[i]] = 1; // 避免重复加入
+            result.push_back(str1[i]);
+        }
+    }
+
+    for (int i = 0; i < result.size(); ++i)
+        printf("%c", result[i]);
+    printf("\n");
+}
+
+void pat_b_1029()
+{
+    pat_a_1084();
+}
+
+void pat_b_1033()
+{
+    char str1[100001], str2[100001];
+
+    std::cin.getline(str1, 100001); // 第一行可能为空，所以要 getline！
+    std::cin.getline(str2, 100001);
+
+    int len1 = strlen(str1);
+    int len2 = strlen(str2);
+
+    int arr[256] = {0};
+    for (int i = 0; i < len1; ++i)
+        arr[str1[i]] = 1;
+
+    for (int i = 0; i < len2; ++i)
+    {
+        if (arr[std::toupper(str2[i])] || arr['+'] && str2[i] >= 'A' && str2[i] <= 'Z')
+            continue;
+        printf("%c", str2[i]);
+    }
+    printf("\n");
+}
+
+void pat_b_1038()
+{
+    int n, t;
+    int score[100] = {0};
+
+    scanf("%d", &n);
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%d", &t);
+        ++score[t];
+    }
+
+    int k;
+    scanf("%d", &k);
+    for (int i = 0; i < k; ++i)
+    {
+        scanf("%d", &t);
+        if (i)
+            printf(" ");
+        printf("%d", score[t]);
+    }
+}
+
+void pat_a_1092()
+{
+    char str1[1001], str2[1001];
+
+    std::cin.getline(str1, 1001);
+    std::cin.getline(str2, 1001);
+
+    int len1 = strlen(str1);
+    int len2 = strlen(str2);
+
+    int arr[256] = {0};
+    for (int i = 0; i < len1; ++i)
+        ++arr[str1[i]];
+
+    bool sign = true;
+    int left = 0;
+    for (int i = 0; i < len2; ++i)
+    {
+        if (arr[str2[i]] == 0)
+        {
+            sign = false;
+            ++left;
+        }
+        else
+            --arr[str2[i]];
+    }
+
+    if (sign)
+        printf("Yes %d\n", len1 - len2);
+    else
+        printf("No %d\n", left);
+}
+
+void pat_b_1039()
+{
+    pat_a_1092();
+}

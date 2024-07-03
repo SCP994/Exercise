@@ -2,12 +2,14 @@
 #include <cstdlib>
 #include <cstring>
 #include <cmath>
+#include <cctype>
 
 #include <iostream>
 #include <vector>
 #include <string>
 #include <algorithm>
 #include <deque>
+#include <map>
 #include <unordered_map>
 #include <utility>
 #include <numeric>
@@ -135,3 +137,19 @@ void pat_a_1075(); // *
 void pat_a_1083();
 
 void pat_a_1080();
+
+void pat_a_1095(); // *
+
+// 4.2 散列
+
+void pat_a_1084();
+
+void pat_b_1029();
+
+void pat_b_1033();
+
+void pat_b_1038();
+
+void pat_a_1092();
+
+void pat_b_1039();
