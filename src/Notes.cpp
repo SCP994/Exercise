@@ -233,4 +233,28 @@ namespace notes
 		}
 		printf("\n");
 	}
+
+	void testSort_1()
+	{
+		std::vector<int> vec(20);
+		// 使用iota填充从0开始的连续整数
+		std::iota(vec.begin(), vec.end(), 0);
+		// 使用默认随机数生成器打乱顺序
+		std::shuffle(vec.begin(), vec.end(), std::mt19937{std::random_device{}()});
+		// 输出排序前的结果
+		for (int num : vec) {
+			std::cout << num << " ";
+		}
+		std::cout << "                      " <<std::endl;
+		std::cout << "                      " <<std::endl;
+		std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+		// 使用并行算法进行排序
+		std::sort(std::execution::par, vec.begin(), vec.end());
+
+		// 输出排序后的结果
+		for (int num : vec) {
+			std::cout << num << " ";
+		}
+		std::cout << std::endl;
+	}
 }

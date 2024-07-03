@@ -4,6 +4,11 @@
 #include <stack>
 #include <deque>
 #include <utility>
+#include <algorithm>
+#include <random>
+#include <numeric>
+#include <thread>
+#include <execution>
 
 namespace notes
 {
@@ -93,4 +98,6 @@ namespace notes
 	void DFS_tree(TreeNode* node);  // 深度优先遍历
 
 	void testSort();
+
+	void testSort_1();
 }

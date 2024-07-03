@@ -7,7 +7,7 @@ int main()
 {
 	// pat_a_1095();
 
-	// notes::testSort();
+	notes::testSort_1();
 
 	return 0;
 }
