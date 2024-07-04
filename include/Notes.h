@@ -10,6 +10,8 @@
 #include <thread>
 #include <execution>
 
+#include <ppl.h>
+
 namespace notes
 {
 	std::pair<int, int> minMax(std::vector<int>& nums);   // min and max in 3n / 2 times' comparison
@@ -100,4 +102,8 @@ namespace notes
 	void testSort();
 
 	void testSort_1();
+
+	void testTime_1();
 }
+
+void testPPL();

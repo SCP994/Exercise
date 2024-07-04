@@ -257,4 +257,30 @@ namespace notes
 		}
 		std::cout << std::endl;
 	}
+
+	void sleep()
+	{
+		std::this_thread::sleep_for(std::chrono::seconds(2));
+	}
+
+	void testTime_1()
+	{
+		auto startTime = std::chrono::high_resolution_clock::now();
+
+		sleep();
+		sleep();
+
+		auto stopTime = std::chrono::high_resolution_clock::now();
+		auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stopTime - startTime);
+
+		std::cout << "Duration: " << duration.count() / 1e6 << "s" << std::endl;
+	}
+}
+
+void testPPL()
+{
+	concurrency::parallel_for(0, 20, [](int x)
+	{
+		printf("%d ", x);
+	});
 }

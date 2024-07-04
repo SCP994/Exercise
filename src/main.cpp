@@ -7,7 +7,7 @@ int main()
 {
 	// pat_a_1095();
 
-	notes::testSort_1();
+	// testPPL();
 
 	return 0;
 }
