@@ -2431,3 +2431,142 @@ void pat_b_1039()
 {
     pat_a_1092();
 }
+
+void pat_b_1042()
+{
+    char str[1001];
+    std::cin.getline(str, 1001);
+
+    int len = strlen(str);
+    int freq[256] = {0};
+    for (int i = 0; i < len; ++i)
+        ++freq[std::tolower(str[i])];
+
+    int maxFreq = -1;
+    char c;
+    for (int i = 0; i < 256; ++i)
+        if (i >= 'a' && i <= 'z' && freq[i] > maxFreq)
+        {
+            maxFreq = freq[i];
+            c = i;
+        }
+    printf("%c %d\n", c, maxFreq);
+}
+
+void pat_b_1043()
+{
+    char str[10001];
+    std::cin.getline(str, 10001);
+
+    int len = strlen(str);
+    std::map<char, int> map;
+    map['P'] = 0;
+    map['A'] = 0;
+    map['T'] = 0;
+    map['e'] = 0;
+    map['s'] = 0;
+    map['t'] = 0;
+    for (int i = 0; i < len; ++i)
+        if (map.find(str[i]) != map.end())
+            ++map[str[i]];
+
+    while (map['P'] + map['A'] + map['T'] + map['e'] + map['s'] + map['t'])
+    {
+        if (map['P'])
+        {
+            printf("P");
+            --map['P'];
+        }
+        if (map['A'])
+        {
+            printf("A");
+            --map['A'];
+        }
+        if (map['T'])
+        {
+            printf("T");
+            --map['T'];
+        }
+        if (map['e'])
+        {
+            printf("e");
+            --map['e'];
+        }
+        if (map['s'])
+        {
+            printf("s");
+            --map['s'];
+        }
+        if (map['t'])
+        {
+            printf("t");
+            --map['t'];
+        }
+    }
+    printf("\n");
+}
+
+void pat_b_1047()
+{
+    int n;
+    scanf("%d", &n);
+
+    int totalScore[1001] = {0};
+    int team, crew, score;
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%d-%d%d", &team, &crew, &score);
+        totalScore[team] += score;
+    }
+
+    int* p = std::max_element(totalScore, totalScore + 1001);
+    printf("%d %d\n", static_cast<int>(p - totalScore), *p);
+}
+
+void pat_a_1041()
+{
+    int arr[100000];
+    int map[10001] = {0};
+
+    int n;
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%d", &arr[i]);
+        ++map[arr[i]];
+    }
+
+    bool sign = false;
+    for (int i = 0; i < n; ++i)
+        if (map[arr[i]] == 1)
+        {
+            printf("%d\n", arr[i]);
+            sign = true;
+            break;
+        }
+    if (!sign)
+        printf("None\n");
+}
+
+void pat_a_1050()
+{
+    const int maxn = 10001;
+    char str1[maxn], str2[maxn];
+
+    char map[256] = {0};
+
+    std::cin.getline(str1, maxn);
+    std::cin.getline(str2, maxn);
+
+    int len1 = strlen(str1);
+    int len2 = strlen(str2);
+
+    for (int i = 0; i < len2; ++i)
+        map[str2[i]] = 1;
+
+    for (int i = 0; i < len1; ++i)
+        if (!map[str1[i]])
+            printf("%c", str1[i]);
+    printf("\n");
+}

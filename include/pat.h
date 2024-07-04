@@ -153,3 +153,13 @@ void pat_b_1038();
 void pat_a_1092();
 
 void pat_b_1039();
+
+void pat_b_1042();
+
+void pat_b_1043();
+
+void pat_b_1047();
+
+void pat_a_1041();
+
+void pat_a_1050();

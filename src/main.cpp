@@ -5,7 +5,7 @@
 
 int main()
 {
-	// pat_a_1095();
+	pat_a_1050();
 
 	// testPPL();
 
