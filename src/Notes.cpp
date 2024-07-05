@@ -249,7 +249,7 @@ namespace notes
 		std::cout << "                      " <<std::endl;
 		std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 		// 使用并行算法进行排序
-		std::sort(std::execution::par, vec.begin(), vec.end());
+		// std::sort(std::execution::par, vec.begin(), vec.end());
 
 		// 输出排序后的结果
 		for (int num : vec) {
@@ -279,8 +279,8 @@ namespace notes
 
 void testPPL()
 {
-	concurrency::parallel_for(0, 20, [](int x)
-	{
-		printf("%d ", x);
-	});
+	// concurrency::parallel_for(0, 20, [](int x)
+	// {
+	// 	printf("%d ", x);
+	// });
 }

@@ -8,9 +8,9 @@
 #include <random>
 #include <numeric>
 #include <thread>
-#include <execution>
+// #include <execution>
 
-#include <ppl.h>
+// #include <ppl.h>
 
 namespace notes
 {

@@ -2831,7 +2831,7 @@ void pat_a_1033()
     const int maxn = 500;
     const float eps = std::numeric_limits<double>::epsilon();
 
-    GasStation_1033 gasStations[maxn];
+    GasStation_1033 gasStations[maxn]; // 如果在终点 gasStations[n] 设置一个终点加油站，其油价设为 0，会方便一些
 
     double c, d, dAvg;
     int n;
