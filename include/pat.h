@@ -13,6 +13,7 @@
 #include <unordered_map>
 #include <utility>
 #include <numeric>
+#include <limits>
 
 // 3.1 简单模拟
 
@@ -163,3 +164,19 @@ void pat_b_1047();
 void pat_a_1041();
 
 void pat_a_1050();
+
+void pat_b_1005();
+
+void pat_a_1048();
+
+void pat_a_1048_1();
+
+void pat_a_1048_2();
+
+void pat_b_1023();
+
+void pat_a_1070();
+
+void pat_b_1020();
+
+void pat_a_1033(); // *

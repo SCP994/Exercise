@@ -2570,3 +2570,356 @@ void pat_a_1050()
             printf("%c", str1[i]);
     printf("\n");
 }
+
+namespace
+{
+    void judge_1005(int num, int map[])
+    {
+        while (num != 1)
+        {
+            if (num % 2)
+                num = (3 * num + 1) / 2;
+            else
+                num /= 2;
+            ++map[num];
+        }
+    }
+}
+
+void pat_b_1005()
+{
+    int arr[100];
+    int map[10000] = {0}; // 101、1000 不通过
+
+    int k;
+    scanf("%d", &k);
+
+    for (int i = 0; i < k; ++i)
+    {
+        scanf("%d", &arr[i]);
+        judge_1005(arr[i], map);
+    }
+
+    std::vector<int> result;
+    for (int i = 0; i < k; ++i)
+        if (!map[arr[i]])
+            result.push_back(arr[i]);
+
+    std::sort(result.begin(), result.end(), std::greater<int>());
+    for (int i = 0; i < result.size(); ++i)
+    {
+        if (i)
+            printf(" ");
+        printf("%d", result[i]);
+    }
+}
+
+void pat_a_1048() // 散列表
+{
+    int n, m;
+    scanf("%d%d", &n, &m);
+
+    int arr[100000];
+    int map[1000] = {0}; // 不能只开 500，否则会段错误
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%d", &arr[i]);
+        ++map[arr[i]];
+    }
+
+    std::sort(arr, arr + n);
+
+    int v1 = 0;
+    int v2 = 0;
+    for (int i = 0; i < n; ++i)
+        if (arr[i] < m && map[m - arr[i]] && (arr[i] != m - arr[i] || map[arr[i]] > 1))
+        {
+            v1 = arr[i];
+            v2 = m - arr[i];
+            break;
+        }
+
+    if (v1 && v2)
+        printf("%d %d\n", v1, v2);
+    else
+        printf("No Solution\n");
+}
+
+void pat_a_1048_1() // 双指针
+{
+    int n, m;
+    scanf("%d%d", &n, &m);
+
+    int arr[100000];
+    for (int i = 0; i < n; ++i)
+        scanf("%d", &arr[i]);
+
+    std::sort(arr, arr + n);
+
+    int left = 0;
+    int right = n - 1;
+
+    while (left < right)
+    {
+        int total = arr[left] + arr[right];
+        if (total == m)
+            break;
+        else
+        {
+            if (total > m)
+                --right;
+            else
+                ++left;
+        }
+    }
+
+    if (left < right)
+        printf("%d %d\n", arr[left], arr[right]);
+    else
+        printf("No Solution\n");
+}
+
+void pat_a_1048_2() // 二分
+{
+    int n, m;
+    scanf("%d%d", &n, &m);
+
+    int arr[100000];
+    for (int i = 0; i < n; ++i)
+        scanf("%d", &arr[i]);
+
+    std::sort(arr, arr + n);
+
+
+    int v1, v2;
+    bool sign;
+    for (int i = 0; i < n; ++i)
+    {
+        v1 = arr[i];
+
+        int left = i + 1;
+        int right = n;
+
+        sign = false;
+        while (left < right)
+        {
+            int mid = (left + right) / 2;
+            if (arr[mid] == m - v1)
+            {
+                v2 = m - v1;
+                sign = true;
+                break;
+            }
+            else if (arr[mid] > m - v1)
+                right = mid;
+            else
+                left = mid + 1;
+
+        }
+        if (sign)
+            break;
+    }
+
+    if (sign)
+        printf("%d %d\n", v1, v2);
+    else
+        printf("No Solution\n");
+}
+
+void pat_b_1023()
+{
+    const int maxn = 10;
+
+    int totalNum = 0;
+    int map[maxn];
+    for (int i = 0; i < maxn; ++i)
+    {
+        scanf("%d", &map[i]);
+        totalNum += map[i];
+    }
+
+    std::string str;
+    for (int i = 1; i < maxn; ++i)
+        if (map[i])
+        {
+            str += char(i + '0');
+            --map[i];
+            break;
+        }
+    --totalNum;
+
+    while (totalNum--)
+    {
+        for (int i = 0; i < maxn; ++i)
+            if (map[i])
+            {
+                str += char(i + '0');
+                --map[i];
+                break;
+            }
+    }
+
+    printf("%s\n", str.c_str());
+}
+
+namespace
+{
+    struct Cake_1070
+    {
+        float inventory, price, averagePrice; // inventory could be decimals
+    };
+}
+
+void pat_a_1070()
+{
+    const int maxn = 1000;
+    const float eps = std::numeric_limits<float>::epsilon();
+
+    Cake_1070 cakes[maxn];
+
+    int n;
+    float d;
+    scanf("%d%f", &n, &d);
+
+    for (int i = 0; i < n; ++i)
+        scanf("%f", &cakes[i].inventory);
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%f", &cakes[i].price);
+        cakes[i].averagePrice = cakes[i].price / cakes[i].inventory;
+    }
+
+    std::sort(cakes, cakes + n, [](const auto &a, const auto &b)
+    {
+        return a.averagePrice > b.averagePrice;
+    });
+
+    float profit = 0.0f;
+
+    for (int i = 0; i < n; ++i)
+        if (d < cakes[i].inventory)
+        {
+            profit += cakes[i].averagePrice * d;
+            break;
+        }
+        else
+        {
+            profit += cakes[i].price;
+            d -= cakes[i].inventory;
+            if (d < eps)
+                break;
+        }
+
+    printf("%.2f\n", profit);
+}
+
+void pat_b_1020()
+{
+    pat_a_1070();
+}
+
+namespace
+{
+    struct GasStation_1033
+    {
+        double price, distance;
+    };
+}
+
+void pat_a_1033()
+{
+    const int maxn = 500;
+    const float eps = std::numeric_limits<double>::epsilon();
+
+    GasStation_1033 gasStations[maxn];
+
+    double c, d, dAvg;
+    int n;
+    scanf("%lf%lf%lf%d", &c, &d, &dAvg, &n);
+
+    for (int i = 0; i < n; ++i)
+        scanf("%lf%lf", &gasStations[i].price, &gasStations[i].distance);
+
+    std::sort(gasStations, gasStations + n, [&](const auto &a, const auto &b)
+    {
+        return b.distance > a.distance;
+    });
+
+    double container = 0.0;
+    double price = 0.0;
+    double distance = 0.0;
+    double onceDistance = c * dAvg;
+    for (int i = 0; i < n; ++i)
+    {
+        auto &thisGS = gasStations[i];
+
+        if (thisGS.distance > distance)
+            break;
+
+        if (thisGS.distance < distance)
+            continue;
+
+        if (fabs(distance - d) < eps)
+            break;
+
+        int minIdx = -1;
+        for (int j = i + 1; j < n; ++j)
+        {
+            auto &nextGS = gasStations[j];
+            if (nextGS.distance - distance > onceDistance)
+                break;
+            if (minIdx == -1 || gasStations[minIdx].price > nextGS.price || fabs(gasStations[minIdx].price - nextGS.price) < eps)
+            {
+                minIdx = j;
+                if (gasStations[minIdx].price < thisGS.price) // break when meets first cheaper gas station! if none then find the cheapest
+                    break;
+            }
+        }
+
+        if (minIdx == -1)
+        {
+            if (onceDistance > d - distance || fabs(onceDistance - (d - distance)) < eps)
+            {
+                price += (d - distance - container * dAvg) / dAvg * thisGS.price;
+                container = 0.0;
+                distance = d;
+            }
+            else
+            {
+                distance += onceDistance;
+                break;
+            }
+        }
+        else
+        {
+            auto &nextGS = gasStations[minIdx];
+
+            if (thisGS.price > nextGS.price || fabs(thisGS.price - nextGS.price) < eps)
+            {
+                price += (nextGS.distance - distance - container * dAvg) / dAvg * thisGS.price;
+                container = 0.0;
+                distance = nextGS.distance;
+            }
+            else
+            {
+                if (onceDistance > d - distance || fabs(onceDistance - (d - distance)) < eps)
+                {
+                    price += (d - distance - container * dAvg) / dAvg * thisGS.price;
+                    container = 0.0;
+                    distance = d;
+                }
+                else
+                {
+                    price += (c - container) * thisGS.price;
+                    container = c - (nextGS.distance - distance) / dAvg;
+                    distance = nextGS.distance;
+                }
+            }
+        }
+    }
+
+    if (fabs(distance - d) < eps)
+        printf("%.2lf\n", price);
+    else
+        printf("The maximum travel distance = %.2f\n", distance);
+}
