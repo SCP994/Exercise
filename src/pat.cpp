@@ -3080,10 +3080,11 @@ void pat_a_1010()
     using ull = unsigned long long;
 
     char n1[11], n2[11];
-    ull tag, radix;
+    int tag;
+    ull radix;
 
     scanf("%s%s", n1, n2);
-    scanf("%lld%lld", &tag, &radix);
+    scanf("%d%lld", &tag, &radix);
 
     char* p1 = n1;
     char* p2 = n2;
@@ -3091,22 +3092,20 @@ void pat_a_1010()
     if (tag == 2)
         std::swap(p1, p2);
 
-    ull len1 = strlen(p1);
-    ull len2 = strlen(p2);
+    int len1 = strlen(p1);
+    int len2 = strlen(p2);
 
     ull intN1 = 0;
     ull intN2 = 0;
 
-    auto getNum = [](char* p, ull len, ull radix)
+    auto getNum = [](char* p, int len, ull radix)
     {
         ull res = 0;
-        for (ull i = 0; i < len; ++i)
+        for (int i = 0; i < len; ++i)
         {
             ull t = p[i] - '0';
             if (p[i] >= 'a' && p[i] <= 'z')
                 t = p[i] - 'a' + 10;
-            if (t >= radix)
-                return static_cast<ull>(0);
             res = res * radix + t;
         }
         return res;
@@ -3114,27 +3113,30 @@ void pat_a_1010()
 
     intN1 = getNum(p1, len1, radix);
 
-    ull left = 1;
-    ull right = 37;
-    ull found = 0x3F3F3F3F;
-    while (left < right)
+    int left = 1;
+    for (int i = 0; i < len2; ++i)
     {
-        ull mid = (left + right) / 2;
-        intN2 = getNum(p2, len2, mid);
-        if (intN2 >= intN1 || intN2 < 0)
-        {
-            right = mid;
-            if (intN2 == intN1 && mid < found)
-                found = mid;
-        }
-        else
-        {
-            left = mid + 1;
-        }
+        int t = p2[i] - '0';
+        if (p2[i] >= 'a' && p2[i] <= 'z')
+            t = p2[i] - 'a' + 10;
+        if (t + 1 > left)
+            left = t + 1;
     }
 
-    if (found == 0x3F3F3F3F)
+    int right = 37;
+    while (left < right)
+    {
+        int mid = (left + right) / 2;
+        intN2 = getNum(p2, len2, mid);
+
+        if (intN2 >= intN1)
+            right = mid;
+        else
+            left = mid + 1;
+    }
+
+    if (getNum(p2, len2, left) != intN1)
         printf("Impossible\n");
     else
-        printf("%lld\n", found);
+        printf("%d\n", left);
 }
