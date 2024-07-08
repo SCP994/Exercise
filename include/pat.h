@@ -173,6 +173,8 @@ void pat_a_1048_1();
 
 void pat_a_1048_2();
 
+// 4.4 贪心
+
 void pat_b_1023();
 
 void pat_a_1070();
@@ -180,3 +182,17 @@ void pat_a_1070();
 void pat_b_1020();
 
 void pat_a_1033(); // *
+
+void pat_a_1037();
+
+void pat_a_1067();
+
+void pat_a_1038();
+
+// 4.5 二分
+
+void pat_a_1085();
+
+void pat_b_1030();
+
+void pat_a_1010();

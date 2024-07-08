@@ -2923,3 +2923,218 @@ void pat_a_1033()
     else
         printf("The maximum travel distance = %.2f\n", distance);
 }
+
+void pat_a_1037()
+{
+    const int maxn = 100000;
+    int coupons[maxn];
+    int values[maxn];
+
+    int nc, np;
+
+    scanf("%d", &nc);
+    for (int i = 0; i < nc; ++i)
+        scanf("%d", coupons + i);
+
+    scanf("%d", &np);
+    for (int i = 0; i < np; ++i)
+        scanf("%d", values + i);
+
+    int profit = 0;
+
+    std::sort(coupons, coupons + nc);
+    std::sort(values, values + np);
+
+    for (int i = 0; i < nc && i < np; ++i) // forward i = j
+    {
+        if (coupons[i] > 0 || values[i] > 0)
+            break;
+        profit += coupons[i] * values[i];
+    }
+
+    for (int i = nc - 1, j = np - 1; i >= 0 && j >= 0; --i, --j) // backward i != j if nc != np
+    {
+        if (coupons[i] < 0 || values[j] < 0)
+            break;
+        profit += coupons[i] * values[j];
+    }
+
+    printf("%d\n", profit);
+}
+
+void pat_a_1067()
+{
+    int n, t;
+    int arr[100000];
+    scanf("%d", &n);
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%d", &t);
+        arr[t] = i;
+        // arr[i] = t;
+    }
+
+    int cnt = 0;
+
+    for (int i = 0; i < n; ++i)
+    {
+
+    }
+
+    printf("%d\n", cnt);
+}
+
+void pat_a_1038()
+{
+    int n;
+    std::string strs[10000];
+
+    std::cin >> n;
+
+    for (int i = 0; i < n; ++i)
+        std::cin >> strs[i];
+
+    std::sort(strs, strs + n, [](const auto &a, const auto &b)
+    {
+        return a + b < b + a;
+    });
+
+    for (int i = 0; i < strs[0].size(); ++i)
+        if (strs[0][i] != '0')
+        {
+            strs[0] = strs[0].substr(i);
+            break;
+        }
+
+    bool allZero = true;
+    for (int i = 0; i < n; ++i) // can simply strcat all strs[]
+    {
+        if (std::stoi(strs[i]) == 0)
+        {
+            if (allZero)
+            {
+                if (i == n - 1)
+                    std::cout << "0";
+                continue;
+            }
+            else
+                std::cout << strs[i];
+        }
+        else
+        {
+            if (allZero)
+                std::cout << std::stoi(strs[i]);
+            else
+                std::cout << strs[i];
+            allZero = false;
+        }
+    }
+
+    std::cout << std::endl;
+}
+
+void pat_a_1085()
+{
+    const int maxn = 100000;
+
+    int arr[maxn];
+    int n;
+    long long p; // do not use int
+    scanf("%d%lld", &n, &p);
+
+    for (int i = 0; i < n; ++i)
+        scanf("%d", &arr[i]);
+
+    std::sort(arr, arr + n);
+
+    int cnt = 0;
+
+    for (int i = 0; i < n; ++i)
+    {
+        int mi = arr[i];
+
+        int left = i;
+        int right = n;
+        while (left < right)
+        {
+            int mid = (left + right) / 2;
+            if (arr[mid] <= mi * p)
+                left = mid + 1;
+            else
+                right = mid;
+        }
+        if (left - i > cnt)
+            cnt = left - i;
+    }
+
+    printf("%d\n", cnt);
+}
+
+void pat_b_1030()
+{
+    pat_a_1085();
+}
+
+void pat_a_1010()
+{
+    using ull = unsigned long long;
+
+    char n1[11], n2[11];
+    ull tag, radix;
+
+    scanf("%s%s", n1, n2);
+    scanf("%lld%lld", &tag, &radix);
+
+    char* p1 = n1;
+    char* p2 = n2;
+
+    if (tag == 2)
+        std::swap(p1, p2);
+
+    ull len1 = strlen(p1);
+    ull len2 = strlen(p2);
+
+    ull intN1 = 0;
+    ull intN2 = 0;
+
+    auto getNum = [](char* p, ull len, ull radix)
+    {
+        ull res = 0;
+        for (ull i = 0; i < len; ++i)
+        {
+            ull t = p[i] - '0';
+            if (p[i] >= 'a' && p[i] <= 'z')
+                t = p[i] - 'a' + 10;
+            if (t >= radix)
+                return static_cast<ull>(0);
+            res = res * radix + t;
+        }
+        return res;
+    };
+
+    intN1 = getNum(p1, len1, radix);
+
+    ull left = 1;
+    ull right = 37;
+    ull found = 0x3F3F3F3F;
+    while (left < right)
+    {
+        ull mid = (left + right) / 2;
+        intN2 = getNum(p2, len2, mid);
+        if (intN2 >= intN1 || intN2 < 0)
+        {
+            right = mid;
+            if (intN2 == intN1 && mid < found)
+                found = mid;
+        }
+        else
+        {
+            left = mid + 1;
+        }
+    }
+
+    if (found == 0x3F3F3F3F)
+        printf("Impossible\n");
+    else
+        printf("%lld\n", found);
+}

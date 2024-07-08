@@ -247,7 +247,7 @@ namespace notes
 		}
 		std::cout << "                      " <<std::endl;
 		std::cout << "                      " <<std::endl;
-		std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+		// std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 		// 使用并行算法进行排序
 		// std::sort(std::execution::par, vec.begin(), vec.end());
 
@@ -260,7 +260,7 @@ namespace notes
 
 	void sleep()
 	{
-		std::this_thread::sleep_for(std::chrono::seconds(2));
+		// std::this_thread::sleep_for(std::chrono::seconds(2));
 	}
 
 	void testTime_1()
