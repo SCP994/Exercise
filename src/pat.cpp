@@ -3162,3 +3162,212 @@ void pat_a_1010()
     else
         printf("%lld\n", left);
 }
+
+void pat_a_1044()
+{
+    const int maxn = 100001;
+
+    int arr[maxn] = {0};
+
+    int n, m, t;
+    scanf("%d%d", &n, &m);
+
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%d", &t);
+        arr[i + 1] = arr[i] + t;
+    }
+
+    std::vector<std::pair<int, int>> vec;
+
+    int mi = 0x3F3F3F3F;
+    for (int i = 0; i < n + 1; ++i)
+    {
+        int start = i;
+        int end = n + 1;
+
+        while (start < end)
+        {
+            int mid = (start + end) / 2;
+            int total = arr[mid] - arr[i];
+            if (total >= m)
+                end = mid;
+            else
+                start = mid + 1;
+        }
+        int total = arr[start] - arr[i];
+        if (total >= m && total <= mi)
+        {
+            if (total < mi)
+            {
+                vec.clear();
+                mi = arr[start] - arr[i];
+            }
+            vec.push_back({i + 1, start});
+        }
+    }
+
+    for (const auto &[s, e] : vec)
+        printf("%d-%d\n", s, e);
+}
+
+void pat_a_1085_1()
+{
+    const int maxn = 100000;
+
+    int arr[maxn];
+
+    int n;
+    long long p;
+    scanf("%d%lld", &n, &p);
+
+    for (int i = 0; i < n; ++i)
+        scanf("%d", &arr[i]);
+
+    std::sort(arr, arr + n);
+
+    int left = 0;
+    int right = 0;
+    int cnt = 0;
+    while (right < n)
+    {
+        if (arr[right] <= arr[left] * p)
+        {
+            if (right - left + 1 > cnt)
+                cnt = right - left + 1;
+            ++right;
+        }
+        else
+        {
+            ++left;
+        }
+    }
+    printf("%d\n", cnt);
+}
+
+void pat_a_1089()
+{
+    const int maxn = 100;
+
+    int arrOriginal[maxn];
+    int arrSort[maxn];
+
+    int n;
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; ++i)
+        scanf("%d", &arrOriginal[i]);
+    for (int i = 0; i < n; ++i)
+        scanf("%d", &arrSort[i]);
+
+    bool isInsert = true;
+    int right = n - 1;
+
+    // array can be accessed even if index is negative! right could be less then -1 without the first condition
+    while (right >= 0 && arrOriginal[right] == arrSort[right])
+        --right;
+
+    for (int i = 1; i <= right; ++i)
+        if (arrSort[i] < arrSort[i - 1])
+        {
+            isInsert = false;
+            break;
+        }
+
+    if (isInsert)
+    {
+        printf("Insertion Sort\n");
+
+        /*
+            4
+            3 4 2 1
+            3 4 2 1
+        */
+        if (right == -1)
+            right = 0;
+        while (arrSort[right] < arrSort[right + 1])
+            ++right;
+
+        ++right;
+        while (right > 0 && arrSort[right] < arrSort[right - 1])
+        {
+            std::swap(arrSort[right], arrSort[right - 1]);
+            --right;
+        }
+
+        for (int i = 0; i < n; ++i)
+        {
+            if (i)
+                printf(" ");
+            printf("%d", arrSort[i]);
+        }
+    }
+    else
+    {
+        printf("Merge Sort\n");
+
+        int t = 1;
+        bool breakSign = false;
+        while (true)
+        {
+            t *= 2;
+            for (int i = 0; i < n; i += t)
+            {
+                for (int j = i + 1; j < i + t && j < n; ++j)
+                {
+                    if (arrSort[j] < arrSort[j - 1])
+                    {
+                        breakSign = true;
+                        break;
+                    }
+                }
+                if (breakSign)
+                    break;
+            }
+            if (breakSign)
+                break;
+        }
+
+        for (int i = 0; i < n; i += t)
+        {
+            int left = i;
+            int right = i + t;
+            if (right > n)
+                right = n;
+            std::sort(arrSort + left, arrSort + right);
+        }
+
+        for (int i = 0; i < n; ++i)
+        {
+            if (i)
+                printf(" ");
+            printf("%d", arrSort[i]);
+        }
+    }
+}
+
+void pat_b_1035()
+{
+    pat_a_1089();
+}
+
+void pat_a_1029()
+{
+    const int maxn = 2 * 100000;
+
+    int n1, n2;
+    int arr1[maxn];
+    int arr2[maxn];
+
+    scanf("%d", &n1);
+    for (int i = 0; i < n1; ++i)
+        scanf("%d", &arr1[i]);
+    scanf("%d", &n2);
+    for (int i = 0; i < n2; ++i)
+        scanf("%d", &arr2[i]);
+
+    int left = 0;
+    int right = 0;
+
+
+}

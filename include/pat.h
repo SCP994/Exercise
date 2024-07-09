@@ -197,3 +197,15 @@ void pat_a_1085();
 void pat_b_1030();
 
 void pat_a_1010(); // *
+
+void pat_a_1044();
+
+// 4.6 two pointers
+
+void pat_a_1085_1();
+
+void pat_a_1089(); // *
+
+void pat_b_1035();
+
+void pat_a_1029(); // *
