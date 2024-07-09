@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <cstdlib>
+#include <cstdint>
 #include <cstring>
 #include <cmath>
 #include <cctype>
@@ -185,7 +186,7 @@ void pat_a_1033(); // *
 
 void pat_a_1037();
 
-void pat_a_1067();
+void pat_a_1067(); // *
 
 void pat_a_1038();
 
@@ -195,4 +196,4 @@ void pat_a_1085();
 
 void pat_b_1030();
 
-void pat_a_1010();
+void pat_a_1010(); // *

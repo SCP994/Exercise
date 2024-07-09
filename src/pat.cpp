@@ -2964,24 +2964,43 @@ void pat_a_1037()
 
 void pat_a_1067()
 {
+    const int maxn = 100000;
+
     int n, t;
-    int arr[100000];
+    int arr[maxn];
+    int vis[maxn] = {0};
     scanf("%d", &n);
+
     for (int i = 0; i < n; ++i)
     {
         scanf("%d", &t);
         arr[t] = i;
-        // arr[i] = t;
     }
 
-    int cnt = 0;
+    int step = 0;
 
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i < n; ++i) // a greedy algorithm should be used instead
     {
+        if (vis[i] || arr[i] == i)
+            continue;
 
+        int next = i;
+        bool zero = false;
+        while (!vis[next])
+        {
+            vis[next] = 1;
+            if (next == 0)
+                zero = true;
+            next = arr[next];
+            ++step;
+        }
+        if (zero)
+            --step;
+        else
+            ++step;
     }
 
-    printf("%d\n", cnt);
+    printf("%d\n", step);
 }
 
 void pat_a_1038()
@@ -3077,11 +3096,11 @@ void pat_b_1030()
 
 void pat_a_1010()
 {
-    using ull = unsigned long long;
+    using ll = long long; // cannot be unsigned long long for the judge of overflow
 
     char n1[11], n2[11];
     int tag;
-    ull radix;
+    ll radix;
 
     scanf("%s%s", n1, n2);
     scanf("%d%lld", &tag, &radix);
@@ -3095,25 +3114,27 @@ void pat_a_1010()
     int len1 = strlen(p1);
     int len2 = strlen(p2);
 
-    ull intN1 = 0;
-    ull intN2 = 0;
+    ll intN1 = 0;
+    ll intN2 = 0;
 
-    auto getNum = [](char* p, int len, ull radix)
+    auto getNum = [](char* p, int len, ll radix)
     {
-        ull res = 0;
+        ll res = 0;
         for (int i = 0; i < len; ++i)
         {
-            ull t = p[i] - '0';
+            ll t = p[i] - '0';
             if (p[i] >= 'a' && p[i] <= 'z')
                 t = p[i] - 'a' + 10;
             res = res * radix + t;
+            if (res < 0) // overflow!
+                return static_cast<ll>(0);
         }
         return res;
     };
 
     intN1 = getNum(p1, len1, radix);
 
-    int left = 1;
+    ll left = 1;
     for (int i = 0; i < len2; ++i)
     {
         int t = p2[i] - '0';
@@ -3123,13 +3144,14 @@ void pat_a_1010()
             left = t + 1;
     }
 
-    int right = 37;
+    ll right = std::numeric_limits<int>::max(); // the answer could be 2^31 - 1, mid is up to 2^31 - 2, but left (left = mid + 1) is up to 2^31 - 1
     while (left < right)
     {
-        int mid = (left + right) / 2;
+        ll mid = (left + right) / 2;
+
         intN2 = getNum(p2, len2, mid);
 
-        if (intN2 >= intN1)
+        if (intN2 >= intN1 || intN2 == 0)
             right = mid;
         else
             left = mid + 1;
@@ -3138,5 +3160,5 @@ void pat_a_1010()
     if (getNum(p2, len2, left) != intN1)
         printf("Impossible\n");
     else
-        printf("%d\n", left);
+        printf("%lld\n", left);
 }
