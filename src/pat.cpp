@@ -3355,19 +3355,103 @@ void pat_a_1029()
 {
     const int maxn = 2 * 100000;
 
-    int n1, n2;
-    int arr1[maxn];
-    int arr2[maxn];
+    int n[2];
+    int arr[2][maxn]; // would be more convenient to set a sentinel at the end of each array
 
-    scanf("%d", &n1);
-    for (int i = 0; i < n1; ++i)
-        scanf("%d", &arr1[i]);
-    scanf("%d", &n2);
-    for (int i = 0; i < n2; ++i)
-        scanf("%d", &arr2[i]);
+    scanf("%d", &n[0]);
+    for (int i = 0; i < n[0]; ++i)
+        scanf("%d", &arr[0][i]);
+    scanf("%d", &n[1]);
+    for (int i = 0; i < n[1]; ++i)
+        scanf("%d", &arr[1][i]);
 
-    int left = 0;
-    int right = 0;
+    int mid = (n[0] + n[1] + 1) / 2;
 
+    int idx[2] = {0};
+    int nowArr = arr[0][0] > arr[1][0] ? 1 : 0;
+    int anotherArr = nowArr == 1 ? 0 : 1;
 
+    idx[anotherArr] = -1;
+
+    int cnt = 1;
+    while (cnt < mid)
+    {
+        if (idx[nowArr] < n[nowArr] - 1 && idx[anotherArr] < n[anotherArr] - 1)
+        {
+            if (arr[nowArr][idx[nowArr] + 1] > arr[anotherArr][idx[anotherArr] + 1])
+                std::swap(nowArr, anotherArr);
+            ++idx[nowArr];
+            ++cnt;
+        }
+        else
+        {
+            if (idx[nowArr] == n[nowArr] - 1)
+                std::swap(nowArr, anotherArr);
+            ++idx[nowArr];
+            ++cnt;
+        }
+    }
+
+    printf("%d\n", arr[nowArr][idx[nowArr]]);
+}
+
+void pat_a_1093()
+{
+    const int maxn = 100001;
+    const int mod = 1000000007;
+
+    char str[maxn];
+    scanf("%s", str);
+
+    int pNum[maxn] = {0};
+    int tNum[maxn] = {0};
+
+    int len = strlen(str);
+
+    for (int i = 0; i < len; ++i)
+    {
+        if (str[i] == 'P')
+        {
+            if (i == 0)
+                pNum[i] = 1;
+            else
+                pNum[i] = pNum[i - 1] + 1;
+        }
+        else if (i > 0)
+        {
+            pNum[i] = pNum[i - 1];
+        }
+    }
+
+    for (int i = len - 1; i >= 0; --i)
+    {
+        if (str[i] == 'T')
+        {
+            if (i == len - 1)
+                tNum[i] = 1;
+            else
+                tNum[i] = tNum[i + 1] + 1;
+        }
+        else if (i < len - 1)
+        {
+            tNum[i] = tNum[i + 1];
+        }
+    }
+
+    int cnt = 0;
+
+    for (int i = 1; i < len - 1; ++i)
+    {
+        if (str[i] != 'A')
+            continue;
+        cnt += pNum[i - 1] * tNum[i + 1];
+        cnt %= mod;
+    }
+
+    printf("%d\n", cnt);
+}
+
+void pat_b_1040()
+{
+    pat_a_1093();
 }

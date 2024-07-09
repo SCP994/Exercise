@@ -209,3 +209,9 @@ void pat_a_1089(); // *
 void pat_b_1035();
 
 void pat_a_1029(); // *
+
+// 4.7 其他高效技巧与算法
+
+void pat_a_1093();
+
+void pat_b_1040();
