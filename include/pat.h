@@ -215,3 +215,17 @@ void pat_a_1029(); // *
 void pat_a_1093();
 
 void pat_b_1040();
+
+void pat_a_1101();
+
+void pat_b_1045();
+
+void pat_b_1003();
+
+void pat_a_1069();
+
+void pat_b_1019();
+
+void pat_a_1104();
+
+void pat_b_1049();

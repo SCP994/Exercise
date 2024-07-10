@@ -1,4 +1,6 @@
 #include "pat.h"
+#include <cstdio>
+#include <string>
 
 int pat_b_1001(int n)
 {
@@ -3454,4 +3456,174 @@ void pat_a_1093()
 void pat_b_1040()
 {
     pat_a_1093();
+}
+
+void pat_a_1101()
+{
+    const int maxn = 100000;
+
+    int arr[maxn];
+    int mi[maxn] = {0};
+    int ma[maxn] = {0};
+
+    int n;
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; ++i)
+        scanf("%d", &arr[i]);
+
+    for (int i = 1; i < n; ++i)
+        ma[i] = std::max(arr[i - 1], ma[i - 1]);
+
+    mi[n - 1] = 0x3F3F3F3F;
+    for (int i = n - 2; i >= 0; --i)
+        mi[i] = std::min(arr[i + 1], mi[i + 1]);
+
+    int cnt = 0;
+    int result[maxn];
+
+    for (int i = 0; i < n; ++i)
+        if (arr[i] <= mi[i] && arr[i] >= ma[i])
+            result[cnt++] = arr[i];
+
+    printf("%d\n", cnt);
+    for (int i = 0; i < cnt; ++i)
+    {
+        if (i)
+            printf(" ");
+        printf("%d", result[i]);
+    }
+    if (cnt == 0) // e.g. 2 1, there's no result
+        printf("\n");
+}
+
+void pat_b_1045()
+{
+    pat_a_1101();
+}
+
+void pat_b_1003()
+{
+    int n;
+    scanf("%d", &n);
+
+    auto judge = [](const char str[])
+    {
+        int len = strlen(str);
+
+        int pIdx = -1;
+        int tIdx = -1;
+        for (int i = 0; i < len; ++i)
+        {
+            char c = str[i];
+            if (c - 'P' && c - 'A' && c - 'T')
+                return false;
+            if (c == 'P')
+            {
+                if (pIdx != -1)
+                    return false;
+                pIdx = i;
+            }
+            if (c == 'T')
+            {
+                if (tIdx != -1)
+                    return false;
+                tIdx = i;
+            }
+        }
+
+        if (pIdx == -1 || tIdx == -1 || pIdx >= tIdx - 1)
+            return false;
+
+        for (int i = pIdx + 1; i < tIdx; ++i)
+            if (str[i] != 'A')
+                return false;
+
+        int left = pIdx;
+        int right = len - 1 - tIdx;
+
+        if (right != left * (tIdx - pIdx - 1))
+            return false;
+
+        for (int i = 0; i < pIdx; ++i)
+            if (str[i] != 'A')
+                return false;
+
+        for (int i = tIdx + 1; i < len; ++i)
+            if (str[i] != 'A')
+                return false;
+
+        return true;
+    };
+
+    char str[101];
+    getchar();
+    for (int i = 0; i < n; ++i)
+    {
+        std::cin.getline(str, 101);
+        printf(judge(str) ? "YES\n" : "NO\n");
+    }
+}
+
+void pat_a_1069()
+{
+    const int end = 6174;
+    const int len = 4;
+
+    int num;
+    scanf("%d", &num);
+
+    char str[len + 1];
+    std::string nextStr = std::to_string(num);
+    int size = nextStr.size(); // do not use size() inside for statement! it's changing!
+    for (int i = 0; i < len - size; ++i)
+        nextStr = "0" + nextStr;
+    strcpy(str, nextStr.c_str());
+
+    for (int i = 1; i < len; ++i)
+        if (str[i] == str[i - 1])
+        {
+            if (i == len - 1)
+            {
+                printf("%s - %s = 0000\n", str, str);
+                return;
+            }
+        }
+        else
+        {
+            break;
+        }
+
+    int ma, mi;
+    do
+    {
+        std::sort(str, str + len);
+        mi = std::stoi(str);
+        std::sort(str, str + len, std::greater<char>());
+        ma = std::stoi(str);
+
+        printf("%04d - %04d = %04d\n", ma, mi, ma - mi);
+
+        std::string nextStr = std::to_string(ma - mi);
+        int size = nextStr.size();
+        for (int i = 0; i < len - size; ++i)
+            nextStr = '0' + nextStr;
+
+        strcpy(str, nextStr.c_str());
+    } while (ma - mi != end);
+}
+
+void pat_b_1019()
+{
+    pat_a_1069();
+}
+
+void pat_a_1104()
+{
+
+}
+
+void pat_b_1049()
+{
+    pat_a_1104();
 }
