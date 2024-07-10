@@ -1,6 +1,4 @@
 #include "pat.h"
-#include <cstdio>
-#include <string>
 
 int pat_b_1001(int n)
 {
@@ -3620,10 +3618,48 @@ void pat_b_1019()
 
 void pat_a_1104()
 {
+    using ull = unsigned long long;
+    using ld = long double;
 
+    ull n; // can not be int
+    scanf("%lld", &n);
+
+    ld t;
+    ld sum = 0.0; // can not be double or float
+    for (ull i = 0; i < n; ++i)
+    {
+        scanf("%Lf", &t);
+        sum += static_cast<ld>((n - i) * (i + 1)) * t;
+    }
+
+    printf("%.2Lf\n", sum);
 }
 
 void pat_b_1049()
 {
     pat_a_1104();
+}
+
+void pat_a_1008()
+{
+    const int maxn = 100;
+
+    int arr[maxn];
+
+    int n, t;
+    scanf("%d", &n);
+
+    int floor = 0;
+    int total = 0;
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%d", &t);
+        if (t > floor)
+            total += (t - floor) * 6 + 5;
+        else
+            total += (floor - t) * 4 + 5;
+        floor = t;
+    }
+
+    printf("%d\n", total);
 }

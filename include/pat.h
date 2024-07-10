@@ -226,6 +226,8 @@ void pat_a_1069();
 
 void pat_b_1019();
 
-void pat_a_1104();
+void pat_a_1104(); // *
 
 void pat_b_1049();
+
+void pat_a_1008();
