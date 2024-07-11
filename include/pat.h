@@ -220,6 +220,8 @@ void pat_a_1101();
 
 void pat_b_1045();
 
+// 5.1 简单数学
+
 void pat_b_1003();
 
 void pat_a_1069();
@@ -241,3 +243,7 @@ void pat_a_1081();
 void pat_a_1088();
 
 void pat_b_1034();
+
+// 5.4 素数
+
+void pat_a_1007();
