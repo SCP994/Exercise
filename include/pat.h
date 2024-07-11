@@ -231,3 +231,13 @@ void pat_a_1104(); // *
 void pat_b_1049();
 
 void pat_a_1008();
+
+void pat_a_1049();
+
+// 5.3 分数的四则运算
+
+void pat_a_1081();
+
+void pat_a_1088();
+
+void pat_b_1034();

@@ -3663,3 +3663,205 @@ void pat_a_1008()
 
     printf("%d\n", total);
 }
+
+void pat_a_1049()
+{
+    int n;
+    scanf("%d", &n);
+
+    int cnt = 0;
+
+    printf("%d\n", cnt);
+}
+
+namespace
+{
+    long long gcd_1081(long a, long b)
+    {
+        if (b == 0)
+            return a;
+        return gcd_1081(b, a % b);
+    }
+
+    struct Fraction_1081 // and 1088
+    {
+        long long up, down;
+        Fraction_1081(long long up_, long long down_)
+        {
+            up = up_;
+            down = down_;
+            if (up == 0)
+                down = 1;
+        }
+
+        void reduce()
+        {
+            long long g = gcd_1081(std::llabs(up), std::llabs(down));
+            up /= g;
+            down /= g;
+            if (up > 0 && down < 0)
+            {
+                down *= -1;
+                up *= -1;
+            }
+        }
+    };
+
+    void print_1081(Fraction_1081 &fraction)
+    {
+        long long front = 0;
+
+        long long u = std::llabs(fraction.up);
+        long long d = std::llabs(fraction.down);
+
+        if (u >= d)
+        {
+            front = u / d;
+            printf("%lld", front);
+            fraction.up = u % d * (fraction.up > 0 ? 1 : -1);
+        }
+
+        if (fraction.up == 0)
+        {
+            if (front == 0)
+                printf("0\n");
+        }
+        else
+        {
+            if (front != 0)
+                printf(" ");
+            printf("%lld/%lld\n", fraction.up, fraction.down);
+        }
+    }
+}
+
+void pat_a_1081()
+{
+    int n;
+    scanf("%d", &n);
+
+    long long u, d;
+    Fraction_1081 sum(0, 1);
+
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%lld/%lld", &u, &d);
+        sum.up = sum.up * d + u * sum.down;
+        sum.down *= d;
+        sum.reduce();
+    }
+
+    print_1081(sum);
+}
+
+namespace
+{
+    void print_1088(Fraction_1081 fraction)
+    {
+        long long front = 0;
+
+        long long u = std::llabs(fraction.up);
+        long long d = std::llabs(fraction.down);
+
+        bool sign = true;
+        if (fraction.up > 0 && fraction.down < 0 || fraction.up < 0 && fraction.down > 0)
+            sign = false;
+
+        fraction.up = u;
+        fraction.down = d;
+
+        if (d == 0)
+        {
+            printf("Inf");
+            return;
+        }
+
+        if (u >= d)
+        {
+            front = u / d;
+            fraction.up = u % d;
+        }
+
+        if (!sign)
+            printf("(-");
+
+        if (front)
+            printf("%lld", front);
+
+        if (fraction.up == 0)
+        {
+            if (front == 0)
+                printf("0");
+        }
+        else
+        {
+            if (front != 0)
+                printf(" ");
+            printf("%lld/%lld", fraction.up, fraction.down);
+        }
+
+        if (!sign)
+            printf(")");
+    }
+}
+
+void pat_a_1088()
+{
+    Fraction_1081 frac1(0, 1), frac2(0, 1);
+
+    scanf("%lld/%lld%lld/%lld", &frac1.up, &frac1.down, &frac2.up, &frac2.down);
+
+    frac1.reduce();
+    frac2.reduce();
+
+    Fraction_1081 ans(0, 1);
+
+    ans.down = frac1.down * frac2.down;
+    ans.up = frac1.up * frac2.down + frac2.up * frac1.down;
+    ans.reduce();
+
+    print_1088(frac1);
+    printf(" + ");
+    print_1088(frac2);
+    printf(" = ");
+    print_1088(ans);
+    printf("\n");
+
+    ans.down = frac1.down * frac2.down;
+    ans.up = frac1.up * frac2.down - frac2.up * frac1.down;
+    ans.reduce();
+
+    print_1088(frac1);
+    printf(" - ");
+    print_1088(frac2);
+    printf(" = ");
+    print_1088(ans);
+    printf("\n");
+
+    ans.down = frac1.down * frac2.down;
+    ans.up = frac1.up * frac2.up;
+    ans.reduce();
+
+    print_1088(frac1);
+    printf(" * ");
+    print_1088(frac2);
+    printf(" = ");
+    print_1088(ans);
+    printf("\n");
+
+    ans.down = frac1.down * frac2.up;
+    ans.up = frac1.up * frac2.down;
+    ans.reduce();
+
+    print_1088(frac1);
+    printf(" / ");
+    print_1088(frac2);
+    printf(" = ");
+    print_1088(ans);
+    printf("\n");
+}
+
+void pat_b_1034()
+{
+    pat_a_1088();
+}
