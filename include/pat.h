@@ -234,7 +234,7 @@ void pat_b_1049();
 
 void pat_a_1008();
 
-void pat_a_1049();
+void pat_a_1049(); // *
 
 // 5.3 分数的四则运算
 

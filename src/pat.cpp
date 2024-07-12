@@ -3670,6 +3670,24 @@ void pat_a_1049()
     scanf("%d", &n);
 
     int cnt = 0;
+    int idx = 1;
+
+    int pre, post, now;
+    while (n / idx)
+    {
+        pre = n / (idx * 10);
+        post = n % idx;
+        now = n / idx % 10;
+
+        if (now == 0)
+            cnt += pre * idx;
+        else if (now == 1)
+            cnt += pre * idx + post + 1;
+        else // now >= 2
+            cnt += (pre + 1) * idx;
+
+        idx *= 10;
+    }
 
     printf("%d\n", cnt);
 }
@@ -3683,7 +3701,7 @@ namespace
         return gcd_1081(b, a % b);
     }
 
-    struct Fraction_1081 // and 1088
+    struct Fraction_1081
     {
         long long up, down;
         Fraction_1081(long long up_, long long down_)
@@ -3756,7 +3774,38 @@ void pat_a_1081()
 
 namespace
 {
-    void print_1088(Fraction_1081 fraction)
+    long long gcd_1088(long a, long b)
+    {
+        if (b == 0)
+            return a;
+        return gcd_1088(b, a % b);
+    }
+
+    struct Fraction_1088
+    {
+        long long up, down;
+        Fraction_1088(long long up_, long long down_)
+        {
+            up = up_;
+            down = down_;
+            if (up == 0)
+                down = 1;
+        }
+
+        void reduce()
+        {
+            long long g = gcd_1088(std::llabs(up), std::llabs(down));
+            up /= g;
+            down /= g;
+            if (up > 0 && down < 0)
+            {
+                down *= -1;
+                up *= -1;
+            }
+        }
+    };
+
+    void print_1088(Fraction_1088 fraction)
     {
         long long front = 0;
 
@@ -3807,14 +3856,14 @@ namespace
 
 void pat_a_1088()
 {
-    Fraction_1081 frac1(0, 1), frac2(0, 1);
+    Fraction_1088 frac1(0, 1), frac2(0, 1);
 
     scanf("%lld/%lld%lld/%lld", &frac1.up, &frac1.down, &frac2.up, &frac2.down);
 
     frac1.reduce();
     frac2.reduce();
 
-    Fraction_1081 ans(0, 1);
+    Fraction_1088 ans(0, 1);
 
     ans.down = frac1.down * frac2.down;
     ans.up = frac1.up * frac2.down + frac2.up * frac1.down;
