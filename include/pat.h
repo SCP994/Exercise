@@ -249,3 +249,7 @@ void pat_b_1034();
 // 5.4 素数
 
 void pat_a_1007();
+
+void pat_b_1013();
+
+void pat_a_1015();

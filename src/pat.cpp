@@ -3955,5 +3955,70 @@ void pat_b_1034()
 
 void pat_a_1007()
 {
+    const int maxn = 100000;
+
+    int idx = 0;
+    int prime[maxn] = {0};
+    bool isNotPrime[maxn] = {0};
+
+    for (int i = 2; i < maxn; ++i)
+    {
+        if (!isNotPrime[i])
+        {
+            prime[idx++] = i;
+            for (int j = i + i; j < maxn; j += i)
+                isNotPrime[j] = true;
+        }
+    }
+
+    int n;
+    scanf("%d", &n);
+
+    int cnt = 0;
+
+    for (int i = 1; i < idx; ++i)
+    {
+        if (prime[i] > n)
+            break;
+        if (prime[i] - prime[i - 1] == 2)
+            ++cnt;
+    }
+
+    printf("%d\n", cnt);
+}
+
+void pat_b_1013()
+{
+    const int maxn = 200000; // careful, it's not the range of n
+
+    int m, n;
+    scanf("%d%d", &m, &n);
+
+    int idx = 0;
+    int prime[maxn] = {0};
+    bool isNotPrime[maxn] = {0};
+
+    for (int i = 2; i < maxn; ++i)
+        if (!isNotPrime[i])
+        {
+            prime[idx++] = i;
+            if (idx >= n)
+                break;
+            for (int j = i + i; j < maxn; j += i)
+                isNotPrime[j] = true;
+        }
+
+    for (int i = m; i <= n; ++i)
+    {
+        if ((i - m) % 10)
+            printf(" ");
+        else if (i > m)
+            printf("\n");
+        printf("%d", prime[i - 1]);
+    }
+}
+
+void pat_a_1015()
+{
 
 }
