@@ -3692,6 +3692,44 @@ void pat_a_1049()
     printf("%d\n", cnt);
 }
 
+void pat_a_1049_()
+{
+    int n;
+    scanf("%d", &n);
+
+    int cnt = 0;
+    int now = 0;
+    int pre = 0;
+    int post = 0;
+    int post_ = 0;
+    int index = 1;
+
+    while (n / index)
+    {
+        now = n / index % 10;
+        pre = n / (index * 10);
+        post = n % index; // 1. right
+
+        // if (post != post_) // test
+        //     return;
+
+        if (now > 1)
+            cnt += (pre + 1) * index;
+        else if (now == 1)
+            cnt += pre * index + (post + 1);
+        else
+            cnt += pre * index;
+
+        // post_ = post_ * 10 + now; // 2. wrong!
+
+        // post += now * index; // 3. also right
+
+        index *= 10;
+    }
+
+    printf("%d\n", cnt);
+}
+
 namespace
 {
     long long gcd_1081(long a, long b)

@@ -236,6 +236,8 @@ void pat_a_1008();
 
 void pat_a_1049(); // *
 
+void pat_a_1049_(); // redo
+
 // 5.3 分数的四则运算
 
 void pat_a_1081();
