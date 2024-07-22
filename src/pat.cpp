@@ -4020,5 +4020,112 @@ void pat_b_1013()
 
 void pat_a_1015()
 {
+    const int maxn = 100000;
+    int idx = 0;
+    int prime[maxn] = {0};
+    bool isNotPrime[maxn] = {0};
 
+    isNotPrime[1] = true; // one is not prime!
+    for (int i = 2; i < maxn; ++i)
+        if (!isNotPrime[i])
+        {
+            prime[idx++] = i;
+            for (int j = i + i; j < maxn; j += i)
+                isNotPrime[j] = true;
+        }
+
+    int n, d;
+
+    auto f = [](int num, int d)
+    {
+        std::string tmp; // can user array instead
+        while (num)
+        {
+            int remainder = num % d;
+            num = num / d;
+            tmp = tmp + std::to_string(remainder);
+        }
+
+        int ret = 0;
+        int len = tmp.size();
+        for (int i = 0; i < len; ++i)
+            ret += (tmp[i] - '0') * static_cast<int>(pow(d, len - 1 - i));
+        return ret;
+    };
+
+    while (true)
+    {
+        scanf("%d", &n);
+        if (n < 0)
+            break;
+        scanf("%d", &d);
+
+        int rN = f(n, d);
+
+        if (!isNotPrime[n] && !isNotPrime[rN])
+            printf("Yes\n");
+        else
+            printf("No\n");
+    }
+}
+
+void pat_a_1078()
+{
+    const int maxn = 10100; // should be greater than maximun of n 10000 !
+
+    auto isPrime = [](int num)
+    {
+        if (num < 2)
+            return false;
+        for (int i = 2; i * i <= num; ++i)
+            if (num % i == 0)
+                return false;
+        return true;
+    };
+
+    int hash[maxn] = {0};
+
+    int size, n, t;
+    scanf("%d%d", &size, &n);
+
+    while (!isPrime(size))
+        ++size;
+
+    std::vector<int> result;
+
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%d", &t);
+
+        bool sign = false;
+
+        int j = 0;
+        do
+        {
+            int k = (t + j * j) % size;
+
+            if (hash[k] == 0)
+            {
+                hash[k] = t;
+                result.push_back(k);
+                sign = true;
+                break;
+            }
+            ++j;
+        } while (j <= size); // can be proven
+
+        if (!sign)
+            result.push_back(-1);
+    }
+
+    for (int i = 0; i < result.size(); ++i)
+    {
+        if (i)
+            printf(" ");
+        if (result[i] == -1)
+            printf("-");
+        else
+            printf("%d", result[i]);
+    }
+    printf("\n");
 }

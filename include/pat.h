@@ -253,3 +253,5 @@ void pat_a_1007();
 void pat_b_1013();
 
 void pat_a_1015();
+
+void pat_a_1078(); // *
