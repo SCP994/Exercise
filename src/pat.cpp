@@ -4242,5 +4242,40 @@ void pat_b_1017()
 {
     const int maxn = 1001;
 
+    char strA[maxn], strQ[maxn];
+    int b, r;
+
+    scanf("%s%d", strA, &b);
+
+    int lenA = strlen(strA);
+    int qIdx = 0;
+
+    int now = 0;
+    for (int i = 0; i < lenA; ++i)
+    {
+        now = now * 10 + (strA[i] - '0');
+        if (now < b)
+        {
+            strQ[qIdx++] = '0';
+        }
+        else
+        {
+            strQ[qIdx++] = '0' + now / b;
+            now = now % b;
+        }
+    }
+    strQ[qIdx] = '\0';
+
+    char* p = strQ;
+    while (*p == '0')
+        ++p;
+    if (*p == '\0')
+        --p;
+
+    printf("%s %d\n", p, now);
+}
+
+void pat_a_1023()
+{
 
 }
