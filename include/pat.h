@@ -272,4 +272,4 @@ void pat_a_1024(); // *
 
 // 6.1 vector 的常见用法详解
 
-void pat_a_1039();
+void pat_a_1039(); // *

@@ -4365,5 +4365,46 @@ void pat_a_1024()
 
 void pat_a_1039()
 {
+    int N, K;
+    scanf("%d%d", &N, &K);
 
+    std::unordered_map<std::string, std::vector<int>> m; // should use string hash
+
+    int n, k;
+    char name[5];
+    for (int i = 0; i < K; ++i)
+    {
+        scanf("%d%d", &k, &n);
+        for (int j = 0; j < n; ++j)
+        {
+            scanf("%s", name);
+            if (m.find(name) == m.end())
+                m[name] = std::vector<int>();
+            m[name].push_back(k);
+        }
+    }
+
+    for (int i = 0; i < N; ++i)
+    {
+        scanf("%s", name);
+
+        printf("%s ", name);
+
+        if (m.find(name) == m.end())
+        {
+            printf("0\n");
+        }
+        else
+        {
+            std::sort(m[name].begin(), m[name].end());
+            printf("%d ", static_cast<int>(m[name].size()));
+            for (int j = 0; j < m[name].size(); ++j)
+            {
+                if (j)
+                    printf(" ");
+                printf("%d", m[name][j]);
+            }
+            printf("\n");
+        }
+    }
 }
