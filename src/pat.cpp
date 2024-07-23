@@ -4277,5 +4277,93 @@ void pat_b_1017()
 
 void pat_a_1023()
 {
+    const int maxn = 21;
+
+    char original[maxn], result[maxn];
+    scanf("%s", original);
+
+    int lenO = strlen(original);
+    int hash[256] = {0};
+    for (int i = 0; i < lenO; ++i)
+        ++hash[original[i]];
+
+    int idx = 0;
+    int c = 0;
+    for (int i = lenO - 1; i >= 0; --i)
+    {
+        int now = 2 * (original[i] - '0') + c;
+        result[idx++] = '0' + now % 10;
+        c = now / 10;
+    }
+    if (c > 0)
+        result[idx++] = '0' + c;
+    result[idx++] = '\0';
+
+    std::reverse(result, result + idx - 1);
+
+    int lenR = strlen(result);
+    for (int i = 0; i < lenR; ++i)
+        --hash[result[i]];
+
+    bool sign = true;
+    for (int i = 0; i < 256; ++i)
+        if (hash[i] != 0)
+        {
+            sign = false;
+            break;
+        }
+
+    printf(sign ? "Yes\n" : "No\n");
+    printf("%s\n", result);
+}
+
+void pat_a_1024()
+{
+    const int maxn = 1000;
+
+    auto isPalindromic = [](const char* str, int len)
+    {
+        for (int i = 0; i < len / 2; ++i)
+            if (str[i] != str[len - 1 - i])
+                return false;
+        return true;
+    };
+
+    char numA[maxn], numB[maxn], numC[maxn];
+    int k;
+    scanf("%s%d", numA, &k);
+
+    int lenA = strlen(numA);
+    int step = 0;
+
+    while (step < k && !isPalindromic(numA, lenA))
+    {
+        strcpy(numB, numA);
+        std::reverse(numB, numB + lenA);
+
+        int idx = 0;
+        int c = 0;
+        for (int i = lenA - 1; i >= 0; --i)
+        {
+            int now = (numA[i] - '0') + (numB[i] - '0') + c;
+            numC[idx++] = '0' + now % 10;
+            c = now / 10;
+        }
+        if (c > 0)
+            numC[idx++] = '0' + c;
+        numC[idx] = '\0';
+
+        std::reverse(numC, numC + idx);
+
+        strcpy(numA, numC);
+        lenA = strlen(numA);
+        ++step;
+    }
+
+    printf("%s\n%d\n", numA, step);
+}
+
+void pat_a_1039()
+{
 
 }
