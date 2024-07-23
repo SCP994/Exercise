@@ -255,3 +255,13 @@ void pat_b_1013();
 void pat_a_1015();
 
 void pat_a_1078(); // *
+
+// 5.5 质因子分解
+
+void pat_a_1096(); // *
+
+void pat_a_1059(); // *
+
+// 5.6 大整数运算
+
+void pat_b_1017();

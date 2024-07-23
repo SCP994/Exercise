@@ -4129,3 +4129,118 @@ void pat_a_1078()
     }
     printf("\n");
 }
+
+void pat_a_1096()
+{
+    int n;
+    scanf("%d", &n);
+
+    int maxLen = 0;
+    int begin = 0;
+
+    // for (int i = 2; i * i <= n; ++i) // TLE!
+
+    int sqr = static_cast<int>(sqrt(1.0 * n));
+    for (int i = 2; i <= sqr; ++i)
+        if (n % i == 0)
+        {
+            int j = i;
+            int t = n;
+            while (t % j == 0)
+            {
+                t /= j;
+                ++j;
+            }
+            if (j - i > maxLen)
+            {
+                maxLen = j - i;
+                begin = i;
+            }
+        }
+
+    if (maxLen == 0) //  n is a prime
+    {
+        printf("1\n%d\n", n);
+        return;
+    }
+
+    printf("%d\n", maxLen);
+    for (int i = begin; i < begin + maxLen; ++i)
+    {
+        if (i > begin)
+            printf("*");
+        printf("%d", i);
+    }
+    printf("\n");
+}
+
+namespace
+{
+    struct Factor_a_1059
+    {
+        int x, cnt;
+        Factor_a_1059() : x(0), cnt(0) {}
+    };
+}
+
+void pat_a_1059()
+{
+    /*
+        another method: open the prime number table up to 10^5,
+        because 10^10 is larger than the integer range
+    */
+    auto isPrime = [](int num)
+    {
+        int sqr = static_cast<int>(sqrt(1.0 * num));
+        for (int i = 2; i <= sqr; ++i)
+            if (num % i == 0)
+                return false;
+        return true;
+    };
+
+    int n;
+    scanf("%d", &n);
+
+    if (n == 1 || isPrime(n))
+    {
+        printf("%d=%d\n", n, n);
+        return;
+    }
+
+    int fIdx = 0;
+    Factor_a_1059 fac[10];
+
+    int tN = n;
+    int sqr = static_cast<int>(sqrt(1.0 * tN));
+    for (int i = 2; i <= sqr; ++i)
+        if (isPrime(i) && tN % i == 0)
+        {
+            while (tN % i == 0)
+            {
+                ++fac[fIdx].cnt;
+                tN /= i;
+            }
+            fac[fIdx].x = i;
+            ++fIdx;
+            if (tN == 0)
+                break;
+        }
+
+    printf("%d=", n);
+    for (int i = 0; i < fIdx; ++i)
+    {
+        if (i)
+            printf("*");
+        printf("%d", fac[i].x);
+        if (fac[i].cnt > 1)
+            printf("^%d", fac[i].cnt);
+    }
+    printf("\n");
+}
+
+void pat_b_1017()
+{
+    const int maxn = 1001;
+
+
+}
