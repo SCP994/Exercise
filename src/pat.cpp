@@ -1,4 +1,7 @@
 #include "pat.h"
+#include <cctype>
+#include <string>
+#include <unordered_map>
 
 int pat_b_1001(int n)
 {
@@ -4736,7 +4739,54 @@ void pat_a_1054()
     printf("%d\n", p->first);
 }
 
-void pat_a_1071()
+void pat_a_1071() // todo
 {
+    const int maxn = 1048576 + 1;
 
+    char str[maxn];
+    std::cin.getline(str, maxn);
+
+    int len = strlen(str);
+
+    for (int i = 0; i < len; ++i)
+    {
+        if (str[i] >= 'A' && str[i] <= 'Z')
+            str[i] = std::tolower(str[i]);
+        if (!(str[i] >= 'a' && str[i] <= 'z' || str[i] >= '0' && str[i] <= '9'))
+            str[i] = '\0';
+    }
+
+
+    std::unordered_map<std::string, int> map;
+    for (int i = 0; i < len; ++i)
+    {
+        if (str[i] == '\0')
+            continue;
+
+        if (map.find(str + i) == map.end())
+            map[str + i] = 1;
+        else
+            ++map[str + i];
+
+        int j = i;
+        while (str[j] != '\0')
+            ++j;
+        i = j;
+    }
+
+    int ma = -1;
+    std::string ret;
+    for (const auto& [a, b] : map)
+    {
+        if (b > ma)
+        {
+            ma = b;
+            ret = a;
+        }
+        else if (b == ma && a < ret)
+        {
+            ret = a;
+        }
+    }
+    printf("%s %d\n", ret.c_str(), ma);
 }
