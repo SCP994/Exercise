@@ -11,7 +11,9 @@
 #include <algorithm>
 #include <deque>
 #include <map>
+#include <set>
 #include <unordered_map>
+#include <unordered_set>
 #include <utility>
 #include <numeric>
 #include <limits>
@@ -273,3 +275,23 @@ void pat_a_1024(); // *
 // 6.1 vector 的常见用法详解
 
 void pat_a_1039(); // *
+
+void pat_a_1047(); // *
+
+// 6.2 set 的常见用法详解
+
+void pat_a_1063();
+
+// 6.3 string 的常见用法详解
+
+void pat_a_1060(); // *
+
+// 6.4 map 的常见用法详解
+
+void pat_a_1100(); // *
+
+void pat_b_1044();
+
+void pat_a_1054();
+
+void pat_a_1071();

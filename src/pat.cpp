@@ -4368,7 +4368,8 @@ void pat_a_1039()
     int N, K;
     scanf("%d%d", &N, &K);
 
-    std::unordered_map<std::string, std::vector<int>> m; // should use string hash
+    // should use string hash, like pat_a_1047, save more space than std::string
+    std::unordered_map<std::string, std::vector<int>> m;
 
     int n, k;
     char name[5];
@@ -4407,4 +4408,335 @@ void pat_a_1039()
             printf("\n");
         }
     }
+}
+
+void pat_a_1047()
+{
+    const int maxK = 2501;
+    const int nameLen = 4;
+    const int base = 26;
+
+    // should use name array instead, vector save the index of the name
+
+    auto getKey = [base](const char str[])
+    {
+        int key = 0;
+        for (int i = 0; i < nameLen - 1; ++i)
+            key = key * base + str[i] - 'A';
+        key = key * base + str[nameLen - 1] - '0';
+        return key;
+    };
+
+    auto getValue = [base](int key, char str[])
+    {
+        str[nameLen] = '\0';
+
+        int t = key % base;
+        str[nameLen - 1] = '0' + t;
+        key /= base;
+
+        // while (key) { ... } wrong!
+        for (int i = nameLen - 2; i >= 0; --i)
+        {
+            t = key % base;
+            str[i] = 'A' + t;
+            key /= base;
+        }
+    };
+
+    int N, K;
+    scanf("%d%d", &N, &K);
+
+    std::vector<int> m[maxK];
+
+    char name[nameLen + 1];
+    int n, t;
+    for (int i = 0; i < N; ++i)
+    {
+        scanf("%s%d", name, &n);
+        for (int j = 0; j < n; ++j)
+        {
+            scanf("%d", &t);
+            m[t].push_back(getKey(name));
+        }
+    }
+
+    for (int i = 1; i <= K; ++i)
+    {
+        printf("%d %d\n", i, static_cast<int>(m[i].size()));
+        std::sort(m[i].begin(), m[i].end());
+        for (const auto& it : m[i])
+        {
+            getValue(it, name);
+            printf("%s\n", name);
+        }
+    }
+}
+
+void pat_a_1063()
+{
+    const int maxn = 50;
+
+    std::unordered_set<int> s[maxn];
+
+    int n, m, t;
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%d", &m);
+        for (int j = 0; j < m; ++j)
+        {
+            scanf("%d", &t);
+            s[i].insert(t);
+        }
+    }
+
+    auto getSimilarity = [&s](int a, int b)
+    {
+        auto& sA = s[a];
+        auto& sB = s[b];
+        int sizeA = sA.size();
+        int sizeB = sB.size();
+
+        int cnt = 0;
+        for (const auto& it : sA)
+            if (sB.find(it) != sB.end())
+                ++cnt;
+
+        return (1.0 * cnt) / (sizeA + sizeB - cnt);
+    };
+
+    int k;
+    scanf("%d", &k);
+
+    int a, b;
+    for (int i = 0; i < k; ++i)
+    {
+        scanf("%d%d", &a, &b);
+        printf("%.1f%%\n", 100 * getSimilarity(a - 1, b - 1));
+    }
+}
+
+void pat_a_1060()
+{
+    int n;
+    std::string a, b;
+
+    std::cin >> n >> a >> b;
+
+    // could be 000, 000.001
+    auto deal = [](std::string& str)
+    {
+        bool noOther = true;
+        for (int i = 0; i < str.size(); ++i)
+            if (str[i] > '0' && str[i] <= '9')
+            {
+                noOther = false;
+                break;
+            }
+        if (noOther)
+        {
+            str = "0";
+            return;
+        }
+    };
+
+    auto getValidity = [n](const std::string& str)
+    {
+        std::string ret = "0.";
+
+        if (str == "0")
+        {
+            for (int i = 0; i < n; ++i)
+                ret += "0";
+            ret += "*10^0";
+            return ret;
+        }
+
+        int len = str.size();
+
+        int first = -1;
+        int dot = -1;
+        for (int i = 0; i < len; ++i)
+        {
+            if (first == -1 && str[i] != '0' && str[i] != '.') // != 0 && != .
+                first = i;
+            if (str[i] == '.')
+                dot = i;
+            if (first != -1 && dot != -1)
+                break;
+        }
+        if (dot == -1)
+            dot = len;
+
+        for (int i = first, valid = 0; valid < n; ++i)
+        {
+            if (i < len && str[i] == '.')
+                continue;
+
+            if (i >= len)
+                ret += '0';
+            else
+                ret += str[i];
+            ++valid;
+        }
+
+        ret += "*10^";
+
+        if (str[first] == '0') // 0 !
+            ret += '0';
+        else
+            ret += std::to_string(dot < first ? dot - first + 1 : dot - first); // !
+
+        return ret;
+    };
+
+    deal(a);
+    deal(b);
+    std::string vA = getValidity(a);
+    std::string vB = getValidity(b);
+
+    if (vA == vB)
+        printf("YES %s\n", vA.c_str());
+    else
+        printf("NO %s %s\n", vA.c_str(), vB.c_str());
+}
+
+void pat_a_1100()
+{
+    const int maxLen = 20;
+    const int base = 13;
+
+    std::string lDigit[base] = {"tret", "jan", "feb", "mar", "apr", "may", "jun", "jly", "aug", "sep", "oct", "nov", "dec"};
+    std::string hDigit[base] = {"_", "tam", "hel", "maa", "huh", "tou", "kes", "hei", "elo", "syy", "lok", "mer", "jou"};
+
+    // could directly obtain all mapped strings of [0, 169)
+    std::unordered_map<std::string, int> digitToNum, hDigitToNum;
+    for (int i = 0; i < base; ++i)
+    {
+        digitToNum[lDigit[i]] = i;
+        hDigitToNum[hDigit[i]] = i * base;
+    }
+
+    auto isDecimal = [](const char num[])
+    {
+        int len = strlen(num);
+        for (int i = 0; i < len; ++i)
+            if (num[i] >= 'a' && num[i] <= 'z')
+                return false;
+        return true;
+    };
+
+    auto getDecimalFromString = [](const char num[])
+    {
+        int len = strlen(num);
+        int ret = 0;
+        for (int i = 0; i < len; ++i)
+            ret = ret * 10 + (num[i] - '0');
+        return ret;
+    };
+
+    auto getMarsFromDecimal = [&](int value, char result[])
+    {
+        if (value == 0)
+        {
+            strcpy(result, lDigit[0].c_str());
+            return;
+        }
+        if (value < base)
+        {
+            strcpy(result, lDigit[value].c_str());
+            return;
+        }
+        int now = value % base;
+        value /= base;
+        strcpy(result, hDigit[value].c_str());
+        if (now > 0)
+        {
+            int len = strlen(result);
+            result[len] = ' ';
+            strcpy(result + len + 1, lDigit[now].c_str());
+        }
+    };
+
+    auto getDecimalFromMars = [&](char num[], char result[])
+    {
+        int len = strlen(num);
+        int space = 0;
+        for (int i = 0; i < len; ++i)
+            if (num[i] == ' ')
+            {
+                space = i;
+                break;
+            }
+
+        int value = 0;
+        if (space == 0)
+        {
+            if (digitToNum.find(num) != digitToNum.end())
+                value = digitToNum[num];
+            else
+                value = hDigitToNum[num];
+        }
+        else
+        {
+            num[space] = '\0';
+            value = hDigitToNum[num];
+            value += digitToNum[num + space + 1];
+        }
+        strcpy(result, std::to_string(value).c_str());
+    };
+
+    int n;
+    scanf("%d%*c", &n);
+
+    char num[maxLen];
+    char result[maxLen];
+    for (int i = 0; i < n; ++i)
+    {
+        std::cin.getline(num, 20);
+        if (isDecimal(num))
+        {
+            int value = getDecimalFromString(num);
+            getMarsFromDecimal(value, result);
+        }
+        else
+            getDecimalFromMars(num, result);
+        printf("%s\n", result);
+    }
+}
+
+void pat_a_1054()
+{
+    int m, n, t;
+    scanf("%d%d", &m, &n);
+
+    std::unordered_map<int, int> map;
+
+    int total = m * n;
+
+    // for (int i = 0; i < total; ++i) // cost too much space!
+    //     map[i] = 0;
+
+    for (int i = 0; i < total; ++i)
+    {
+        scanf("%d", &t);
+        if (map.find(t) == map.end())
+            map[t] = 1;
+        else
+            ++map[t];
+    }
+
+    auto p = std::max_element(map.begin(), map.end(),
+        [](const auto& a, const auto& b)
+        {
+            return a.second < b.second;
+        });
+    printf("%d\n", p->first);
+}
+
+void pat_a_1071()
+{
+
 }
