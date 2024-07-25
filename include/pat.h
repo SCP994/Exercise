@@ -9,6 +9,8 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <stack>
+#include <queue>
 #include <deque>
 #include <map>
 #include <set>
@@ -295,3 +297,19 @@ void pat_b_1044();
 void pat_a_1054();
 
 void pat_a_1071();
+
+void pat_a_1022(); // *
+
+// 7.1 栈的应用
+
+void pat_a_1051();
+
+// 7.2 队列的应用
+
+void pat_a_1056(); // *
+
+// 7.3 链表处理
+
+void pat_a_1074();
+
+void pat_b_1025();

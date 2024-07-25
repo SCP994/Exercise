@@ -1,7 +1,4 @@
 #include "pat.h"
-#include <cctype>
-#include <string>
-#include <unordered_map>
 
 int pat_b_1001(int n)
 {
@@ -4710,6 +4707,11 @@ void pat_a_1100()
     }
 }
 
+void pat_b_1044()
+{
+    pat_a_1100();
+}
+
 void pat_a_1054()
 {
     int m, n, t;
@@ -4739,7 +4741,7 @@ void pat_a_1054()
     printf("%d\n", p->first);
 }
 
-void pat_a_1071() // todo
+void pat_a_1071()
 {
     const int maxn = 1048576 + 1;
 
@@ -4755,7 +4757,6 @@ void pat_a_1071() // todo
         if (!(str[i] >= 'a' && str[i] <= 'z' || str[i] >= '0' && str[i] <= '9'))
             str[i] = '\0';
     }
-
 
     std::unordered_map<std::string, int> map;
     for (int i = 0; i < len; ++i)
@@ -4789,4 +4790,218 @@ void pat_a_1071() // todo
         }
     }
     printf("%s %d\n", ret.c_str(), ma);
+}
+
+void pat_a_1022()
+{
+    const int maxLen = 81;
+    const int maxLenQuery = 1000; // different from maxLen, could be much greater than maxLen
+    const int maxM = 1000;
+
+    std::unordered_map<std::string, std::vector<int>> titleM, authorM, keywordM, publisherM, yearM;
+    std::unordered_map<int, std::unordered_map<std::string, std::vector<int>>*> mM =
+        { {1, &titleM}, {2, &authorM}, {3, &keywordM}, {4, &publisherM}, {5, &yearM} };
+
+    int n;
+    scanf("%d", &n);
+
+    int ID;
+    char tmp[maxLen];
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%d%*c", &ID);
+
+        std::cin.getline(tmp, maxLen);
+        if (titleM.find(tmp) == titleM.end())
+            titleM[tmp] = std::vector<int>();
+        titleM[tmp].push_back(ID);
+
+        std::cin.getline(tmp, maxLen);
+        if (authorM.find(tmp) == authorM.end())
+            authorM[tmp] = std::vector<int>();
+        authorM[tmp].push_back(ID);
+
+        std::cin.getline(tmp, maxLen);
+        int len = strlen(tmp);
+        for (int i = 0; i < len; ++i)
+            if (tmp[i] == ' ')
+                tmp[i] = '\0';
+        for (int i = 0; i < len; ++i)
+            if (tmp[i] != '\0')
+            {
+                if (keywordM.find(tmp + i) == keywordM.end())
+                    keywordM[tmp + i] = std::vector<int>();
+                keywordM[tmp + i].push_back(ID);
+
+                int j = i;
+                while (tmp[j] != '\0')
+                    ++j;
+                i = j;
+            }
+
+        std::cin.getline(tmp, maxLen);
+        if (publisherM.find(tmp) == publisherM.end())
+            publisherM[tmp] = std::vector<int>();
+        publisherM[tmp].push_back(ID);
+
+        std::cin.getline(tmp, maxLen);
+        if (yearM.find(tmp) == yearM.end())
+            yearM[tmp] = std::vector<int>();
+        yearM[tmp].push_back(ID);
+    }
+
+    auto print = [](std::unordered_map<std::string, std::vector<int>> &map, const char str[])
+    {
+        // Priority queue cannot be traversed, so set can be used, then no need to sort.
+        std::sort(map[str].begin(), map[str].end());
+        for (const auto &it : map[str])
+            printf("%07d\n", it);
+    };
+
+    int m;
+    scanf("%d%*c", &m);
+
+    char queries[maxLenQuery][maxM];
+    for (int i = 0; i < m; ++i)
+    {
+        std::cin.getline(queries[i], maxLenQuery);
+        printf("%s\n", queries[i]);
+
+        int type = queries[i][0] - '0';
+        auto& map = *mM[type];
+        if (map.find(queries[i] + 3) != map.end())
+            print(map, queries[i] + 3);
+        else
+            printf("Not Found\n");
+    }
+}
+
+void pat_a_1051()
+{
+    const int maxn = 1000;
+
+    int m, n, k;
+    int arr[maxn];
+    scanf("%d%d%d", &m, &n, &k);
+
+    std::stack<int> s;
+    auto judge = [&s, m, n](int arr[])
+    {
+        s = std::stack<int>();
+
+        int last = 0;
+        for (int i = 0; i < n; ++i)
+        {
+            if (!s.empty() && s.top() == arr[i])
+            {
+                if (s.top() > last)
+                    last = s.top();
+                s.pop();
+            }
+            else if (s.empty() || s.top() < arr[i])
+            {
+                for (int j = last + 1; j <= arr[i]; ++j)
+                    s.push(j);
+                if (s.size() > m)
+                    return false;
+                if (s.top() > last)
+                    last = s.top();
+                s.pop();
+            }
+            else
+                return false;
+        }
+
+        return true;
+    };
+
+    for (int i = 0; i < k; ++i)
+    {
+        for (int j = 0; j < n; ++j)
+            scanf("%d", &arr[j]);
+        if (judge(arr))
+            printf("YES\n");
+        else
+            printf("NO\n");
+    }
+}
+
+void pat_a_1056()
+{
+    const int maxn = 1000;
+
+    int np, ng;
+    scanf("%d%d", &np, &ng);
+
+    int weight[maxn];
+    int rank[maxn];
+
+    std::queue<int> q;
+    for (int i = 0; i < np; ++i)
+        scanf("%d", &weight[i]);
+
+    int t;
+    for (int i = 0; i < np; ++i)
+    {
+        scanf("%d", &t);
+        q.push(t);
+    }
+
+    int nowRank = 0;
+    while (q.size() > 1)
+    {
+        int size = q.size();
+        nowRank = (size + 1) / ng + 1; // todo
+        while (size)
+        {
+            int max = -1;
+            for (int i = 0; i < ng && size > 0; ++i)
+            {
+                if (max == -1 || weight[q.front()] > weight[max])
+                    max = q.front();
+                rank[q.front()] = nowRank;
+                q.pop();
+                --size;
+            }
+            q.push(max);
+        }
+        ++nowRank;
+    }
+    rank[q.front()] = nowRank;
+    rank[q.front()] = 1;
+
+    // int num[maxn] = {0}, map[maxn] = {0};
+    // for (int i = 0; i < np; ++i)
+    // {
+    //     rank[i] = nowRank + 1 - rank[i];
+    //     ++num[rank[i]];
+    // }
+    // for (int i = 0; i < np; ++i)
+    // {
+    //     if (!map[rank[i]])
+    //     {
+    //         int sum = 0;
+    //         for (int j = 1; j < rank[i]; ++j)
+    //             sum += num[j];
+    //         map[rank[i]] = sum + 1;
+    //     }
+    //     rank[i] = map[rank[i]];
+    // }
+
+    for (int i = 0; i < np; ++i)
+    {
+        if (i)
+            printf(" ");
+        printf("%d", rank[i]);
+    }
+}
+
+void pat_a_1074()
+{
+
+}
+
+void pat_b_1025()
+{
+    pat_a_1074();
 }
