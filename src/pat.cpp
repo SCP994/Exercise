@@ -4947,11 +4947,13 @@ void pat_a_1056()
         q.push(t);
     }
 
-    int nowRank = 0;
     while (q.size() > 1)
     {
         int size = q.size();
-        nowRank = (size + 1) / ng + 1; // todo
+        // int nowRank = (size + 1) / ng + 1; // wrong !!!
+        int nowRank = size / ng;
+        if (size % ng)
+            nowRank += 1;
         while (size)
         {
             int max = -1;
@@ -4959,34 +4961,14 @@ void pat_a_1056()
             {
                 if (max == -1 || weight[q.front()] > weight[max])
                     max = q.front();
-                rank[q.front()] = nowRank;
+                rank[q.front()] = nowRank + 1;
                 q.pop();
                 --size;
             }
             q.push(max);
         }
-        ++nowRank;
     }
-    rank[q.front()] = nowRank;
     rank[q.front()] = 1;
-
-    // int num[maxn] = {0}, map[maxn] = {0};
-    // for (int i = 0; i < np; ++i)
-    // {
-    //     rank[i] = nowRank + 1 - rank[i];
-    //     ++num[rank[i]];
-    // }
-    // for (int i = 0; i < np; ++i)
-    // {
-    //     if (!map[rank[i]])
-    //     {
-    //         int sum = 0;
-    //         for (int j = 1; j < rank[i]; ++j)
-    //             sum += num[j];
-    //         map[rank[i]] = sum + 1;
-    //     }
-    //     rank[i] = map[rank[i]];
-    // }
 
     for (int i = 0; i < np; ++i)
     {
@@ -4994,6 +4976,7 @@ void pat_a_1056()
             printf(" ");
         printf("%d", rank[i]);
     }
+    printf("\n");
 }
 
 void pat_a_1074()
