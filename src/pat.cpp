@@ -4979,12 +4979,267 @@ void pat_a_1056()
     printf("\n");
 }
 
+namespace
+{
+    struct Node_a_1074
+    {
+        int value, next;
+    };
+
+    int reverseK(Node_a_1074 nodes[], int head, int k) // another method: sort nodes
+    {
+        int begin = nodes[head].next;
+        int next = begin;
+        while (k-- > 0)
+        {
+            int t = nodes[next].next;
+            nodes[next].next = nodes[head].next;
+            nodes[head].next = next;
+            next = t;
+        }
+        nodes[begin].next = next;
+        return begin;
+    }
+}
+
 void pat_a_1074()
 {
+    const int maxn = 100000 + 1;
 
+    Node_a_1074 nodes[maxn];
+
+    int root, n, k;
+    scanf("%d%d%d", &root, &n, &k);
+
+    for (int i = 0; i < n; ++i)
+    {
+        int idx;
+        scanf("%d", &idx);
+        Node_a_1074 &node = nodes[idx];
+        scanf("%d%d", &node.value, &node.next);
+    }
+
+    int cnt = 0;
+    int next = root;
+    while (next != -1)
+    {
+        next = nodes[next].next;
+        ++cnt;
+    }
+
+    int head = maxn;
+    nodes[head].next = root;
+    while (head != -1 && cnt >= k)
+    {
+        head = reverseK(nodes, head, k);
+        cnt -= k;
+    }
+
+    head = maxn;
+    next = nodes[head].next;
+    while (next != -1)
+    {
+        Node_a_1074 &node = nodes[next];
+        if (node.next == -1)
+            printf("%05d %d %d\n", next, node.value, node.next);
+        else
+            printf("%05d %d %05d\n", next, node.value, node.next);
+        next = node.next;
+    }
 }
 
 void pat_b_1025()
 {
     pat_a_1074();
+}
+
+namespace
+{
+    struct Node_a_1032
+    {
+        char c;
+        int next;
+        bool vis = false;
+    };
+
+}
+
+void pat_a_1032()
+{
+    const int maxn = 100000;
+
+    Node_a_1032 nodes[maxn];
+
+    int root1, root2, n;
+    scanf("%d%d%d", &root1, &root2, &n);
+
+    for (int i = 0; i < n; ++i)
+    {
+        int idx;
+        scanf("%d%*c", &idx);
+        Node_a_1032 &node = nodes[idx];
+        scanf("%c%d", &node.c, &node.next);
+    }
+
+    int next = root1;
+    while (next != -1)
+    {
+        nodes[next].vis = true;
+        next = nodes[next].next;
+    }
+
+    next = root2;
+    while (next != -1)
+    {
+        if (nodes[next].vis)
+        {
+            printf("%05d\n", next);
+            return;
+        }
+        next = nodes[next].next;
+    }
+    printf("-1\n");
+}
+
+namespace
+{
+    struct Node_a_1052
+    {
+        int address, value, next;
+        bool vis;
+        Node_a_1052() : address(0), value(0x3F3F3F3F), next(0), vis(false) {}
+    };
+}
+
+void pat_a_1052()
+{
+    const int maxn = 100000;
+
+    Node_a_1052 nodes[maxn];
+
+    int n, root;
+    scanf("%d%d", &n, &root);
+
+    for (int i = 0, idx; i < n; ++i)
+    {
+        scanf("%d", &idx);
+        Node_a_1052 &node = nodes[idx];
+        node.address = idx;
+        scanf("%d%d", &node.value, &node.next);
+    }
+
+    int cnt = 0;
+    int next = root;
+    while (next != -1)
+    {
+        ++cnt;
+        nodes[next].vis = true;
+        next = nodes[next].next;
+    }
+
+    for (int i = 0; i < maxn; ++i)
+        if (!nodes[i].vis)
+            nodes[i].value = 0x3F3F3F3F;
+
+    std::sort(nodes, nodes + maxn, [](const auto &a, const auto &b)
+    {
+        return a.value < b.value;
+    });
+
+    root = nodes[0].address;
+    if (cnt == 0) // special!
+        printf("%d %d\n", cnt, -1);
+    else
+        printf("%d %05d\n", cnt, root);
+
+    for (int i = 0; i < cnt; ++i)
+    {
+        if (i < cnt - 1)
+            printf("%05d %d %05d\n", nodes[i].address, nodes[i].value, nodes[i + 1].address);
+        else
+            printf("%05d %d %d\n", nodes[i].address, nodes[i].value, -1);
+    }
+}
+
+namespace
+{
+    struct Node_a_1097
+    {
+        int address, value, next;
+        Node_a_1097() : address(0), value(0), next(0) {}
+    };
+}
+
+void pat_a_1097()
+{
+    const int maxn = 100000;
+
+    Node_a_1097 nodes[maxn];
+    std::unordered_set<int> s;
+
+    int root, n;
+    scanf("%d%d", &root, &n);
+
+    for (int i = 0, idx; i < n; ++i)
+    {
+        scanf("%d", &idx);
+        Node_a_1097 &node = nodes[idx];
+        node.address = idx;
+        scanf("%d%d", &node.value, &node.next);
+    }
+
+    int root1 = -1, p1 = -1;
+    int root2 = -1, p2 = -1;
+    int p = root;
+    while (p != -1)
+    {
+        Node_a_1097 &node = nodes[p];
+        if (s.find(static_cast<int>(abs(node.value))) != s.end())
+        {
+            if (root2 == -1)
+                root2 = node.address;
+            else
+                nodes[p2].next = node.address;
+            p2 = node.address;
+        }
+        else
+        {
+            s.insert(static_cast<int>(abs(node.value)));
+            if (root1 == -1)
+                root1 = node.address;
+            else
+                nodes[p1].next = node.address;
+            p1 = node.address;
+        }
+        p = node.next;
+    }
+    nodes[p1].next = -1;
+    if (p2 != -1)
+        nodes[p2].next = -1;
+
+    p1 = root1;
+    while (p1 != -1)
+    {
+        Node_a_1097 &node = nodes[p1];
+        if (node.next == -1)
+            printf("%05d %d %d\n", p1, node.value, node.next);
+        else
+            printf("%05d %d %05d\n", p1, node.value, node.next);
+        p1 = node.next;
+    }
+    p2 = root2;
+    while (p2 != -1)
+    {
+        Node_a_1097 &node = nodes[p2];
+        if (node.next == -1)
+            printf("%05d %d %d\n", p2, node.value, node.next);
+        else
+            printf("%05d %d %05d\n", p2, node.value, node.next);
+        p2 = node.next;
+    }
+}
+
+void pat_a_1103()
+{
+
 }

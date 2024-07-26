@@ -310,6 +310,16 @@ void pat_a_1056(); // *
 
 // 7.3 链表处理
 
-void pat_a_1074();
+void pat_a_1074(); // *
 
 void pat_b_1025();
+
+void pat_a_1032();
+
+void pat_a_1052(); // *
+
+void pat_a_1097(); // *
+
+// 8.1 尝试优先搜索
+
+void pat_a_1103();
