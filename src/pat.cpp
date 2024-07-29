@@ -1,4 +1,5 @@
 #include "pat.h"
+#include <numeric>
 
 int pat_b_1001(int n)
 {
@@ -5239,7 +5240,57 @@ void pat_a_1097()
     }
 }
 
-void pat_a_1103()
+namespace
 {
+    void dfs_a_1103(int idx, int n, int k, int p, int sum, std::vector<int> &tmp, std::vector<std::vector<int>> &ret)
+    {
+        int add = static_cast<int>(pow(1.0 * idx, p));
+        sum += add;
 
+        if (tmp.size() < k && sum <= n)
+        {
+            tmp.push_back(idx);
+            if (sum == n)
+            {
+                if (tmp.size() == k)
+                    ret.push_back(tmp);
+            }
+            else
+            {
+                dfs_a_1103(idx, n, k, p, sum, tmp, ret);
+            }
+            tmp.pop_back();
+        }
+
+        if (idx > 1)
+        {
+            sum -= add;
+            dfs_a_1103(idx - 1, n, k, p, sum, tmp, ret); // from large to small
+        }
+    }
+}
+
+void pat_a_1103() // todo
+{
+    int n, k, p;
+    scanf("%d%d%d", &n, &k, &p);
+
+    int right = static_cast<int>(sqrt(1.0 * n));
+    std::vector<int> tmp, ret_;
+    std::vector<std::vector<int>> ret;
+    dfs_a_1103(right, n, k, p, 0, tmp, ret);
+
+    if (ret.size() == 0)
+        printf("Impossible\n");
+    else
+    {
+        printf("%d = ", n);
+        for (int i = 0; i < ret[0].size(); ++i)
+        {
+            if (i)
+                printf(" + ");
+            printf("%d^%d", ret[0][i], p);
+        }
+        printf("\n");
+    }
 }
