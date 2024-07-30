@@ -4,7 +4,7 @@
 
 int main()
 {
-	pat_a_1020();
+	pat_a_1079();
 
 	return 0;
 }

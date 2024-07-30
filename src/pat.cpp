@@ -5351,8 +5351,8 @@ void pat_a_1091() // using dfs will cause stack overflow
     using std::vector;
 
     const int maxm = 1286; // 1286
-    const int maxn = 129; // 128
-    const int maxl = 61; // 60
+    const int maxn = 129;  // 128
+    const int maxl = 61;   // 60
 
     /*
         should simply use a larger number than the limit: 128 -> 130, 60 -> 80
@@ -5393,7 +5393,252 @@ void pat_a_1091() // using dfs will cause stack overflow
     printf("%d\n", ret);
 }
 
+namespace
+{
+    void getLevelFromPostAndIn_a_1020(int postSeq[], int inSeq[], std::vector<std::vector<int>> &levelSeq,
+        int pl, int pr, int il, int ir, int layer = 0)
+    {
+        if (pl == pr || il == ir)
+            return;
+
+        int root = postSeq[pr - 1];
+        levelSeq[layer].push_back(root);
+
+        int lLen = 0;
+        for (int i = il; i < ir; ++i)
+            if (inSeq[i] == root)
+            {
+                lLen = i - il;
+                break;
+            }
+
+        getLevelFromPostAndIn_a_1020(postSeq, inSeq, levelSeq, pl, pl + lLen, il, il + lLen, layer + 1);
+        getLevelFromPostAndIn_a_1020(postSeq, inSeq, levelSeq, pl + lLen, pr - 1, il + lLen + 1, ir, layer + 1);
+    }
+}
+
 void pat_a_1020()
+{
+    const int maxn = 30;
+
+    int inSeq[maxn], postSeq[maxn];
+
+    int n;
+    scanf("%d", &n);
+
+    std::vector<std::vector<int>> levelSeq(n, std::vector<int>());
+
+    for (int i = 0; i < n; ++i)
+        scanf("%d", &postSeq[i]);
+    for (int i = 0; i < n; ++i)
+        scanf("%d", &inSeq[i]);
+
+    getLevelFromPostAndIn_a_1020(postSeq, inSeq, levelSeq, 0, n, 0, n);
+
+    for (int i = 0; i < levelSeq.size(); ++i)
+        for (int j = 0; j < levelSeq[i].size(); ++j)
+        {
+            if (i || j)
+                printf(" ");
+            printf("%d", levelSeq[i][j]);
+        }
+    printf("\n");
+}
+
+namespace
+{
+    void getPostFromPreAndIn_a_1086(int preSeq[], int inSeq[], int postSeq[],
+        int pl, int pr, int il, int ir, int idx)
+    {
+        if (pl == pr || il == ir)
+            return;
+
+        int root = preSeq[pl];
+        postSeq[idx - 1] = root;
+
+        int len = ir - il;
+        int lLen = 0;
+        for (int i = il; i < ir; ++i)
+            if (inSeq[i] == root)
+            {
+                lLen = i - il;
+                break;
+            }
+        int rLen = len - lLen - 1;
+
+        getPostFromPreAndIn_a_1086(preSeq, inSeq, postSeq, pl + 1, pl + 1 + lLen, il, il + lLen, idx - 1 - rLen);
+        getPostFromPreAndIn_a_1086(preSeq, inSeq, postSeq, pl + 1 + lLen, pr, il + lLen + 1, ir, idx - 1);
+    }
+}
+
+void pat_a_1086()
+{
+    const int maxn = 30;
+
+    int preSeq[maxn], inSeq[maxn], postSeq[maxn];
+    int preIdx = 0, inIdx = 0;
+
+    std::stack<int> s;
+
+    int n;
+    char op[5];
+    scanf("%d", &n);
+
+    for (int i = 0; i < 2 * n; ++i)
+    {
+        scanf("%s", op);
+        if (strcmp(op, "Push") == 0)
+        {
+            scanf("%d", &preSeq[preIdx]);
+            s.push(preSeq[preIdx++]);
+        }
+        else // "Pop"
+        {
+            inSeq[inIdx++] = s.top();
+            s.pop();
+        }
+    }
+
+    getPostFromPreAndIn_a_1086(preSeq, inSeq, postSeq, 0, n, 0, n, n);
+
+    for (int i = 0; i < n; ++i)
+    {
+        if (i)
+            printf(" ");
+        printf("%d", postSeq[i]);
+    }
+}
+
+namespace
+{
+    struct Node_a_1102
+    {
+        int left;
+        int right;
+    };
+
+    void invert_a_1102(Node_a_1102 nodes[], int root)
+    {
+        if (root == -1)
+            return;
+
+        Node_a_1102 &node = nodes[root];
+        invert_a_1102(nodes, node.left);
+        invert_a_1102(nodes, node.right);
+        std::swap(node.left, node.right);
+    }
+
+    int getRoot_a_1102(Node_a_1102 nodes[], const int n)
+    {
+        const int maxn = 10;
+        int isChild[maxn] = {0};
+
+        for (int i = 0; i < n; ++i)
+        {
+            if (nodes[i].left != -1)
+                isChild[nodes[i].left] = 1;
+            if (nodes[i].right != -1)
+                isChild[nodes[i].right] = 1;
+        }
+
+        for (int i = 0; i < n; ++i)
+            if (!isChild[i])
+                return i;
+        return -1;
+    }
+
+    void getLevelSeq_a_1102(Node_a_1102 nodes[], int root, int levelSeq[])
+    {
+        int idx = 0;
+        std::queue<int> q;
+        q.push(root);
+
+        while (!q.empty())
+        {
+            Node_a_1102 &node = nodes[q.front()];
+            levelSeq[idx++] = q.front();
+            q.pop();
+
+            if (node.left != -1)
+                q.push(node.left);
+            if (node.right != -1)
+                q.push(node.right);
+        }
+    }
+
+    void getInSeq_a_1102(Node_a_1102 nodes[], int root, int inSeq[])
+    {
+        int idx = 0;
+        std::stack<int> s;
+
+        while (root != -1)
+        {
+            s.push(root);
+            root = nodes[root].left;
+        }
+
+        while (!s.empty())
+        {
+            root = s.top();
+            inSeq[idx++] = s.top();
+            s.pop();
+
+            if (nodes[root].right != -1)
+            {
+                root = nodes[root].right;
+                while (root != -1)
+                {
+                    s.push(root);
+                    root = nodes[root].left;
+                }
+            }
+        }
+    }
+}
+
+void pat_a_1102()
+{
+    const int maxn = 10;
+
+    int levelSeq[maxn], inSeq[maxn];
+
+    Node_a_1102 nodes[maxn];
+
+    int n;
+    scanf("%d%*c", &n);
+
+    char l, r;
+    for (int i = 0; i < n; ++i)
+    {
+        scanf("%c %c%*c", &l, &r);
+        nodes[i].left  = (l == '-') ? -1 : (l - '0');
+        nodes[i].right = (r == '-') ? -1 : (r - '0');
+    }
+
+    int root = getRoot_a_1102(nodes, n);
+
+    invert_a_1102(nodes, root);
+
+    getLevelSeq_a_1102(nodes, root, levelSeq);
+    getInSeq_a_1102(nodes, root, inSeq);
+
+    for (int i = 0; i < n; ++i)
+    {
+        if (i)
+            printf(" ");
+        printf("%d", levelSeq[i]);
+    }
+    printf("\n");
+    for (int i = 0; i < n; ++i)
+    {
+        if (i)
+            printf(" ");
+        printf("%d", inSeq[i]);
+    }
+    printf("\n");
+}
+
+void pat_a_1079()
 {
 
 }
