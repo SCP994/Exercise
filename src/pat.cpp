@@ -1,5 +1,4 @@
 #include "pat.h"
-#include <numeric>
 
 int pat_b_1001(int n)
 {
@@ -5242,7 +5241,7 @@ void pat_a_1097()
 
 namespace
 {
-    void dfs_a_1103(int idx, int n, int k, int p, int sum, std::vector<int> &tmp, std::vector<std::vector<int>> &ret)
+    void dfs_a_1103(int idx, int n, int k, int p, int sum, int facSum, int &maxFacSum, std::vector<int> &tmp, std::vector<int> &ret)
     {
         int add = static_cast<int>(pow(1.0 * idx, p));
         sum += add;
@@ -5250,47 +5249,151 @@ namespace
         if (tmp.size() < k && sum <= n)
         {
             tmp.push_back(idx);
+            facSum += idx;
             if (sum == n)
             {
-                if (tmp.size() == k)
-                    ret.push_back(tmp);
+                if (tmp.size() == k && facSum > maxFacSum)
+                {
+                    maxFacSum = facSum;
+                    ret = tmp;
+                }
             }
             else
             {
-                dfs_a_1103(idx, n, k, p, sum, tmp, ret);
+                dfs_a_1103(idx, n, k, p, sum, facSum, maxFacSum, tmp, ret);
             }
+            facSum -= idx;
             tmp.pop_back();
         }
 
         if (idx > 1)
         {
             sum -= add;
-            dfs_a_1103(idx - 1, n, k, p, sum, tmp, ret); // from large to small
+            dfs_a_1103(idx - 1, n, k, p, sum, facSum, maxFacSum, tmp, ret); // from large to small, then no need to sort
         }
     }
 }
 
-void pat_a_1103() // todo
+void pat_a_1103()
 {
     int n, k, p;
     scanf("%d%d%d", &n, &k, &p);
 
     int right = static_cast<int>(sqrt(1.0 * n));
-    std::vector<int> tmp, ret_;
-    std::vector<std::vector<int>> ret;
-    dfs_a_1103(right, n, k, p, 0, tmp, ret);
+    std::vector<int> tmp, ret;
+    int maxFacSum = 0;
+    dfs_a_1103(right, n, k, p, 0, 0, maxFacSum, tmp, ret);
 
     if (ret.size() == 0)
         printf("Impossible\n");
     else
     {
         printf("%d = ", n);
-        for (int i = 0; i < ret[0].size(); ++i)
+        for (int i = 0; i < ret.size(); ++i)
         {
             if (i)
                 printf(" + ");
-            printf("%d^%d", ret[0][i], p);
+            printf("%d^%d", ret[i], p);
         }
         printf("\n");
     }
+}
+
+namespace
+{
+    // whether (i, j, k) needs to be visited
+    bool judge_a_1091(std::vector<std::vector<std::vector<bool>>> &pixels, std::vector<std::vector<std::vector<bool>>> &inq,
+        const int i, const int j, const int k, const int l, const int m, const int n)
+    {
+        if (i < 0 || i >= l || j < 0 || j >= m || k < 0 || k >= n || !pixels[i][j][k] || inq[i][j][k])
+            return false;
+        return true;
+    }
+
+    int bfs_a_1091(std::vector<std::vector<std::vector<bool>>> &pixels, std::vector<std::vector<std::vector<bool>>> &inq,
+        const int i, const int j, const int k, const int l, const int m, const int n)
+    {
+        int X[6] = {1, -1, 0, 0, 0, 0};
+        int Y[6] = {0, 0, 1, -1, 0, 0};
+        int Z[6] = {0, 0, 0, 0, 1, -1};
+
+        std::queue<std::tuple<int, int, int>> q;
+        q.push({i, j, k});
+        inq[i][j][k] = true;
+
+        int volume = 1;
+
+        while (!q.empty())
+        {
+            auto [a, b, c] = q.front();
+            q.pop();
+
+            for (int i = 0; i < 6; ++i)
+            {
+                int tA = a + X[i];
+                int tB = b + Y[i];
+                int tC = c + Z[i];
+                if (judge_a_1091(pixels, inq, tA, tB, tC, l, m, n))
+                {
+                    ++volume;
+                    inq[tA][tB][tC] = true;
+                    q.push({tA, tB, tC});
+                }
+            }
+        }
+
+        return volume;
+    }
+}
+
+void pat_a_1091() // using dfs will cause stack overflow
+{
+    using std::vector;
+
+    const int maxm = 1286; // 1286
+    const int maxn = 129; // 128
+    const int maxl = 61; // 60
+
+    /*
+        should simply use a larger number than the limit: 128 -> 130, 60 -> 80
+        do not use the limit directly, maybe the question itself has problems
+    */
+
+    int m, n, l, t, b;
+    scanf("%d%d%d%d", &m, &n, &l, &t);
+
+    if (l >= maxl || m >= maxm || n >= maxn)
+        return; // wrong if set maxn = 128, maxl = 60
+
+    vector<vector<vector<bool>>> pixels(maxl, vector<vector<bool>>(maxm, vector<bool>(maxn, false)));
+    // pixels[maxl][maxm][maxn] is too large to declare on stack, std::vector<bool> only store one bit for bool
+    // std::vector<bool> cannot be assinged like scanf("%d", &vec[0]);
+    vector<vector<vector<bool>>> inq(maxl, vector<vector<bool>>(maxm, vector<bool>(maxn, false)));
+
+    for (int i = 0; i < l; ++i)
+        for (int j = 0; j < m; ++j)
+            for (int k = 0; k < n; ++k)
+            {
+                scanf("%d", &b);
+                if (b)
+                    pixels[i][j][k] = true;
+            }
+
+    int ret = 0;
+    for (int i = 0; i < l; ++i)
+        for (int j = 0; j < m; ++j)
+            for (int k = 0; k < n; ++k)
+                if (judge_a_1091(pixels, inq, i, j, k, l, m, n))
+                {
+                    int volume = bfs_a_1091(pixels, inq, i, j, k, l, m, n);
+                    if (volume >= t)
+                        ret += volume;
+                }
+
+    printf("%d\n", ret);
+}
+
+void pat_a_1020()
+{
+
 }
