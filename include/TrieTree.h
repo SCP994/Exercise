@@ -1,24 +1,24 @@
-#include <vector>
+#include <cstring> // memset
 #include <string>
-#include <cstring>  // memset
+#include <vector>
 
-class TrieTree	// 字典树（前缀树）
+class TrieTree // 字典树（前缀树）
 {
-public:
-	TrieTree();
+   public:
+    TrieTree();
 
-	void insert(std::string& str, int id);
+    void insert(std::string& str, int id);
 
-	int findWord(std::string& str, int left, int right) const;	// leetcode 336
+    int findWord(std::string& str, int left, int right) const; // leetcode 336
 
-	std::vector<int> query(std::string& str) const;	// leetcode 336
+    std::vector<int> query(std::string& str) const; // leetcode 336
 
-private:
-	struct TrieNode	// 字典树节点
-	{
-		int ch[26];
-		int flag;
-		TrieNode();
-	};
-	std::vector<TrieNode> tree;
+   private:
+    struct TrieNode // 字典树节点
+    {
+        int ch[26];
+        int flag;
+        TrieNode();
+    };
+    std::vector<TrieNode> tree;
 };

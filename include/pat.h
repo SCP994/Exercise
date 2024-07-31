@@ -1,24 +1,23 @@
+#include <algorithm>
+#include <cctype>
+#include <cmath>
+#include <cstdint>
 #include <cstdio>
 #include <cstdlib>
-#include <cstdint>
 #include <cstring>
-#include <cmath>
-#include <cctype>
-
-#include <iostream>
-#include <vector>
-#include <string>
-#include <algorithm>
-#include <stack>
-#include <queue>
 #include <deque>
+#include <iostream>
+#include <limits>
 #include <map>
+#include <numeric>
+#include <queue>
 #include <set>
+#include <stack>
+#include <string>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
-#include <numeric>
-#include <limits>
+#include <vector>
 
 // 3.1 简单模拟
 

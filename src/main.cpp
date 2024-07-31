@@ -2,9 +2,8 @@
 
 #include "pat.h"
 
-int main()
-{
-	pat_a_1079();
+int main() {
+    pat_a_1079();
 
-	return 0;
+    return 0;
 }
