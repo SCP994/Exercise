@@ -79,7 +79,8 @@ void MyLinkedList::print() {
 
 UnionFind::UnionFind(int n) {
     parent.reserve(n);
-    for (int i = 0; i < n; ++i) parent.push_back(i);
+    for (int i = 0; i < n; ++i)
+        parent.push_back(i);
 }
 
 void UnionFind::Union(int a, int b) { parent[Find(a)] = b; }
@@ -90,7 +91,8 @@ int UnionFind::Find(int a) { // 路径压缩
 
 UnionFind_leetcode399::UnionFind_leetcode399(int n) {
     parent.reserve(n);
-    for (int i = 0; i < n; ++i) parent.push_back(i);
+    for (int i = 0; i < n; ++i)
+        parent.push_back(i);
 }
 
 void UnionFind_leetcode399::Union(
@@ -122,7 +124,8 @@ int UnionFind_leetcode399::Find(
 NumArray::NumArray(vector<int>& nums) {
     int len = nums.size();
     sums.resize(len + 1);
-    for (int i = 0; i < len; ++i) sums[i + 1] = sums[i] + nums[i]; // 注意这里
+    for (int i = 0; i < len; ++i)
+        sums[i + 1] = sums[i] + nums[i]; // 注意这里
 }
 
 int NumArray::sumRange(int left, int right) {
@@ -183,7 +186,8 @@ string Solution::multiply(string num1, string num2) { // leetcode 43 9/22/22
     for (int i = 0; i < lenMin; ++i) {
         if (strMin[lenMin - i - 1] == '0')
             continue;
-        for (int j = i; j > 0; --j) mid.append(1, '0');
+        for (int j = i; j > 0; --j)
+            mid.append(1, '0');
         for (int j = 0; j < lenMax; ++j) {
             auto it = multiplier(strMax[lenMax - j - 1] - '0',
                                  strMin[lenMin - i - 1] - '0', c_in);
@@ -280,7 +284,8 @@ int Solution::maximumRemovals(string s, string p,
 bool Solution::sub_1898(int k, vector<int>& removable, string s, string p) {
     int len_s = s.length(), len_p = p.length();
     vector<bool> sign(len_s, false);
-    for (int i = 0; i < k; ++i) sign[removable[i]] = true;
+    for (int i = 0; i < k; ++i)
+        sign[removable[i]] = true;
     int i = 0, j = 0;
     for (; i < len_s && j < len_p; ++i)
         if (!sign[i] && s[i] == p[j])
@@ -293,13 +298,12 @@ bool Solution::sub_1898(int k, vector<int>& removable, string s, string p) {
 // 9/16-17/22
 //{
 //	int len_equations = equations.size(), len_queries = queries.size(),
-//count = 0, tempInt1, tempInt2, tempInt3; 	string tempStr1, tempStr2;
+// count = 0, tempInt1, tempInt2, tempInt3; 	string tempStr1, tempStr2;
 //	unordered_set<string> stringSet;
 //	unordered_map<string, int> stringToNums;	//
-//字符串对应到并查集的数字 	unordered_map<int, unordered_map<int, double> > ans;
-//	vector<double> result(len_queries);
-//	for (int i = 0; i < len_equations; ++i)
-//		for (int j = 0; j < 2; ++j)
+// 字符串对应到并查集的数字 	unordered_map<int, unordered_map<int, double> >
+// ans; 	vector<double> result(len_queries); 	for (int i = 0; i < len_equations;
+//++i) 		for (int j = 0; j < 2; ++j)
 //		{
 //			tempStr1 = equations[i][j];
 //			if (stringSet.find(tempStr1) == stringSet.end())
@@ -327,14 +331,14 @@ bool Solution::sub_1898(int k, vector<int>& removable, string s, string p) {
 //		tempInt1 = stringToNums[tempStr1];
 //		tempInt2 = stringToNums[tempStr2];
 //		if (stringSet.find(tempStr1) == stringSet.end() ||
-//stringSet.find(tempStr2) == stringSet.end()
+// stringSet.find(tempStr2) == stringSet.end()
 //			|| uf.Find(tempInt1, ans) != uf.Find(tempInt2, ans))
 //			result[i] = -1.0;
 //		else
 //		{
 //			tempInt3 = uf.Find(tempInt1, ans);
 //			result[i] = ans[tempInt1][tempInt3] *
-//ans[tempInt3][tempInt2];
+// ans[tempInt3][tempInt2];
 //		}
 //	}
 //	return result;
@@ -383,7 +387,7 @@ string Solution::find(string x) { // 并查集
 // 三个思路 bfs dfs 并查集
 //{
 //	int m = grid.size(), n = grid[0].size(), count = 0;	//
-//注意完全不用设置 sign 来标志是否被访问过，直接把 grid 相应位置改为 0 即可
+// 注意完全不用设置 sign 来标志是否被访问过，直接把 grid 相应位置改为 0 即可
 //	deque<pair<int, int> > coordinates;
 //	for (int i = 0; i < m; ++i)
 //		for (int j = 0; j < n; ++j)
@@ -438,8 +442,10 @@ int Solution::numIslands(vector<vector<char>>& grid) // UnionFind *
 }
 
 // vector<int> Solution::nextGreaterElement(vector<int>& nums1, vector<int>&
-// nums2) {	// leetcode 496 9/13/22 	int m = nums1.size(), n = nums2.size(),
-//temp = -1; 	vector<int> result(m); 	for (int i = n - 1, j = m - 1; j >= 0; --i)
+// nums2) {	// leetcode 496 9/13/22 	int m = nums1.size(), n =
+// nums2.size(),
+// temp = -1; 	vector<int> result(m); 	for (int i = n - 1, j = m - 1; j >= 0;
+// --i)
 //	{
 //		if (nums2[i] > nums1[j])
 //			temp = nums2[i];
@@ -575,7 +581,8 @@ bool Solution::judgeSpeed(vector<int>& dist, double hour, int speed) {
 int Solution::networkDelayTime(vector<vector<int>>& times, int n,
                                int k) { // leetcode 743 9/9/22 9/18/22
     vector<vector<int>> edges(n + 1, vector<int>(n + 1, inf));
-    for (auto& i : times) edges[i[0]][i[1]] = i[2];
+    for (auto& i : times)
+        edges[i[0]][i[1]] = i[2];
     vector<bool> vis(
         n + 1, false); // true 或 false 用来判断该点是否已经找到最短路径！！！
     vector<int> dis(n + 1, inf);
@@ -679,7 +686,8 @@ vector<vector<int>> Solution::floodFill(vector<vector<int>>& image, int sr,
 }
 
 // vector<vector<int>> Solution::floodFill(vector<vector<int>>& image, int sr,
-// int sc, int color) { 	int currColor = image[sr][sc]; 	if (currColor == color) {
+// int sc, int color) { 	int currColor = image[sr][sc]; 	if (currColor ==
+// color) {
 //		return image;
 //	}
 //	int n = image.size(), m = image[0].size();
@@ -692,7 +700,8 @@ vector<vector<int>> Solution::floodFill(vector<vector<int>>& image, int sr,
 //		for (int i = 0; i < 4; i++) {
 //			int mx = x + dx[i], my = y + dy[i];
 //			if (mx >= 0 && mx < n && my >= 0 && my < m &&
-//image[mx][my] == currColor) { 				que.emplace(mx, my); 				image[mx][my] = color;
+// image[mx][my] == currColor) { 				que.emplace(mx,
+// my); 				image[mx][my] = color;
 //			}
 //		}
 //	}

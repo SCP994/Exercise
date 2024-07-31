@@ -718,7 +718,8 @@ bool Solution::hasPath(vector<vector<int>>& maze, vector<int>& start,
         vis[px][py] = true;
         for (int i = 0; i < 4; ++i) {
             int x = px, y = py;
-            do x += dis[i], y += dis[i + 1];
+            do
+                x += dis[i], y += dis[i + 1];
             while (x >= 0 && x < m && y >= 0 && y < n &&
                    !maze[x][y]); // 别加 !vis[x][y] 条件
             if (x - dis[i] == px && y - dis[i + 1] == py)
@@ -902,8 +903,9 @@ int Solution::minimumTimeRequired(vector<int>& jobs, int k) {
     int ret = inf, len = jobs.size();
     vector<int> edges(k);
     // sort(jobs.begin(), jobs.end(), greater<int>());
-    sort(jobs.begin(), jobs.end()); // 注意这里应该正序排序而非逆序，这样能更快收敛，而且要和
-                                    // 973 行 break 一起使用才有效果
+    sort(jobs.begin(),
+         jobs.end()); // 注意这里应该正序排序而非逆序，这样能更快收敛，而且要和
+                      // 973 行 break 一起使用才有效果
     ret = dfs_1723(jobs, edges, len, k, 0, ret);
     cout << count_dfs_1723 << endl;
     return ret;
@@ -963,7 +965,8 @@ int Solution::longestIncreasingPath(vector<vector<int>>& matrix) {
     this->matrix = matrix;
 
     for (int i = 0; i < m; ++i)
-        for (int j = 0; j < n; ++j) ret = max(ret, dfs_329(i, j));
+        for (int j = 0; j < n; ++j)
+            ret = max(ret, dfs_329(i, j));
     return ret;
 }
 
@@ -987,7 +990,8 @@ int Solution::countPaths(vector<vector<int>>& grid) {
     matrix = grid;
     int sum = 0;
     for (int i = 0; i < m; ++i)
-        for (int j = 0; j < n; ++j) sum = (sum + dfs_2328(i, j)) % mod;
+        for (int j = 0; j < n; ++j)
+            sum = (sum + dfs_2328(i, j)) % mod;
     return sum;
 }
 
@@ -1058,7 +1062,8 @@ bool Solution::canWin__(string currentState) {
     int ret = 0, i = 0;
     while (i < len) {
         int j = i;
-        while (j < len && currentState[j] == '+') ++j;
+        while (j < len && currentState[j] == '+')
+            ++j;
         ret ^= win__(j - i); // 子状态异或
         i = j + 1;
     }

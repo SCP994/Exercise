@@ -67,7 +67,8 @@ int Solution::cherryPickup_(vector<vector<int>>& grid) {
 
     int ret = 0;
     for (int i = 0; i < n; ++i)
-        for (int j = 0; j < n; ++j) ret = max(ret, dp[m - 1][i][j]);
+        for (int j = 0; j < n; ++j)
+            ret = max(ret, dp[m - 1][i][j]);
     return ret;
 }
 
@@ -84,7 +85,8 @@ int Solution::lengthOfLIS(vector<int>& nums) {
     }
 
     int ret = 0;
-    for (int i = 0; i < n; ++i) ret = max(ret, dp[i]);
+    for (int i = 0; i < n; ++i)
+        ret = max(ret, dp[i]);
     return ret;
 }
 
@@ -133,7 +135,8 @@ int Solution::lengthOfLIS__(vector<int>& nums) {
     set<int> s(nums.begin(), nums.end());
     int idx = 1;
     unordered_map<int, int> m;
-    for (int v : s) m[v] = idx++; // 去重并排序，给每个数字进行编号
+    for (int v : s)
+        m[v] = idx++; // 去重并排序，给每个数字进行编号
     MyBITree tree(m.size()); // 树状数组保存以某个值为结尾的最长上升子序列长度
     int ret = 1;
     for (int v : nums) {
@@ -178,11 +181,14 @@ int Solution::minDeletionSize(vector<string>& strs) {
     m = strs.size();
     n = strs[0].size();
     int sign = 0;
-    vector<vector<bool>> dp(n + 1, vector<bool>(n)); // 记录长度为 1 到 n
-                                                     // 时，以各个位置的字符作为最后一个字符能否构成长度为
-                                                     // 1 - n 的单增字符串
+    vector<vector<bool>> dp(
+        n + 1,
+        vector<bool>(n)); // 记录长度为 1 到 n
+                          // 时，以各个位置的字符作为最后一个字符能否构成长度为
+                          // 1 - n 的单增字符串
 
-    for (int i = 0; i < n; ++i) dp[1][i] = true;
+    for (int i = 0; i < n; ++i)
+        dp[1][i] = true;
 
     for (int i = 2; i <= n; ++i) {
         for (int j = i - 1; j < n; ++j)
@@ -254,7 +260,8 @@ int Solution::maxHeight(std::vector<std::vector<int>>& cuboids) {
         return false;
     };
 
-    for (auto& i : cuboids) sort(i.begin(), i.end());
+    for (auto& i : cuboids)
+        sort(i.begin(), i.end());
     sort(cuboids.begin(), cuboids.end());
 
     for (int i = 0; i < n; ++i) {
@@ -265,7 +272,8 @@ int Solution::maxHeight(std::vector<std::vector<int>>& cuboids) {
     }
 
     for (const auto i : cuboids) {
-        for (const auto j : i) cout << j << " ";
+        for (const auto j : i)
+            cout << j << " ";
         cout << endl;
     }
 

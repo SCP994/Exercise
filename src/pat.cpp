@@ -201,17 +201,20 @@ void pat_a_1042() {
         "D11", "D12", "D13", "J1",  "J2",
     };
     int order[55];
-    for (int i = 1; i < 55; ++i) order[i] = i;
+    for (int i = 1; i < 55; ++i)
+        order[i] = i;
 
     int k;
     scanf("%d", &k);
 
     int shuffleOrder[55];
-    for (int i = 1; i < 55; ++i) scanf("%d", shuffleOrder + i);
+    for (int i = 1; i < 55; ++i)
+        scanf("%d", shuffleOrder + i);
 
     int tmpOrder[55];
     while (k--) {
-        for (int i = 1; i < 55; ++i) tmpOrder[shuffleOrder[i]] = order[i];
+        for (int i = 1; i < 55; ++i)
+            tmpOrder[shuffleOrder[i]] = order[i];
         std::swap(order, tmpOrder);
     }
 
@@ -562,11 +565,13 @@ void pat_b_1036() {
     int m = (n + 1) / 2;
     for (int i = 0; i < m; ++i) {
         if (i == 0 || i == m - 1) {
-            for (int j = 0; j < n; ++j) printf("%c", c);
+            for (int j = 0; j < n; ++j)
+                printf("%c", c);
             printf("\n");
         } else {
             printf("%c", c);
-            for (int j = 1; j < n - 1; ++j) printf(" ");
+            for (int j = 1; j < n - 1; ++j)
+                printf(" ");
             printf("%c\n", c);
         }
     }
@@ -583,13 +588,17 @@ void pat_b_1027() {
     int used = (bottom + 1) * (bottom + 1) / 2 - 1;
 
     for (int i = bottom; i > 0; i -= 2) {
-        for (int j = 0; j < (bottom - i) / 2; ++j) printf(" ");
-        for (int j = 0; j < i; ++j) printf("%c", c);
+        for (int j = 0; j < (bottom - i) / 2; ++j)
+            printf(" ");
+        for (int j = 0; j < i; ++j)
+            printf("%c", c);
         printf("\n");
     }
     for (int i = 3; i <= bottom; i += 2) {
-        for (int j = 0; j < (bottom - i) / 2; ++j) printf(" ");
-        for (int j = 0; j < i; ++j) printf("%c", c);
+        for (int j = 0; j < (bottom - i) / 2; ++j)
+            printf(" ");
+        for (int j = 0; j < i; ++j)
+            printf("%c", c);
         printf("\n");
     }
 
@@ -606,12 +615,14 @@ void pat_a_1031() {
 
     for (int i = 0; i < n1 - 1; ++i) {
         printf("%c", str[i]);
-        for (int j = 0; j < n2 - 2; ++j) printf(" ");
+        for (int j = 0; j < n2 - 2; ++j)
+            printf(" ");
         printf("%c", str[n - i - 1]);
         printf("\n");
     }
 
-    for (int i = n1 - 1; i < n1 - 1 + n2; ++i) printf("%c", str[i]);
+    for (int i = n1 - 1; i < n1 - 1 + n2; ++i)
+        printf("%c", str[i]);
 
     printf("\n");
 }
@@ -630,7 +641,8 @@ void pat_b_1022() {
         c /= base;
     } while (c);
 
-    for (int j = i - 1; j >= 0; --j) printf("%d", arr[j]);
+    for (int j = i - 1; j >= 0; --j)
+        printf("%d", arr[j]);
     printf("\n");
 }
 
@@ -766,9 +778,12 @@ void pat_b_1006() {
     int numS = n / 10;
     int numG = n %= 10;
 
-    for (int i = 0; i < numB; ++i) printf("B");
-    for (int i = 0; i < numS; ++i) printf("S");
-    for (int i = 0; i < numG; ++i) printf("%d", i + 1);
+    for (int i = 0; i < numB; ++i)
+        printf("B");
+    for (int i = 0; i < numS; ++i)
+        printf("S");
+    for (int i = 0; i < numG; ++i)
+        printf("%d", i + 1);
 }
 
 void pat_b_1021(char str[]) {
@@ -777,7 +792,8 @@ void pat_b_1021(char str[]) {
     int len = strlen(str);
     int arr[10] = {0};
 
-    for (int i = 0; i < len; ++i) ++arr[str[i] - '0'];
+    for (int i = 0; i < len; ++i)
+        ++arr[str[i] - '0'];
 
     for (int i = 0; i < 10; ++i)
         if (arr[i])
@@ -828,7 +844,8 @@ void pat_b_1002() {
 
     int len = strlen(str);
     int total = 0;
-    while (len--) total += str[len] - '0';
+    while (len--)
+        total += str[len] - '0';
 
     int idx = 0;
     int result[5];
@@ -930,7 +947,8 @@ void pat_a_1073() {
 
     if (dotIndex <= 0) {
         printf("0.");
-        for (int i = 0; i < -dotIndex; ++i) printf("0");
+        for (int i = 0; i < -dotIndex; ++i)
+            printf("0");
     }
     for (int i = 0; i < index; ++i) {
         if (i == dotIndex)
@@ -938,7 +956,8 @@ void pat_a_1073() {
         printf("%d", num[i]);
     }
     if (dotIndex >= index) {
-        for (int i = 0; i < dotIndex - index; ++i) printf("0");
+        for (int i = 0; i < dotIndex - index; ++i)
+            printf("0");
     }
 }
 
@@ -956,7 +975,8 @@ void pat_b_1048() {
     if (lenB < lenA) // b 比 a 短，高位要补 0
     {
         std::reverse(b, b + lenB); // 不 reverse 会补到低位！
-        for (int i = lenB; i < lenA; ++i) b[i] = '0';
+        for (int i = lenB; i < lenA; ++i)
+            b[i] = '0';
         lenB = lenA;
         std::reverse(b, b + lenB);
     }
@@ -979,7 +999,8 @@ void pat_b_1048() {
         }
     }
 
-    for (int i = 0; i < lenB; ++i) printf("%c", b[i]);
+    for (int i = 0; i < lenB; ++i)
+        printf("%c", b[i]);
 }
 
 void pat_a_1001() {
@@ -1001,7 +1022,8 @@ void pat_a_1001() {
         c /= 10;
     } while (c);
 
-    for (int i = j - 1; i >= 0; --i) printf("%c", num[i]);
+    for (int i = j - 1; i >= 0; --i)
+        printf("%c", num[i]);
     printf("\n");
 }
 
@@ -1013,7 +1035,8 @@ void pat_a_1005() {
 
     int len = strlen(str);
     int total = 0;
-    for (int i = 0; i < len; ++i) total += str[i] - '0';
+    for (int i = 0; i < len; ++i)
+        total += str[i] - '0';
 
     int idx = 0;
     int numArr[3];
@@ -1118,7 +1141,8 @@ void pat_a_1077() {
     else {
         // while (common[idx - 1] == ' ')
         // --idx;
-        for (int i = idx - 1; i >= 0; --i) printf("%c", common[i]);
+        for (int i = idx - 1; i >= 0; --i)
+            printf("%c", common[i]);
     }
     printf("\n");
 }
@@ -1203,7 +1227,8 @@ void pat_a_1082_1() {
         ++left;
     }
 
-    while (left + 4 <= right) right -= 4;
+    while (left + 4 <= right)
+        right -= 4;
 
     while (left < len) {
         bool flag = false;
@@ -1415,7 +1440,8 @@ void pat_a_1012() {
             students[i].rankA = i + 1;
     }
 
-    for (int i = 0; i < n; ++i) map[students[i].id] = i;
+    for (int i = 0; i < n; ++i)
+        map[students[i].id] = i;
 
     int id;
     for (int i = 0; i < m; ++i) {
@@ -1462,7 +1488,8 @@ struct Item_1016 {
 void pat_a_1016() {
     int hourFee[24] = {0};
 
-    for (int i = 0; i < 24; ++i) scanf("%d", hourFee + i);
+    for (int i = 0; i < 24; ++i)
+        scanf("%d", hourFee + i);
 
     std::unordered_map<std::string, Customer_1016> map;
     std::unordered_map<std::string, Date_1016> mapOnLine;
@@ -1521,7 +1548,8 @@ void pat_a_1016() {
     }
 
     std::vector<std::string> vec;
-    for (auto it = map.begin(); it != map.end(); ++it) vec.push_back(it->first);
+    for (auto it = map.begin(); it != map.end(); ++it)
+        vec.push_back(it->first);
 
     std::sort(vec.begin(), vec.end(),
               [](const auto &a, const auto &b) { return a < b; });
@@ -1688,7 +1716,8 @@ void pat_a_1075() {
     int n, k, m;
     scanf("%d%d%d", &n, &k, &m);
 
-    for (int i = 0; i < k; ++i) scanf("%d", score + i);
+    for (int i = 0; i < k; ++i)
+        scanf("%d", score + i);
 
     int ID, p, s;
     for (int i = 0; i < m; ++i) {
@@ -1816,7 +1845,8 @@ void pat_a_1080() {
     int n, m, k;
     scanf("%d%d%d", &n, &m, &k);
 
-    for (int i = 0; i < m; ++i) scanf("%d", quota + i);
+    for (int i = 0; i < m; ++i)
+        scanf("%d", quota + i);
 
     for (int i = 0; i < n; ++i) {
         auto &stu = students[i];
@@ -1824,7 +1854,8 @@ void pat_a_1080() {
         stu.sum = stu.ge + stu.gi;
         stu.ID = i;
 
-        for (int j = 0; j < k; ++j) scanf("%d", &stu.choices[j]);
+        for (int j = 0; j < k; ++j)
+            scanf("%d", &stu.choices[j]);
     }
 
     std::sort(students, students + n, [](const auto &a, const auto &b) {
@@ -1938,7 +1969,8 @@ void pat_a_1095() {
                 car.valid = false;
         }
     }
-    for (const auto &[s, p] : map) p->valid = false;
+    for (const auto &[s, p] : map)
+        p->valid = false;
 
     int queries[80000];
     for (
@@ -1977,7 +2009,8 @@ void pat_a_1095() {
         printf("%d\n", num);
 
     std::sort(result.begin(), result.end());
-    for (const auto &plate : result) printf("%s ", plate.c_str());
+    for (const auto &plate : result)
+        printf("%s ", plate.c_str());
     printf("%02d:%02d:%02d\n", maxDuration / (60 * 60),
            maxDuration % (60 * 60) / 60, maxDuration % 60);
 }
@@ -2004,7 +2037,8 @@ void pat_a_1084() {
         }
     }
 
-    for (int i = 0; i < result.size(); ++i) printf("%c", result[i]);
+    for (int i = 0; i < result.size(); ++i)
+        printf("%c", result[i]);
     printf("\n");
 }
 
@@ -2020,7 +2054,8 @@ void pat_b_1033() {
     int len2 = strlen(str2);
 
     int arr[256] = {0};
-    for (int i = 0; i < len1; ++i) arr[str1[i]] = 1;
+    for (int i = 0; i < len1; ++i)
+        arr[str1[i]] = 1;
 
     for (int i = 0; i < len2; ++i) {
         if (arr[std::toupper(str2[i])] ||
@@ -2061,7 +2096,8 @@ void pat_a_1092() {
     int len2 = strlen(str2);
 
     int arr[256] = {0};
-    for (int i = 0; i < len1; ++i) ++arr[str1[i]];
+    for (int i = 0; i < len1; ++i)
+        ++arr[str1[i]];
 
     bool sign = true;
     int left = 0;
@@ -2087,7 +2123,8 @@ void pat_b_1042() {
 
     int len = strlen(str);
     int freq[256] = {0};
-    for (int i = 0; i < len; ++i) ++freq[std::tolower(str[i])];
+    for (int i = 0; i < len; ++i)
+        ++freq[std::tolower(str[i])];
 
     int maxFreq = -1;
     char c;
@@ -2194,7 +2231,8 @@ void pat_a_1050() {
     int len1 = strlen(str1);
     int len2 = strlen(str2);
 
-    for (int i = 0; i < len2; ++i) map[str2[i]] = 1;
+    for (int i = 0; i < len2; ++i)
+        map[str2[i]] = 1;
 
     for (int i = 0; i < len1; ++i)
         if (!map[str1[i]])
@@ -2275,7 +2313,8 @@ void pat_a_1048_1() // 双指针
     scanf("%d%d", &n, &m);
 
     int arr[100000];
-    for (int i = 0; i < n; ++i) scanf("%d", &arr[i]);
+    for (int i = 0; i < n; ++i)
+        scanf("%d", &arr[i]);
 
     std::sort(arr, arr + n);
 
@@ -2306,7 +2345,8 @@ void pat_a_1048_2() // 二分
     scanf("%d%d", &n, &m);
 
     int arr[100000];
-    for (int i = 0; i < n; ++i) scanf("%d", &arr[i]);
+    for (int i = 0; i < n; ++i)
+        scanf("%d", &arr[i]);
 
     std::sort(arr, arr + n);
 
@@ -2387,7 +2427,8 @@ void pat_a_1070() {
     float d;
     scanf("%d%f", &n, &d);
 
-    for (int i = 0; i < n; ++i) scanf("%f", &cakes[i].inventory);
+    for (int i = 0; i < n; ++i)
+        scanf("%f", &cakes[i].inventory);
     for (int i = 0; i < n; ++i) {
         scanf("%f", &cakes[i].price);
         cakes[i].averagePrice = cakes[i].price / cakes[i].inventory;
@@ -2521,10 +2562,12 @@ void pat_a_1037() {
     int nc, np;
 
     scanf("%d", &nc);
-    for (int i = 0; i < nc; ++i) scanf("%d", coupons + i);
+    for (int i = 0; i < nc; ++i)
+        scanf("%d", coupons + i);
 
     scanf("%d", &np);
-    for (int i = 0; i < np; ++i) scanf("%d", values + i);
+    for (int i = 0; i < np; ++i)
+        scanf("%d", values + i);
 
     int profit = 0;
 
@@ -2593,7 +2636,8 @@ void pat_a_1038() {
 
     std::cin >> n;
 
-    for (int i = 0; i < n; ++i) std::cin >> strs[i];
+    for (int i = 0; i < n; ++i)
+        std::cin >> strs[i];
 
     std::sort(strs, strs + n,
               [](const auto &a, const auto &b) { return a + b < b + a; });
@@ -2634,7 +2678,8 @@ void pat_a_1085() {
     long long p; // do not use int
     scanf("%d%lld", &n, &p);
 
-    for (int i = 0; i < n; ++i) scanf("%d", &arr[i]);
+    for (int i = 0; i < n; ++i)
+        scanf("%d", &arr[i]);
 
     std::sort(arr, arr + n);
 
@@ -2767,7 +2812,8 @@ void pat_a_1044() {
         }
     }
 
-    for (const auto &[s, e] : vec) printf("%d-%d\n", s, e);
+    for (const auto &[s, e] : vec)
+        printf("%d-%d\n", s, e);
 }
 
 void pat_a_1085_1() {
@@ -2779,7 +2825,8 @@ void pat_a_1085_1() {
     long long p;
     scanf("%d%lld", &n, &p);
 
-    for (int i = 0; i < n; ++i) scanf("%d", &arr[i]);
+    for (int i = 0; i < n; ++i)
+        scanf("%d", &arr[i]);
 
     std::sort(arr, arr + n);
 
@@ -2807,15 +2854,18 @@ void pat_a_1089() {
     int n;
     scanf("%d", &n);
 
-    for (int i = 0; i < n; ++i) scanf("%d", &arrOriginal[i]);
-    for (int i = 0; i < n; ++i) scanf("%d", &arrSort[i]);
+    for (int i = 0; i < n; ++i)
+        scanf("%d", &arrOriginal[i]);
+    for (int i = 0; i < n; ++i)
+        scanf("%d", &arrSort[i]);
 
     bool isInsert = true;
     int right = n - 1;
 
     // array can be accessed even if index is negative! right could be less then
     // -1 without the first condition
-    while (right >= 0 && arrOriginal[right] == arrSort[right]) --right;
+    while (right >= 0 && arrOriginal[right] == arrSort[right])
+        --right;
 
     for (int i = 1; i <= right; ++i)
         if (arrSort[i] < arrSort[i - 1]) {
@@ -2833,7 +2883,8 @@ void pat_a_1089() {
         */
         if (right == -1)
             right = 0;
-        while (arrSort[right] < arrSort[right + 1]) ++right;
+        while (arrSort[right] < arrSort[right + 1])
+            ++right;
 
         ++right;
         while (right > 0 && arrSort[right] < arrSort[right - 1]) {
@@ -2893,9 +2944,11 @@ void pat_a_1029() {
                       // of each array
 
     scanf("%d", &n[0]);
-    for (int i = 0; i < n[0]; ++i) scanf("%d", &arr[0][i]);
+    for (int i = 0; i < n[0]; ++i)
+        scanf("%d", &arr[0][i]);
     scanf("%d", &n[1]);
-    for (int i = 0; i < n[1]; ++i) scanf("%d", &arr[1][i]);
+    for (int i = 0; i < n[1]; ++i)
+        scanf("%d", &arr[1][i]);
 
     int mid = (n[0] + n[1] + 1) / 2;
 
@@ -2983,12 +3036,15 @@ void pat_a_1101() {
     int n;
     scanf("%d", &n);
 
-    for (int i = 0; i < n; ++i) scanf("%d", &arr[i]);
+    for (int i = 0; i < n; ++i)
+        scanf("%d", &arr[i]);
 
-    for (int i = 1; i < n; ++i) ma[i] = std::max(arr[i - 1], ma[i - 1]);
+    for (int i = 1; i < n; ++i)
+        ma[i] = std::max(arr[i - 1], ma[i - 1]);
 
     mi[n - 1] = 0x3F3F3F3F;
-    for (int i = n - 2; i >= 0; --i) mi[i] = std::min(arr[i + 1], mi[i + 1]);
+    for (int i = n - 2; i >= 0; --i)
+        mi[i] = std::min(arr[i + 1], mi[i + 1]);
 
     int cnt = 0;
     int result[maxn];
@@ -3078,7 +3134,8 @@ void pat_a_1069() {
     int size =
         nextStr
             .size(); // do not use size() inside for statement! it's changing!
-    for (int i = 0; i < len - size; ++i) nextStr = "0" + nextStr;
+    for (int i = 0; i < len - size; ++i)
+        nextStr = "0" + nextStr;
     strcpy(str, nextStr.c_str());
 
     for (int i = 1; i < len; ++i)
@@ -3102,7 +3159,8 @@ void pat_a_1069() {
 
         std::string nextStr = std::to_string(ma - mi);
         int size = nextStr.size();
-        for (int i = 0; i < len - size; ++i) nextStr = '0' + nextStr;
+        for (int i = 0; i < len - size; ++i)
+            nextStr = '0' + nextStr;
 
         strcpy(str, nextStr.c_str());
     } while (ma - mi != end);
@@ -3418,7 +3476,8 @@ void pat_a_1007() {
     for (int i = 2; i < maxn; ++i) {
         if (!isNotPrime[i]) {
             prime[idx++] = i;
-            for (int j = i + i; j < maxn; j += i) isNotPrime[j] = true;
+            for (int j = i + i; j < maxn; j += i)
+                isNotPrime[j] = true;
         }
     }
 
@@ -3452,7 +3511,8 @@ void pat_b_1013() {
             prime[idx++] = i;
             if (idx >= n)
                 break;
-            for (int j = i + i; j < maxn; j += i) isNotPrime[j] = true;
+            for (int j = i + i; j < maxn; j += i)
+                isNotPrime[j] = true;
         }
 
     for (int i = m; i <= n; ++i) {
@@ -3474,7 +3534,8 @@ void pat_a_1015() {
     for (int i = 2; i < maxn; ++i)
         if (!isNotPrime[i]) {
             prime[idx++] = i;
-            for (int j = i + i; j < maxn; j += i) isNotPrime[j] = true;
+            for (int j = i + i; j < maxn; j += i)
+                isNotPrime[j] = true;
         }
 
     int n, d;
@@ -3526,7 +3587,8 @@ void pat_a_1078() {
     int size, n, t;
     scanf("%d%d", &size, &n);
 
-    while (!isPrime(size)) ++size;
+    while (!isPrime(size))
+        ++size;
 
     std::vector<int> result;
 
@@ -3682,7 +3744,8 @@ void pat_b_1017() {
     strQ[qIdx] = '\0';
 
     char *p = strQ;
-    while (*p == '0') ++p;
+    while (*p == '0')
+        ++p;
     if (*p == '\0')
         --p;
 
@@ -3697,7 +3760,8 @@ void pat_a_1023() {
 
     int lenO = strlen(original);
     int hash[256] = {0};
-    for (int i = 0; i < lenO; ++i) ++hash[original[i]];
+    for (int i = 0; i < lenO; ++i)
+        ++hash[original[i]];
 
     int idx = 0;
     int c = 0;
@@ -3713,7 +3777,8 @@ void pat_a_1023() {
     std::reverse(result, result + idx - 1);
 
     int lenR = strlen(result);
-    for (int i = 0; i < lenR; ++i) --hash[result[i]];
+    for (int i = 0; i < lenR; ++i)
+        --hash[result[i]];
 
     bool sign = true;
     for (int i = 0; i < 256; ++i)
@@ -3816,7 +3881,8 @@ void pat_a_1047() {
 
     auto getKey = [base](const char str[]) {
         int key = 0;
-        for (int i = 0; i < nameLen - 1; ++i) key = key * base + str[i] - 'A';
+        for (int i = 0; i < nameLen - 1; ++i)
+            key = key * base + str[i] - 'A';
         key = key * base + str[nameLen - 1] - '0';
         return key;
     };
@@ -3925,7 +3991,8 @@ void pat_a_1060() {
         std::string ret = "0.";
 
         if (str == "0") {
-            for (int i = 0; i < n; ++i) ret += "0";
+            for (int i = 0; i < n; ++i)
+                ret += "0";
             ret += "*10^0";
             return ret;
         }
@@ -4006,7 +4073,8 @@ void pat_a_1100() {
     auto getDecimalFromString = [](const char num[]) {
         int len = strlen(num);
         int ret = 0;
-        for (int i = 0; i < len; ++i) ret = ret * 10 + (num[i] - '0');
+        for (int i = 0; i < len; ++i)
+            ret = ret * 10 + (num[i] - '0');
         return ret;
     };
 
@@ -4121,7 +4189,8 @@ void pat_a_1071() {
             ++map[str + i];
 
         int j = i;
-        while (str[j] != '\0') ++j;
+        while (str[j] != '\0')
+            ++j;
         i = j;
     }
 
@@ -4183,7 +4252,8 @@ void pat_a_1022() {
                 keywordM[tmp + i].push_back(ID);
 
                 int j = i;
-                while (tmp[j] != '\0') ++j;
+                while (tmp[j] != '\0')
+                    ++j;
                 i = j;
             }
 
@@ -4203,7 +4273,8 @@ void pat_a_1022() {
         // Priority queue cannot be traversed, so set can be used, then no need
         // to sort.
         std::sort(map[str].begin(), map[str].end());
-        for (const auto &it : map[str]) printf("%07d\n", it);
+        for (const auto &it : map[str])
+            printf("%07d\n", it);
     };
 
     int m;
@@ -4241,7 +4312,8 @@ void pat_a_1051() {
                     last = s.top();
                 s.pop();
             } else if (s.empty() || s.top() < arr[i]) {
-                for (int j = last + 1; j <= arr[i]; ++j) s.push(j);
+                for (int j = last + 1; j <= arr[i]; ++j)
+                    s.push(j);
                 if (s.size() > m)
                     return false;
                 if (s.top() > last)
@@ -4255,7 +4327,8 @@ void pat_a_1051() {
     };
 
     for (int i = 0; i < k; ++i) {
-        for (int j = 0; j < n; ++j) scanf("%d", &arr[j]);
+        for (int j = 0; j < n; ++j)
+            scanf("%d", &arr[j]);
         if (judge(arr))
             printf("YES\n");
         else
@@ -4273,7 +4346,8 @@ void pat_a_1056() {
     int rank[maxn];
 
     std::queue<int> q;
-    for (int i = 0; i < np; ++i) scanf("%d", &weight[i]);
+    for (int i = 0; i < np; ++i)
+        scanf("%d", &weight[i]);
 
     int t;
     for (int i = 0; i < np; ++i) {
@@ -4714,8 +4788,10 @@ void pat_a_1020() {
 
     std::vector<std::vector<int>> levelSeq(n, std::vector<int>());
 
-    for (int i = 0; i < n; ++i) scanf("%d", &postSeq[i]);
-    for (int i = 0; i < n; ++i) scanf("%d", &inSeq[i]);
+    for (int i = 0; i < n; ++i)
+        scanf("%d", &postSeq[i]);
+    for (int i = 0; i < n; ++i)
+        scanf("%d", &inSeq[i]);
 
     getLevelFromPostAndIn_a_1020(postSeq, inSeq, levelSeq, 0, n, 0, n);
 
@@ -4899,4 +4975,65 @@ void pat_a_1102() {
     printf("\n");
 }
 
-void pat_a_1079() {}
+namespace {
+struct Node_a_1079 {
+    int value;
+    bool isRetailer = false;
+    std::vector<int> children;
+};
+
+double traverse_a_1079(Node_a_1079 nodes[], int root, double p, double r) {
+    double ret = 0.0;
+
+    std::queue<int> q;
+    q.push(root);
+
+    int layer = 0;
+    while (!q.empty()) {
+        ++layer;
+        int size = q.size();
+        while (size--) {
+            Node_a_1079 &node = nodes[q.front()];
+            q.pop();
+
+            // price from root supplier is p not p * (1 + 4 / 100) !
+            if (node.isRetailer)
+                ret += node.value * p * pow(1 + r / 100, layer - 1);
+            else {
+                for (const auto &child : node.children)
+                    q.push(child);
+            }
+        }
+    }
+    return ret;
+}
+} // namespace
+
+void pat_a_1079() {
+    const int maxn = 100000;
+
+    Node_a_1079 nodes[maxn];
+
+    int n;
+    double p, r;
+    scanf("%d%lf%lf", &n, &p, &r);
+
+    for (int i = 0, k; i < n; ++i) {
+        scanf("%d", &k);
+        Node_a_1079 &node = nodes[i];
+        if (k == 0) {
+            scanf("%d", &node.value);
+            node.isRetailer = true;
+        } else { // k > 0
+            for (int j = 0, t; j < k; ++j) {
+                scanf("%d", &t);
+                node.children.push_back(t);
+            }
+        }
+    }
+
+    double ret = traverse_a_1079(nodes, 0, p, r);
+    printf("%.1lf\n", ret);
+}
+
+void pat_a_1090() {}

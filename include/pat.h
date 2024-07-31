@@ -337,4 +337,6 @@ void pat_a_1102();
 
 // 9.3 树的遍历
 
-void pat_a_1079();
+void pat_a_1079(); // *
+
+void pat_a_1090();

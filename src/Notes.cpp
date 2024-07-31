@@ -70,7 +70,8 @@ void malloc_free() {
     char* ptr = (char*)malloc(8);
     if (!ptr)
         throw bad_alloc();
-    for (int i = 0; i < 7; ++i) ptr[i] = 'a' + i;
+    for (int i = 0; i < 7; ++i)
+        ptr[i] = 'a' + i;
     ptr[7] = '\0';
     cout << ptr << endl; // abcdefg
     free(ptr);

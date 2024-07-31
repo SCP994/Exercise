@@ -13,7 +13,8 @@ vector<int> Solution::getModifiedArray(int length,
         if (it[1] + 1 < length)
             result[it[1]] -= it[2]; // 差分数组
     }
-    for (int i = 1; i < length; ++i) result[i] += result[i - 1];
+    for (int i = 1; i < length; ++i)
+        result[i] += result[i - 1];
     return result;
 }
 
@@ -26,7 +27,8 @@ vector<int> Solution::getModifiedArray_(int length,
         bitree->update(end + 2, -inc);
     }
     vector<int> result;
-    for (int i = 0; i < length; ++i) result.push_back(bitree->query(i + 1));
+    for (int i = 0; i < length; ++i)
+        result.push_back(bitree->query(i + 1));
     delete bitree;
     return result;
 }
@@ -66,7 +68,8 @@ int Solution::lengthOfLongestSubstring(string s) {
     int len = s.length(), count = 0, left = 0;
     unordered_set<char> chars;
     for (int i = 0; i < len; ++i) {
-        while (chars.find(s[i]) != chars.end()) chars.erase(s[left++]);
+        while (chars.find(s[i]) != chars.end())
+            chars.erase(s[left++]);
         chars.insert(s[i]);
         count = max(count, i - left + 1); // 不用写为(int)chars.size()
     }
@@ -88,7 +91,8 @@ int Solution::numSubarrayProductLessThanK(vector<int>& nums, int k) {
         } else {
             acc *= nums[r];
             temp = l;
-            while (acc >= k) acc /= nums[l++];
+            while (acc >= k)
+                acc /= nums[l++];
             // if (temp != l)
             //     sum += f(l - temp + r - l) - f(r - l);
             sum += r - l + 1; // 效率更高
@@ -216,14 +220,16 @@ int Solution::sumSubarrayMins(vector<int>& arr) {
     vector<int> left(len, -1), right(len, len);
     stack<int> temp;
     for (int i = 0; i < len; ++i) {
-        while (!temp.empty() && arr[temp.top()] >= arr[i]) temp.pop();
+        while (!temp.empty() && arr[temp.top()] >= arr[i])
+            temp.pop();
         if (!temp.empty())
             left[i] = temp.top();
         temp.push(i);
     }
     temp = stack<int>();
     for (int i = len - 1; i >= 0; --i) {
-        while (!temp.empty() && arr[temp.top()] > arr[i]) temp.pop();
+        while (!temp.empty() && arr[temp.top()] > arr[i])
+            temp.pop();
         if (!temp.empty())
             right[i] = temp.top();
         temp.push(i);
@@ -237,7 +243,8 @@ int Solution::sumSubarrayMins(vector<int>& arr) {
 int Solution::maxWidthRamp(vector<int>& nums) {
     int len = nums.size(), width = 0;
     vector<pair<int, int> > v;
-    for (int i = 0; i < len; ++i) v.push_back({nums[i], i});
+    for (int i = 0; i < len; ++i)
+        v.push_back({nums[i], i});
     sort(v.begin(), v.end());
     int temp = v[0].second;
     for (int i = 1; i < len; ++i)
@@ -314,7 +321,8 @@ long long Solution::subArrayRanges(vector<int>& nums) {
         rightMin(len, len);
     stack<int> tempMax, tempMin;
     for (int i = 0; i < len; ++i) {
-        while (!tempMax.empty() && nums[tempMax.top()] < nums[i]) tempMax.pop();
+        while (!tempMax.empty() && nums[tempMax.top()] < nums[i])
+            tempMax.pop();
         if (!tempMax.empty())
             leftMax[i] = tempMax.top();
         tempMax.push(i);
@@ -333,7 +341,8 @@ long long Solution::subArrayRanges(vector<int>& nums) {
         if (!tempMax.empty())
             rightMax[i] = tempMax.top();
         tempMax.push(i);
-        while (!tempMin.empty() && nums[tempMin.top()] > nums[i]) tempMin.pop();
+        while (!tempMin.empty() && nums[tempMin.top()] > nums[i])
+            tempMin.pop();
         if (!tempMin.empty())
             rightMin[i] = tempMin.top();
         tempMin.push(i);
@@ -350,14 +359,16 @@ int Solution::maxSumMinProduct(vector<int>& nums) {
     vector<int> leftMin(len, -1), rightMin(len, len);
     stack<int> temp;
     for (int i = 0; i < len; ++i) {
-        while (!temp.empty() && nums[temp.top()] >= nums[i]) temp.pop();
+        while (!temp.empty() && nums[temp.top()] >= nums[i])
+            temp.pop();
         if (!temp.empty())
             leftMin[i] = temp.top();
         temp.push(i);
     }
     temp = stack<int>();
     for (int i = len - 1; i >= 0; --i) {
-        while (!temp.empty() && nums[temp.top()] >= nums[i]) temp.pop();
+        while (!temp.empty() && nums[temp.top()] >= nums[i])
+            temp.pop();
         if (!temp.empty())
             rightMin[i] = temp.top();
         temp.push(i);
@@ -380,7 +391,8 @@ vector<int> Solution::maxSlidingWindow(vector<int>& nums, int k) {
     vector<int> result, leftMax(len, -1), rightMax(len, len);
     stack<int> temp;
     for (int i = 0; i < len; ++i) {
-        while (!temp.empty() && nums[temp.top()] < nums[i]) temp.pop();
+        while (!temp.empty() && nums[temp.top()] < nums[i])
+            temp.pop();
         if (!temp.empty())
             leftMax[i] = i - temp.top() > k ? i - k : temp.top();
         else if (i + 1 > k)
@@ -389,7 +401,8 @@ vector<int> Solution::maxSlidingWindow(vector<int>& nums, int k) {
     }
     temp = stack<int>();
     for (int i = len - 1; i >= 0; --i) {
-        while (!temp.empty() && nums[temp.top()] <= nums[i]) temp.pop();
+        while (!temp.empty() && nums[temp.top()] <= nums[i])
+            temp.pop();
         if (!temp.empty())
             rightMax[i] = temp.top() - i > k ? i + k : temp.top();
         else if (len - i > k)
@@ -413,7 +426,8 @@ vector<int> Solution::maxSlidingWindow_(vector<int>& nums, int k) {
     {
         if (!q.empty() && q.front() < i - k + 1)
             q.pop_front();
-        while (!q.empty() && nums[q.back()] <= nums[i]) q.pop_back();
+        while (!q.empty() && nums[q.back()] <= nums[i])
+            q.pop_back();
         q.push_back(i);
         if (i >= k - 1)
             result.push_back(nums[q.front()]);
@@ -446,10 +460,12 @@ int Solution::findMaxValueOfEquation_(vector<vector<int> >& points, int k) {
     deque<vector<int> > q;
     for (auto& item : points) {
         int x = item[0], y = item[1];
-        while (!q.empty() && x - q.front()[0] > k) q.pop_front();
+        while (!q.empty() && x - q.front()[0] > k)
+            q.pop_front();
         if (!q.empty())
             result = max(result, x - q.front()[0] + y + q.front()[1]);
-        while (!q.empty() && y >= q.back()[1] + x - q.back()[0]) q.pop_back();
+        while (!q.empty() && y >= q.back()[1] + x - q.back()[0])
+            q.pop_back();
         q.push_back(item);
     }
     return result;
@@ -483,7 +499,8 @@ int Solution::constrainedSubsetSum(vector<int>& nums, int k) {
             q.pop_front();
         dp[i] = max(0, q.empty() ? 0 : dp[q.front()]) + nums[i];
         result = max(result, dp[i]);
-        while (!q.empty() && dp[q.back()] <= dp[i]) q.pop_back();
+        while (!q.empty() && dp[q.back()] <= dp[i])
+            q.pop_back();
         q.push_back(i);
     }
     return result;
@@ -579,7 +596,8 @@ bool Solution::isPalindrome(string& str, int left, int right) {
 vector<vector<int> > Solution::palindromePairs_(vector<string>& words) {
     TrieTree trieTree;
     int len = words.size();
-    for (int i = 0; i < len; ++i) trieTree.insert(words[i], i);
+    for (int i = 0; i < len; ++i)
+        trieTree.insert(words[i], i);
     vector<vector<int> > result;
     for (int i = 0; i < len; ++i) {
         int n = words[i].size();
@@ -615,7 +633,8 @@ vector<pair<int, int> > Solution::manacher(string& s) {
     int p = 0, maxn = -1;
     for (int i = 1; i < m; ++i) {
         v[i] = maxn > i ? min(v[p - (i - p)], maxn - i) : 0;
-        while (temp[i - v[i] - 1] == temp[i + v[i] + 1]) ++v[i];
+        while (temp[i - v[i] - 1] == temp[i + v[i] + 1])
+            ++v[i];
         if (i + v[i] > maxn) {
             p = i;
             maxn = i + v[i];
