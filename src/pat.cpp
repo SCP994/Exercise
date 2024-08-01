@@ -5036,4 +5036,65 @@ void pat_a_1079() {
     printf("%.1lf\n", ret);
 }
 
-void pat_a_1090() {}
+namespace {
+struct Node_a_1090 {
+    std::vector<int> children;
+};
+
+std::pair<double, int> traverse_a_1090(Node_a_1090 nodes[], int root, double p,
+                                       double r) {
+    std::queue<int> q;
+    q.push(root);
+
+    int layer = 0;
+    double max = 0.0;
+    int cnt = 0;
+    while (!q.empty()) {
+        ++layer;
+        int size = q.size();
+        while (size--) {
+            Node_a_1090 &node = nodes[q.front()];
+            q.pop();
+            if (node.children.size() == 0) {
+                double t = p * pow(1 + r / 100, layer - 1);
+                if (t > max) {
+                    max = t;
+                    cnt = 1;
+                } else if (fabs(t - max) <
+                           std::numeric_limits<double>::epsilon())
+                    ++cnt;
+
+            } else {
+                for (const auto &child : node.children)
+                    q.push(child);
+            }
+        }
+    }
+
+    return {max, cnt};
+}
+} // namespace
+
+void pat_a_1090() {
+    const int maxn = 100000;
+
+    Node_a_1090 nodes[maxn];
+
+    int n;
+    double p, r;
+    scanf("%d%lf%lf", &n, &p, &r);
+
+    int root;
+    for (int i = 0, t; i < n; ++i) {
+        scanf("%d", &t);
+        if (t == -1)
+            root = i;
+        else
+            nodes[t].children.push_back(i);
+    }
+
+    auto [max, cnt] = traverse_a_1090(nodes, root, p, r);
+    printf("%.2lf %d\n", max, cnt);
+}
+
+void pat_a_1094() {}
