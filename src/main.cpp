@@ -3,7 +3,7 @@
 #include "pat.h"
 
 int main() {
-    pat_a_1094();
+    pat_a_1053();
 
     return 0;
 }

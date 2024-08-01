@@ -5097,4 +5097,177 @@ void pat_a_1090() {
     printf("%.2lf %d\n", max, cnt);
 }
 
-void pat_a_1094() {}
+namespace {
+struct Node_a_1094 {
+    std::vector<int> children;
+};
+
+std::pair<int, int> bfs_a_1094(Node_a_1094 nodes[], int root) {
+    std::queue<int> q;
+    q.push(root);
+
+    int level = 0;
+    int maxN = 0, maxL = 0;
+    while (!q.empty()) {
+        ++level;
+        int size = q.size();
+        if (size > maxN) {
+            maxN = size;
+            maxL = level;
+        }
+        while (size--) {
+            Node_a_1094 &node = nodes[q.front()];
+            q.pop();
+            for (const auto &child : node.children)
+                q.push(child);
+        }
+    }
+
+    return {maxN, maxL};
+}
+} // namespace
+
+void pat_a_1094() {
+    const int maxn = 100;
+
+    Node_a_1094 nodes[maxn];
+
+    int n, m;
+    scanf("%d%d", &n, &m);
+
+    for (int i = 0, id, k, t; i < m; ++i) {
+        scanf("%d%d", &id, &k);
+        for (int j = 0; j < k; ++j) {
+            scanf("%d", &t);
+            nodes[id].children.push_back(t);
+        }
+    }
+
+    int root = 1;
+    auto [maxN, maxL] = bfs_a_1094(nodes, root);
+    printf("%d %d\n", maxN, maxL);
+}
+
+namespace {
+struct Node_a_1106 {
+    bool isRetailer = false;
+    std::vector<int> children;
+};
+
+std::pair<double, int> bfs_a_1106(Node_a_1106 nodes[], int root, double p,
+                                  double r) {
+    std::queue<int> q;
+    q.push(root);
+
+    int level = 0;
+    double minPrice = std::numeric_limits<double>::max();
+    int cnt = 0;
+    while (!q.empty()) {
+        ++level;
+        int size = q.size();
+        while (size--) {
+            Node_a_1106 &node = nodes[q.front()];
+            q.pop();
+
+            if (node.isRetailer) {
+                double t = p * pow(1 + r / 100, level - 1);
+                if (t < minPrice) {
+                    minPrice = t;
+                    cnt = 1;
+                } else if (fabs(t - minPrice) <
+                           std::numeric_limits<double>::epsilon())
+                    ++cnt;
+            } else {
+                for (const auto &child : node.children)
+                    q.push(child);
+            }
+        }
+    }
+
+    return {minPrice, cnt};
+}
+} // namespace
+
+void pat_a_1106() {
+    const int maxn = 100000;
+
+    Node_a_1106 nodes[maxn];
+
+    int n;
+    double p, r;
+    scanf("%d%lf%lf", &n, &p, &r);
+
+    for (int i = 0, k, t; i < n; ++i) {
+        scanf("%d", &k);
+        if (k == 0)
+            nodes[i].isRetailer = true;
+        else {
+            for (int j = 0; j < k; ++j) {
+                scanf("%d", &t);
+                nodes[i].children.push_back(t);
+            }
+        }
+    }
+
+    auto [minPrice, cnt] = bfs_a_1106(nodes, 0, p, r);
+    printf("%.4lf %d\n", minPrice, cnt);
+}
+
+namespace {
+struct Node_a_1004 {
+    std::vector<int> children;
+};
+
+void bfs_a_1004(Node_a_1004 nodes[], int root, std::vector<int> &result) {
+    std::queue<int> q;
+    q.push(root);
+
+    int cnt = 0;
+    while (!q.empty()) {
+        int size = q.size();
+        int cnt = 0;
+        while (size--) {
+            Node_a_1004 &node = nodes[q.front()];
+            q.pop();
+
+            if (node.children.size() == 0)
+                ++cnt;
+            else {
+                for (const auto &child : node.children)
+                    q.push(child);
+            }
+        }
+        result.push_back(cnt);
+    }
+}
+} // namespace
+
+void pat_a_1004() {
+    const int maxn = 100;
+
+    Node_a_1004 nodes[maxn];
+
+    int n, m;
+    scanf("%d%d", &n, &m);
+
+    for (int i = 0, id, k; i < m; ++i) {
+        scanf("%d%d", &id, &k);
+        for (int j = 0, t; j < k; ++j) {
+            scanf("%d", &t);
+            nodes[id].children.push_back(t);
+        }
+    }
+
+    int root = 1;
+    std::vector<int> result;
+    bfs_a_1004(nodes, 1, result);
+
+    for (int i = 0; i < result.size(); ++i) {
+        if (i)
+            printf(" ");
+        printf("%d", result[i]);
+    }
+    printf("\n");
+}
+
+void pat_a_1053() {}
