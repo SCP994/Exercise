@@ -5270,4 +5270,84 @@ void pat_a_1004() {
     printf("\n");
 }
 
-void pat_a_1053() {}
+namespace {
+struct Node_a_1053 {
+    int weight;
+    std::vector<int> children;
+};
+
+void dfs_a_1053(const Node_a_1053 nodes[], int root, const int s,
+                std::vector<std::vector<int>> &result, std::vector<int> &tmp,
+                int sum = 0) {
+    sum += nodes[root].weight;
+    tmp.push_back(nodes[root].weight);
+
+    if (sum > s) {
+        tmp.pop_back();
+        return;
+    }
+    if (sum == s) // the reason to judge here not inside the for loop is that
+                  // nodes[root].weight could equal s
+    {
+        if (nodes[root].children.size() == 0)
+            result.push_back(tmp);
+        tmp.pop_back();
+        return;
+    }
+
+    for (const auto &child : nodes[root].children)
+        dfs_a_1053(nodes, child, s, result, tmp, sum);
+
+    tmp.pop_back();
+    sum -= nodes[root].weight;
+}
+} // namespace
+
+void pat_a_1053() {
+    const int maxn = 100;
+
+    Node_a_1053 nodes[maxn];
+
+    int n, m, s;
+    scanf("%d%d%d", &n, &m, &s);
+
+    for (int i = 0; i < n; ++i)
+        scanf("%d", &nodes[i].weight);
+
+    for (int i = 0, id, k; i < m; ++i) {
+        scanf("%d%d", &id, &k);
+        for (int j = 0, t; j < k; ++j) {
+            scanf("%d", &t);
+            nodes[id].children.push_back(t);
+        }
+
+        // only sort here is wrong because of such situation: 5 3 2; 5 3 4,
+        // althouth the weight 3 is the same, do not know their children's
+        // weights
+
+        // std::sort(nodes[id].children.begin(), nodes[id].children.end(),
+        //           [&nodes](const auto &a, const auto &b) {
+        //               return nodes[a].weight > nodes[b].weight;
+        //           });
+    }
+
+    int root = 0;
+    std::vector<std::vector<int>> result;
+    std::vector<int> tmp;
+    dfs_a_1053(nodes, root, s, result, tmp);
+
+    // simply sort, no need to consider such situation: 1 2 and 1 2 3
+    // the question also does not give a comparison of such situation
+    std::sort(result.rbegin(), result.rend());
+
+    for (int i = 0; i < result.size(); ++i) {
+        for (int j = 0; j < result[i].size(); ++j) {
+            if (j)
+                printf(" ");
+            printf("%d", result[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void pat_a_1043() {}
