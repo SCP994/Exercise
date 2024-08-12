@@ -351,4 +351,6 @@ void pat_a_1053(); // *
 
 // 9.4 二叉查找树
 
-void pat_a_1043();
+void pat_a_1043(); // * ?
+
+void pat_a_1064();

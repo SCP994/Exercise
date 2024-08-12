@@ -5350,4 +5350,148 @@ void pat_a_1053() {
     }
 }
 
-void pat_a_1043() {}
+namespace {
+struct Node_a_1043 {
+    int value;
+    Node_a_1043 *left, *right;
+    Node_a_1043(int v = 0) : value(v), left(nullptr), right(nullptr) {}
+};
+
+void insert_a_1043(Node_a_1043 *&root, int value) {
+    if (!root) {
+        root = new Node_a_1043(value);
+        return;
+    }
+    if (value >= root->value)
+        insert_a_1043(root->right, value);
+    else
+        insert_a_1043(root->left, value);
+}
+
+Node_a_1043 *create_a_1043(int arr[], int n) {
+    Node_a_1043 *root = nullptr;
+    for (int i = 0; i < n; ++i) {
+        insert_a_1043(root, arr[i]);
+    }
+    return root;
+}
+
+void preTraverse_a_1043(Node_a_1043 *root, int arr[]) {
+    if (!root)
+        return;
+
+    std::stack<Node_a_1043 *> s;
+    s.push(root);
+
+    int idx = 0;
+    while (!s.empty()) {
+        root = s.top();
+        s.pop();
+
+        arr[idx++] = root->value;
+
+        if (root->right)
+            s.push(root->right);
+        if (root->left)
+            s.push(root->left);
+    }
+}
+
+void postTraverse_a_1043(Node_a_1043 *root, int arr[]) {
+    if (!root)
+        return;
+
+    std::stack<Node_a_1043 *> s;
+
+    while (root) {
+        s.push(root);
+        root = root->left;
+    }
+
+    int idx = 0;
+    Node_a_1043 *last = nullptr;
+    while (!s.empty()) {
+        root = s.top();
+
+        if (last == root->right || !root->right) {
+            arr[idx++] = root->value;
+            s.pop();
+            last = root;
+        } else {
+            if (root->right) {
+                root = root->right;
+                while (root) {
+                    s.push(root);
+                    root = root->left;
+                }
+            }
+        }
+    }
+}
+
+void mirror_a_1043(Node_a_1043 *root) {
+    if (!root)
+        return;
+    mirror_a_1043(root->left);
+    mirror_a_1043(root->right);
+    std::swap(root->left, root->right);
+}
+
+bool arrEqual_a_1043(int a[], int b[], int n) {
+    for (int i = 0; i < n; ++i)
+        if (a[i] != b[i])
+            return false;
+    return true;
+}
+
+void delete_a_1043(Node_a_1043 *root) {
+    if (!root)
+        return;
+
+    delete_a_1043(root->left);
+    root->left = nullptr;
+
+    delete_a_1043(root->right);
+    root->right = nullptr;
+
+    delete root;
+}
+} // namespace
+
+void pat_a_1043() {
+    const int maxn = 1000;
+
+    int arr[maxn];
+    int preOrder[maxn], postOrder[maxn];
+
+    int n;
+    scanf("%d", &n);
+    for (int i = 0; i < n; ++i)
+        scanf("%d", &arr[i]);
+
+    Node_a_1043 *root = create_a_1043(arr, n);
+
+    preTraverse_a_1043(root, preOrder);
+    if (!arrEqual_a_1043(arr, preOrder, n)) {
+        mirror_a_1043(root);
+        preTraverse_a_1043(root, preOrder);
+    }
+
+    if (arrEqual_a_1043(arr, preOrder, n)) {
+        printf("YES\n");
+        postTraverse_a_1043(root, postOrder);
+        for (int i = 0; i < n; ++i) {
+            if (i)
+                printf(" ");
+            printf("%d", postOrder[i]);
+        }
+        printf("\n");
+    } else {
+        printf("NO\n");
+    }
+
+    delete_a_1043(root);
+    root = nullptr;
+}
+
+void pat_a_1064() {}
