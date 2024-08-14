@@ -5494,4 +5494,54 @@ void pat_a_1043() {
     root = nullptr;
 }
 
-void pat_a_1064() {}
+namespace {
+void inOrder_a_1064(int arr[], int n, int result[]) {
+    std::stack<int> s;
+
+    int node = 1;
+    while (node <= n) {
+        s.push(node);
+        node *= 2;
+    }
+
+    int idx = 0;
+    while (!s.empty()) {
+        node = s.top();
+        s.pop();
+
+        result[node] = arr[idx++]; // inOrder of CBT is an non-decreasing array
+
+        if (node * 2 + 1 <= n) {
+            node = node * 2 + 1;
+            while (node <= n) {
+                s.push(node);
+                node *= 2;
+            }
+        }
+    }
+}
+} // namespace
+
+void pat_a_1064() {
+    const int maxn = 1000 + 1;
+
+    int arr[maxn], result[maxn];
+
+    int n;
+    scanf("%d", &n);
+    for (int i = 0; i < n; ++i)
+        scanf("%d", &arr[i]);
+
+    std::sort(arr, arr + n);
+
+    inOrder_a_1064(arr, n, result);
+
+    for (int i = 1; i <= n; ++i) {
+        if (i > 1)
+            printf(" ");
+        printf("%d", result[i]);
+    }
+    printf("\n");
+}
+
+void pat_a_1099() {}
