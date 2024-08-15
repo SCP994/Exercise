@@ -5722,4 +5722,66 @@ void pat_a_1066() {
     delete_a_1066(root);
 }
 
-void pat_a_1107() {}
+namespace {
+int findFather_a_1107(int arr[], int a) {
+    int fa = a;
+    while (fa != arr[fa])
+        fa = arr[fa];
+    while (a != fa) {
+        int tmp = arr[a];
+        arr[a] = fa;
+        a = tmp;
+    }
+    return fa;
+}
+
+void Union_a_1107(int arr[], int a, int b) {
+    int fa = findFather_a_1107(arr, a);
+    int fb = findFather_a_1107(arr, b);
+    if (fa != fb)
+        arr[fa] = fb;
+}
+} // namespace
+
+void pat_a_1107() {
+    const int maxn = 1000 + 1;
+
+    int people[maxn] = {0};
+    int hobbies[maxn] = {0};
+    int cnt[maxn] = {0};
+
+    int n;
+    scanf("%d", &n);
+
+    for (int i = 1; i <= n; ++i)
+        people[i] = i;
+
+    for (int i = 1, k; i <= n; ++i) {
+        scanf("%d:", &k);
+        for (int j = 0, t; j < k; ++j) {
+            scanf("%d", &t);
+            if (hobbies[t] == 0)
+                hobbies[t] = i;
+            Union_a_1107(people, i, findFather_a_1107(people, hobbies[t]));
+        }
+    }
+
+    for (int i = 1; i <= n; ++i)
+        ++cnt[findFather_a_1107(people, i)];
+
+    int ans = 0;
+    for (int i = 1; i <= n; ++i)
+        if (cnt[i])
+            ++ans;
+
+    std::sort(cnt + 1, cnt + n + 1, std::greater<int>());
+    printf("%d\n", ans);
+    for (int i = 1; i <= ans; ++i) {
+        if (i > 1)
+            printf(" ");
+        printf("%d", cnt[i]);
+    }
+    printf("\n");
+}
+
+void pat_a_1098() {}

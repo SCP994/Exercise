@@ -353,7 +353,7 @@ void pat_a_1053(); // *
 
 void pat_a_1043(); // * ?
 
-void pat_a_1064(); // *
+void pat_a_1064(); // **
 
 void pat_a_1099();
 
@@ -363,4 +363,8 @@ void pat_a_1066(); // *
 
 // 9.6 并查集
 
-void pat_a_1107(); // *
+void pat_a_1107(); // **
+
+// 9.7 堆
+
+void pat_a_1098(); // *
