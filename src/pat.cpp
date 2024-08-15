@@ -5784,4 +5784,105 @@ void pat_a_1107() {
     printf("\n");
 }
 
-void pat_a_1098() {}
+namespace {
+namespace a_1098 {
+void showArray(int arr[], int n) {
+    for (int i = 1; i <= n; ++i) {
+        if (i > 1)
+            printf(" ");
+        printf("%d", arr[i]);
+    }
+    printf("\n");
+}
+
+bool isSame(int A[], int B[], int n) {
+    for (int i = 1; i <= n; ++i)
+        if (A[i] != B[i])
+            return false;
+    return true;
+}
+
+bool insertionSort(int arr[], int n, int tmp[]) {
+    bool flag = false;
+
+    for (int i = 2; i <= n; ++i) {
+        int t = arr[i];
+        int j = i - 1;
+        while (j >= 1 && t < arr[j]) {
+            arr[j + 1] = arr[j];
+            --j;
+        }
+        arr[j + 1] = t;
+
+        if (flag) {
+            printf("Insertion Sort\n");
+            showArray(arr, n);
+            break;
+        }
+        if (isSame(arr, tmp, n))
+            flag = true;
+    }
+
+    return flag;
+}
+
+void downAdjust(int arr[], int i, int n) {
+    int j = i * 2;
+    while (j <= n) {
+        if (j + 1 <= n && arr[j] < arr[j + 1])
+            j = j + 1;
+        if (arr[i] < arr[j]) {
+            std::swap(arr[i], arr[j]);
+            i = j;
+            j = i * 2;
+        } else {
+            break;
+        }
+    }
+}
+
+bool heapSort(int arr[], int n, int tmp[]) {
+    for (int i = n / 2; i >= 1; --i)
+        downAdjust(arr, i, n);
+
+    bool flag = false;
+
+    for (int i = n; i >= 2; --i) {
+        std::swap(arr[1], arr[i]);
+        downAdjust(arr, 1, i - 1);
+
+        if (flag) {
+            printf("Heap Sort\n");
+            showArray(arr, n);
+            break;
+        }
+        if (isSame(arr, tmp, n))
+            flag = true;
+    }
+
+    return flag;
+}
+} // namespace a_1098
+} // namespace
+
+void pat_a_1098() {
+    const int maxn = 101;
+
+    int arr1[maxn], arr2[maxn];
+    int tmp[maxn];
+
+    int n;
+    scanf("%d", &n);
+    for (int i = 1; i <= n; ++i) {
+        scanf("%d", &arr1[i]);
+        arr2[i] = arr1[i];
+    }
+    for (int i = 1; i <= n; ++i)
+        scanf("%d", &tmp[i]);
+
+    if (!a_1098::insertionSort(arr1, n, tmp))
+        a_1098::heapSort(arr2, n, tmp);
+    // or
+    // if (!a_1098::heapSort(arr1, n, tmp))
+    //     a_1098::insertionSort(arr2, n, tmp);
+}
