@@ -5886,3 +5886,5 @@ void pat_a_1098() {
     // if (!a_1098::heapSort(arr1, n, tmp))
     //     a_1098::insertionSort(arr2, n, tmp);
 }
+
+void pat_a_1013() {}
