@@ -5544,4 +5544,180 @@ void pat_a_1064() {
     printf("\n");
 }
 
-void pat_a_1099() {}
+namespace {
+struct Node_a_1099 {
+    int value;
+    int left, right;
+    Node_a_1099(int v = 0, int l = -1, int r = -1)
+        : value(v), left(l), right(r) {}
+};
+
+void inOrder_a_1099(Node_a_1099 nodes[], int root, int arr[]) {
+    std::stack<int> s;
+
+    while (root != -1) {
+        s.push(root);
+        root = nodes[root].left;
+    }
+
+    int idx = 0;
+    while (!s.empty()) {
+        root = s.top();
+        s.pop();
+
+        nodes[root].value = arr[idx++];
+
+        if (nodes[root].right != -1) {
+            root = nodes[root].right;
+            while (root != -1) {
+                s.push(root);
+                root = nodes[root].left;
+            }
+        }
+    }
+}
+
+void levelOrder_a_1099(Node_a_1099 nodes[], int root, int result[]) {
+    std::queue<int> q;
+
+    q.push(root);
+
+    int idx = 0;
+    while (!q.empty()) {
+        root = q.front();
+        q.pop();
+
+        result[idx++] = nodes[root].value;
+
+        if (nodes[root].left != -1)
+            q.push(nodes[root].left);
+        if (nodes[root].right != -1)
+            q.push(nodes[root].right);
+    }
+}
+} // namespace
+
+void pat_a_1099() {
+    const int maxn = 100;
+
+    int arr[maxn], result[maxn];
+    Node_a_1099 nodes[maxn];
+
+    int n;
+    scanf("%d", &n);
+    for (int i = 0; i < n; ++i)
+        scanf("%d%d", &nodes[i].left, &nodes[i].right);
+    for (int i = 0; i < n; ++i)
+        scanf("%d", &arr[i]);
+
+    std::sort(arr, arr + n);
+    inOrder_a_1099(nodes, 0, arr);
+    levelOrder_a_1099(nodes, 0, result);
+
+    for (int i = 0; i < n; ++i) {
+        if (i)
+            printf(" ");
+        printf("%d", result[i]);
+    }
+    printf("\n");
+}
+
+namespace {
+struct Node_a_1066 {
+    int value;
+    int height;
+    Node_a_1066 *left, *right;
+    Node_a_1066(int v = 0, int h = 1)
+        : value(v), height(h), left(nullptr), right(nullptr) {}
+};
+
+int getHeight(Node_a_1066 *root) {
+    if (!root)
+        return 0;
+    return root->height;
+}
+
+void updateHeight(Node_a_1066 *root) {
+    root->height = std::max(getHeight(root->left), getHeight(root->right)) + 1;
+}
+
+int getBalanceFactor(Node_a_1066 *root) {
+    return getHeight(root->left) - getHeight(root->right);
+}
+
+void L(Node_a_1066 *&root) {
+    Node_a_1066 *tmp = root->right;
+    root->right = tmp->left;
+    tmp->left = root;
+    updateHeight(root);
+    updateHeight(tmp);
+    root = tmp;
+}
+
+void R(Node_a_1066 *&root) {
+    Node_a_1066 *tmp = root->left;
+    root->left = tmp->right;
+    tmp->right = root;
+    updateHeight(root);
+    updateHeight(tmp);
+    root = tmp;
+}
+
+void insert_a_1066(Node_a_1066 *&root, int value) {
+    if (!root) {
+        root = new Node_a_1066(value);
+        return;
+    }
+
+    if (value >= root->value)
+        insert_a_1066(root->right, value);
+    else
+        insert_a_1066(root->left, value);
+
+    int factor = getBalanceFactor(root);
+    if (factor == 2) {
+        if (getBalanceFactor(root->left) == 1) { // LL
+            R(root);
+        } else { // LR
+            L(root->left);
+            R(root);
+        }
+    } else if (factor == -2) {
+        if (getBalanceFactor(root->right) == -1) { // RR
+            L(root);
+        } else { // RL
+            R(root->right);
+            L(root);
+        }
+    }
+
+    updateHeight(root);
+}
+
+void delete_a_1066(Node_a_1066 *root) {
+    if (!root)
+        return;
+    delete_a_1066(root->left);
+    root->left = nullptr;
+    delete_a_1066(root->right);
+    root->right = nullptr;
+    delete root;
+}
+} // namespace
+
+void pat_a_1066() {
+    Node_a_1066 *root = nullptr;
+
+    int n;
+    scanf("%d", &n);
+    for (int i = 0, t; i < n; ++i) {
+        scanf("%d", &t);
+        insert_a_1066(root, t);
+    }
+
+    printf("%d\n", root->value);
+
+    delete_a_1066(root);
+}
+
+void pat_a_1107() {}
