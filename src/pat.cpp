@@ -5631,26 +5631,28 @@ struct Node_a_1066 {
         : value(v), height(h), left(nullptr), right(nullptr) {}
 };
 
-int getHeight(Node_a_1066 *root) {
+int getHeight_a_1066(Node_a_1066 *root) {
     if (!root)
         return 0;
     return root->height;
 }
 
-void updateHeight(Node_a_1066 *root) {
-    root->height = std::max(getHeight(root->left), getHeight(root->right)) + 1;
+void updateHeight_a_1066(Node_a_1066 *root) {
+    root->height =
+        std::max(getHeight_a_1066(root->left), getHeight_a_1066(root->right)) +
+        1;
 }
 
-int getBalanceFactor(Node_a_1066 *root) {
-    return getHeight(root->left) - getHeight(root->right);
+int getBalanceFactor_a_1066(Node_a_1066 *root) {
+    return getHeight_a_1066(root->left) - getHeight_a_1066(root->right);
 }
 
 void L(Node_a_1066 *&root) {
     Node_a_1066 *tmp = root->right;
     root->right = tmp->left;
     tmp->left = root;
-    updateHeight(root);
-    updateHeight(tmp);
+    updateHeight_a_1066(root);
+    updateHeight_a_1066(tmp);
     root = tmp;
 }
 
@@ -5658,8 +5660,8 @@ void R(Node_a_1066 *&root) {
     Node_a_1066 *tmp = root->left;
     root->left = tmp->right;
     tmp->right = root;
-    updateHeight(root);
-    updateHeight(tmp);
+    updateHeight_a_1066(root);
+    updateHeight_a_1066(tmp);
     root = tmp;
 }
 
@@ -5674,16 +5676,16 @@ void insert_a_1066(Node_a_1066 *&root, int value) {
     else
         insert_a_1066(root->left, value);
 
-    int factor = getBalanceFactor(root);
+    int factor = getBalanceFactor_a_1066(root);
     if (factor == 2) {
-        if (getBalanceFactor(root->left) == 1) { // LL
+        if (getBalanceFactor_a_1066(root->left) == 1) { // LL
             R(root);
         } else { // LR
             L(root->left);
             R(root);
         }
     } else if (factor == -2) {
-        if (getBalanceFactor(root->right) == -1) { // RR
+        if (getBalanceFactor_a_1066(root->right) == -1) { // RR
             L(root);
         } else { // RL
             R(root->right);
@@ -5691,7 +5693,7 @@ void insert_a_1066(Node_a_1066 *&root, int value) {
         }
     }
 
-    updateHeight(root);
+    updateHeight_a_1066(root);
 }
 
 void delete_a_1066(Node_a_1066 *root) {
