@@ -353,6 +353,10 @@ void pat_a_1053(); // *
 
 void pat_a_1043(); // * ?
 
-void pat_a_1064(); // **
+void pat_a_1064(); // *
 
 void pat_a_1099();
+
+// 9.5 平衡二叉树（AVL 树）
+
+void pat_a_1066();
