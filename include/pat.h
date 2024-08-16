@@ -374,3 +374,5 @@ void pat_a_1098(); // *
 void pat_a_1013(); // *
 
 void pat_a_1021();
+
+void pat_a_1034();

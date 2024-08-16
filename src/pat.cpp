@@ -5941,4 +5941,101 @@ void pat_a_1013() {
         printf("%d\n", a_1013::getSetNum(g, n, key[i]) - 1);
 }
 
-void pat_a_1021() {}
+namespace {
+namespace a_1021 {
+const int maxn = 10001;
+std::vector<int> adj[maxn];
+int n;
+
+int getComponentsNum() {
+    std::vector<bool> vis(n + 1, false);
+
+    int cnt = 0;
+
+    for (int i = 1; i <= n; ++i) {
+        if (vis[i])
+            continue;
+
+        ++cnt;
+        std::queue<int> q;
+        q.push(i);
+        vis[i] = true;
+
+        while (!q.empty()) {
+            int t = q.front();
+            q.pop();
+            for (const auto &it : adj[t]) {
+                if (vis[it])
+                    continue;
+                q.push(it);
+                vis[it] = true;
+            }
+        }
+    }
+
+    return cnt;
+}
+
+void getDeepestDepth(std::vector<int> &result) {
+    int maxDepth = -1;
+    for (int i = 1; i <= n; ++i) {
+        std::vector<bool> vis(n + 1, false);
+
+        std::queue<int> q;
+        q.push(i);
+        vis[i] = true;
+
+        int depth = 0;
+        while (!q.empty()) {
+            ++depth;
+            int size = q.size();
+            while (size--) {
+                int t = q.front();
+                q.pop();
+
+                for (const auto &it : adj[t]) {
+                    if (vis[it])
+                        continue;
+                    q.push(it);
+                    vis[it] = true;
+                }
+            }
+        }
+
+        if (depth > maxDepth) {
+            maxDepth = depth;
+            result.clear();
+            result.push_back(i);
+        } else if (depth == maxDepth) {
+            result.push_back(i);
+        }
+    }
+}
+} // namespace a_1021
+} // namespace
+
+void pat_a_1021() {
+    using namespace a_1021;
+
+    scanf("%d", &n);
+
+    for (int i = 0, a, b; i < n - 1; ++i) {
+        scanf("%d%d", &a, &b);
+        adj[a].push_back(b);
+        adj[b].push_back(a);
+    }
+
+    int k = getComponentsNum();
+    if (k > 1) {
+        printf("Error: %d components\n", k);
+        return;
+    }
+
+    std::vector<int> result;
+    getDeepestDepth(result);
+
+    for (const auto &it : result)
+        printf("%d\n", it);
+}
+
+void pat_a_1034() {}

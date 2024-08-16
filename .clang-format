@@ -9,3 +9,4 @@ SpacesBeforeTrailingComments: 1
 IndentCaseLabels: false
 PointerBindsToType: true
 AllowShortLoopsOnASingleLine: false
+AllowShortBlocksOnASingleLine: false
