@@ -4727,8 +4727,8 @@ void pat_a_1091() // using dfs will cause stack overflow
     vector<vector<vector<bool>>> pixels(
         maxl, vector<vector<bool>>(maxm, vector<bool>(maxn, false)));
     // pixels[maxl][maxm][maxn] is too large to declare on stack,
-    // std::vector<bool> only store one bit for bool std::vector<bool> cannot be
-    // assinged like scanf("%d", &vec[0]);
+    // std::vector<bool> only store one bit for bool, std::vector<bool> cannot
+    // be assinged like scanf("%d", &vec[0]);
     vector<vector<vector<bool>>> inq(
         maxl, vector<vector<bool>>(maxm, vector<bool>(maxn, false)));
 
@@ -5887,4 +5887,58 @@ void pat_a_1098() {
     //     a_1098::insertionSort(arr2, n, tmp);
 }
 
-void pat_a_1013() {}
+namespace {
+namespace a_1013 {
+const int maxn = 1001;
+
+int getSetNum(bool g[][maxn], int n, int k) {
+    bool vis[maxn] = {0};
+    int ret = 0;
+
+    for (int i = 1; i <= n; ++i) {
+        if (i == k || vis[i])
+            continue;
+
+        ++ret;
+
+        std::queue<int> q;
+        q.push(i);
+        vis[i] = true;
+
+        while (!q.empty()) {
+            int t = q.front();
+            q.pop();
+            for (int j = 1; j <= n; ++j) {
+                if (j == k || vis[j] || !g[t][j])
+                    continue;
+                q.push(j);
+                vis[j] = true;
+            }
+        }
+    }
+
+    return ret;
+}
+} // namespace a_1013
+} // namespace
+
+void pat_a_1013() {
+    using a_1013::maxn;
+
+    bool g[maxn][maxn] = {0};
+    int key[maxn];
+
+    int n, m, k;
+    scanf("%d%d%d", &n, &m, &k);
+    for (int i = 0, a, b; i < m; ++i) {
+        scanf("%d%d", &a, &b);
+        g[a][b] = g[b][a] = true;
+    }
+    for (int i = 0; i < k; ++i)
+        scanf("%d", &key[i]);
+
+    for (int i = 0; i < k; ++i)
+        printf("%d\n", a_1013::getSetNum(g, n, key[i]) - 1);
+}
+
+void pat_a_1021() {}

@@ -371,4 +371,6 @@ void pat_a_1098(); // *
 
 // 10.3 图的遍历
 
-void pat_a_1013();
+void pat_a_1013(); // *
+
+void pat_a_1021();
