@@ -6038,4 +6038,180 @@ void pat_a_1021() {
         printf("%d\n", it);
 }
 
-void pat_a_1034() {}
+namespace {
+namespace a_1034 {
+const int maxn = 2010; // 1000 phone calls could have 2000 people!
+int w[maxn];
+int g[maxn][maxn];
+
+int n, k;
+
+std::unordered_map<std::string, int> m1;
+std::unordered_map<int, std::string> m2;
+int mIdx = 0;
+int map1(const char str[]) {
+    if (m1.find(str) == m1.end()) {
+        m1[str] = mIdx;
+        m2[mIdx] = str;
+        ++mIdx;
+    }
+    return m1[str];
+}
+
+std::string map2(int num) { return m2[num]; }
+
+struct Node {
+    int head, time, num;
+    Node() : head(0), time(0), num(0) {}
+};
+
+void bfs(std::vector<Node> &result) {
+    std::vector<bool> vis(mIdx, false);
+    std::queue<int> q;
+
+    for (int i = 0; i < mIdx; ++i) {
+        if (vis[i])
+            continue;
+
+        Node node;
+        int maxTime = -1;
+
+        q.push(i);
+        vis[i] = true;
+
+        node.num += 1;
+        if (w[i] > maxTime) {
+            maxTime = w[i];
+            node.head = i;
+        }
+
+        while (!q.empty()) {
+            int t = q.front();
+            q.pop();
+
+            for (int j = 0; j < mIdx; ++j) {
+                if (!g[t][j])
+                    continue;
+
+                node.time += g[t][j];
+                // Delete this edge to prevent turning back!!!
+                g[t][j] = g[j][t] = 0;
+
+                if (vis[j])
+                    continue;
+
+                q.push(j);
+                vis[j] = true;
+
+                node.num += 1;
+                if (w[j] > maxTime) {
+                    maxTime = w[j];
+                    node.head = j;
+                }
+            }
+        }
+
+        if (node.time > k && node.num > 2)
+            result.push_back(node);
+    }
+}
+
+void dfs(std::vector<Node> &result) {
+    std::vector<bool> vis(mIdx, false);
+    std::stack<int> s;
+
+    for (int i = 0; i < mIdx; ++i) {
+        if (vis[i])
+            continue;
+
+        Node node;
+        int maxTime = -1;
+
+        s.push(i);
+        vis[i] = true;
+
+        node.num += 1;
+        if (w[i] > maxTime) {
+            maxTime = w[i];
+            node.head = i;
+        }
+
+        while (!s.empty()) {
+            int t = s.top();
+
+            int next = -1;
+            for (int j = 0; j < mIdx; ++j) {
+                if (!g[t][j])
+                    continue;
+                node.time += g[t][j];
+                g[t][j] = g[j][t] = 0;
+                if (vis[j])
+                    continue;
+                next = j;
+                break;
+            }
+
+            if (next == -1) // different from bfs, pop here!!!
+                s.pop();
+
+            while (next != -1) {
+                s.push(next);
+                vis[next] = true;
+
+                node.num += 1;
+                if (w[next] > maxTime) {
+                    maxTime = w[next];
+                    node.head = next;
+                }
+
+                t = next;
+                next = -1;
+                for (int j = 0; j < mIdx; ++j) {
+                    if (!g[t][j])
+                        continue;
+                    node.time += g[t][j];
+                    g[t][j] = g[j][t] = 0;
+                    if (vis[j])
+                        continue;
+                    next = j;
+                    break;
+                }
+            }
+        }
+
+        if (node.time > k && node.num > 2)
+            result.push_back(node);
+    }
+}
+} // namespace a_1034
+} // namespace
+
+void pat_a_1034() {
+    using namespace a_1034;
+
+    scanf("%d%d", &n, &k);
+
+    char name1[5], name2[5];
+    int time;
+    for (int i = 0; i < n; ++i) {
+        scanf("%s%s%d", name1, name2, &time);
+        int id1 = map1(name1);
+        int id2 = map1(name2);
+        w[id1] += time;
+        w[id2] += time;
+        g[id1][id2] += time;
+        g[id2][id1] += time;
+    }
+
+    std::vector<Node> result;
+    // bfs(result);
+    // or
+    dfs(result);
+    std::sort(result.begin(), result.end(), [](const auto &a, const auto &b) {
+        return map2(a.head) < map2(b.head);
+    });
+
+    printf("%zu\n", result.size());
+    for (int i = 0; i < result.size(); ++i)
+        printf("%s %d\n", map2(result[i].head).c_str(), result[i].num);
+}
