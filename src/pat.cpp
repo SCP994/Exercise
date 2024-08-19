@@ -6215,3 +6215,68 @@ void pat_a_1034() {
     for (int i = 0; i < result.size(); ++i)
         printf("%s %d\n", map2(result[i].head).c_str(), result[i].num);
 }
+
+namespace {
+namespace a_1076 {
+const int maxn = 1001;
+bool g[maxn][maxn];
+
+int n, l;
+
+int getAmount(int id) {
+    std::vector<bool> vis(n + 1, false);
+    std::queue<int> q;
+    int cnt = 0;
+
+    q.push(id);
+    vis[id] = true;
+
+    int level = 0;
+    while (!q.empty()) {
+        ++level;
+        if (level - 1 > l)
+            break;
+
+        int size = q.size();
+        while (size--) {
+            id = q.front();
+            q.pop();
+
+            if (level > 1)
+                ++cnt;
+
+            for (int i = 1; i <= n; ++i) {
+                if (!g[id][i] || vis[i])
+                    continue;
+                q.push(i);
+                vis[i] = true;
+            }
+        }
+    }
+
+    return cnt;
+}
+} // namespace a_1076
+} // namespace
+
+void pat_a_1076() {
+    using namespace a_1076;
+
+    scanf("%d%d", &n, &l);
+    for (int i = 0, m; i < n; ++i) {
+        scanf("%d", &m);
+        for (int j = 0, t; j < m; ++j) {
+            scanf("%d", &t);
+            g[t][i + 1] = true;
+        }
+    }
+
+    int k;
+    scanf("%d", &k);
+    for (int i = 0, id; i < k; ++i) {
+        scanf("%d", &id);
+        printf("%d\n", getAmount(id));
+    }
+}
+
+void pat_a_1003() {}

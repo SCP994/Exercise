@@ -376,3 +376,9 @@ void pat_a_1013(); // *
 void pat_a_1021();
 
 void pat_a_1034(); // **
+
+void pat_a_1076();
+
+// 10.4 最短路径
+
+void pat_a_1003();
