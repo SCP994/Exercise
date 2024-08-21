@@ -6364,4 +6364,118 @@ void pat_a_1003() {
     printf("%zu %d\n", result.size(), getMax());
 }
 
-void pat_a_1018() {}
+namespace {
+namespace a_1018 {
+const int maxn = 501;
+const int INF = 0x3F3F3F3F;
+int c, n, sp, m;
+
+int d[maxn];
+int cNum[maxn];
+std::vector<int> pre[maxn];
+std::vector<std::pair<int, int>> g[maxn];
+
+struct cmp {
+    bool operator()(const int &a, const int &b) { return d[a] > d[b]; }
+};
+std::priority_queue<int, std::vector<int>, cmp> q;
+
+void init(int s) {
+    for (int i = 0; i <= n; ++i)
+        d[i] = INF;
+    d[s] = 0;
+}
+
+void relax(int u, int v, int w) {
+    if (d[u] > d[v] + w) {
+        d[u] = d[v] + w;
+        q.push(u);
+        pre[u].clear();
+        pre[u].push_back(v);
+    } else if (d[u] == d[v] + w) {
+        pre[u].push_back(v);
+    }
+}
+
+void dijkstra(int s) {
+    q.push(s);
+    while (!q.empty()) {
+        int v = q.top();
+        q.pop();
+        for (const auto &it : g[v])
+            relax(it.first, v, it.second);
+    }
+}
+
+std::vector<std::vector<int>> result;
+std::vector<int> tmp;
+void dfs(int t, int s) {
+    tmp.push_back(t);
+    if (t == s) {
+        result.push_back(tmp);
+        std::reverse(result.back().begin(), result.back().end());
+    } else {
+        for (const auto &it : pre[t])
+            dfs(it, s);
+    }
+    tmp.pop_back();
+}
+
+// On the way to the destination, all stations must be adjusted well!
+// Cannot calculate the sum of all bikes, then minus (c / 2 * stations number).
+std::pair<int, int> getNeedRemain(const std::vector<int> &tmp) {
+    int need = 0;
+    int remain = 0;
+    for (int i = 1; i < tmp.size(); ++i) {
+        int idx = tmp[i];
+        if (cNum[idx] < c / 2) {
+            int t = c / 2 - cNum[idx];
+            remain -= t;
+            if (remain < 0) {
+                need += -remain;
+                remain = 0;
+            }
+        } else if (cNum[idx] > c / 2) {
+            remain += cNum[idx] - c / 2;
+        }
+    }
+    return {need, remain};
+}
+} // namespace a_1018
+} // namespace
+
+void pat_a_1018() {
+    using namespace a_1018;
+
+    scanf("%d%d%d%d", &c, &n, &sp, &m);
+    for (int i = 1; i <= n; ++i)
+        scanf("%d", &cNum[i]);
+    for (int i = 0, u, v, w; i < m; ++i) {
+        scanf("%d%d%d", &u, &v, &w);
+        g[u].push_back({v, w});
+        g[v].push_back({u, w});
+    }
+
+    init(0);
+    dijkstra(0);
+    dfs(sp, 0);
+
+    std::sort(result.begin(), result.end(), [](const auto &a, const auto &b) {
+        auto [needA, remainA] = getNeedRemain(a);
+        auto [needB, remainB] = getNeedRemain(b);
+        if (needA == needB)
+            return remainA < remainB;
+        return needA < needB;
+    });
+
+    auto [need, remain] = getNeedRemain(result[0]);
+    printf("%d ", need);
+    for (int i = 0; i < result[0].size(); ++i) {
+        if (i)
+            printf("->");
+        printf("%d", result[0][i]);
+    }
+    printf(" %d\n", remain);
+}
+
+void pat_a_1030() {}
