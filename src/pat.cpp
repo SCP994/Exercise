@@ -6279,4 +6279,89 @@ void pat_a_1076() {
     }
 }
 
-void pat_a_1003() {}
+namespace {
+namespace a_1003 {
+const int maxn = 500;
+const int INF = 0x3F3F3F3F;
+int w[maxn];
+int d[maxn];
+int n, m, c1, c2;
+std::vector<int> pre[maxn];
+std::vector<std::pair<int, int>> g[maxn];
+
+struct cmp {
+    bool operator()(const int a, const int b) { return d[a] > d[b]; }
+};
+std::priority_queue<int, std::vector<int>, cmp> q;
+
+void init(int s) {
+    for (int i = 0; i < n; ++i)
+        d[i] = INF;
+    d[s] = 0;
+}
+
+void relax(int u, int v, int l) {
+    if (d[u] > d[v] + l) {
+        d[u] = d[v] + l;
+        q.push(u);
+        pre[u].clear();
+        pre[u].push_back(v);
+    } else if (d[u] == d[v] + l) {
+        pre[u].push_back(v);
+    }
+}
+
+void dijkstra(int s) {
+    q.push(s);
+    while (!q.empty()) {
+        int v = q.top();
+        q.pop();
+        for (const auto &it : g[v])
+            relax(it.first, v, it.second);
+    }
+}
+
+std::vector<std::vector<int>> result;
+std::vector<int> tmp;
+void dfs(int t) {
+    tmp.push_back(t);
+    if (t == c1)
+        result.push_back(tmp);
+    for (const auto &it : pre[t])
+        dfs(it);
+    tmp.pop_back();
+}
+
+int getMax() {
+    int maxSum = -1;
+    for (const auto &vec : result) {
+        int tmpSum = 0;
+        for (const auto &it : vec)
+            tmpSum += w[it];
+        if (tmpSum > maxSum)
+            maxSum = tmpSum;
+    }
+    return maxSum;
+}
+} // namespace a_1003
+} // namespace
+
+void pat_a_1003() {
+    using namespace a_1003;
+
+    scanf("%d%d%d%d", &n, &m, &c1, &c2);
+    for (int i = 0; i < n; ++i)
+        scanf("%d", &w[i]);
+    for (int i = 0, u, v, l; i < m; ++i) {
+        scanf("%d%d%d", &u, &v, &l);
+        g[u].push_back({v, l});
+        g[v].push_back({u, l});
+    }
+
+    init(c1);
+    dijkstra(c1);
+    dfs(c2);
+    printf("%zu %d\n", result.size(), getMax());
+}
+
+void pat_a_1018() {}
