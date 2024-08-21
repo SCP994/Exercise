@@ -6478,4 +6478,77 @@ void pat_a_1018() {
     printf(" %d\n", remain);
 }
 
-void pat_a_1030() {}
+namespace {
+namespace a_1030 {
+const int maxn = 500;
+const int INF = 0x3F3F3F3F;
+int dis[maxn];
+int disCost[maxn];
+int pre[maxn];
+std::vector<std::tuple<int, int, int>> g[maxn];
+int n, m, s, d;
+
+void init() {
+    for (int i = 0; i < n; ++i) {
+        dis[i] = INF;
+        disCost[i] = INF;
+        pre[i] = -1;
+    }
+    dis[s] = 0;
+    disCost[s] = 0;
+}
+
+struct cmp {
+    bool operator()(const int a, const int b) {
+        // if (dis[a] == dis[b]) // also works
+        //     return disCost[a] > disCost[b];
+        return dis[a] > dis[b];
+    }
+};
+std::priority_queue<int, std::vector<int>, cmp> q;
+
+void relax(int u, int v, int w, int wCost) {
+    if (dis[u] > dis[v] + w ||
+        dis[u] == dis[v] + w && disCost[u] > disCost[v] + wCost) {
+        dis[u] = dis[v] + w;
+        disCost[u] = disCost[v] + wCost;
+        q.push(u);
+        pre[u] = v;
+    }
+}
+
+void dijkstra() {
+    q.push(s);
+    while (!q.empty()) {
+        int v = q.top();
+        q.pop();
+        for (const auto &it : g[v])
+            relax(std::get<0>(it), v, std::get<1>(it), std::get<2>(it));
+    }
+}
+} // namespace a_1030
+} // namespace
+
+void pat_a_1030() {
+    using namespace a_1030;
+
+    scanf("%d%d%d%d", &n, &m, &s, &d);
+    for (int i = 0, u, v, w, c; i < m; ++i) {
+        scanf("%d%d%d%d", &u, &v, &w, &c);
+        g[u].push_back({v, w, c});
+        g[v].push_back({u, w, c});
+    }
+
+    init();
+    dijkstra();
+
+    std::vector<int> route;
+    int p = d;
+    while (p != -1) {
+        route.push_back(p);
+        p = pre[p];
+    }
+    for (int i = route.size() - 1; i >= 0; --i)
+        printf("%d ", route[i]);
+    printf("%d %d\n", dis[d], disCost[d]);
+}
