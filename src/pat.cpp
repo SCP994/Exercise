@@ -6552,3 +6552,5 @@ void pat_a_1030() {
         printf("%d ", route[i]);
     printf("%d %d\n", dis[d], disCost[d]);
 }
+
+void pat_a_1072() {}
