@@ -6782,4 +6782,54 @@ void pat_a_1087() {
     printf("\n");
 }
 
-void pat_a_1007() {}
+namespace {
+namespace a_1007 {
+const int maxn = 10000;
+int n;
+int arr[maxn];
+int beginIndex[maxn];
+int dp[maxn];
+
+void solution() {
+    dp[0] = arr[0];
+    beginIndex[0] = 0;
+    for (int i = 1; i < n; ++i)
+        if (arr[i] < arr[i] + dp[i - 1]) {
+            beginIndex[i] = beginIndex[i - 1];
+            dp[i] = arr[i] + dp[i - 1];
+        } else {
+            beginIndex[i] = i;
+            dp[i] = arr[i];
+        }
+}
+} // namespace a_1007
+} // namespace
+
+void pat_a_1007() {
+    using namespace a_1007;
+
+    bool allNegative = true;
+    scanf("%d", &n);
+    for (int i = 0; i < n; ++i) {
+        scanf("%d", &arr[i]);
+        if (arr[i] >= 0)
+            allNegative = false;
+    }
+
+    /*
+    Be careful of the special condition!!!
+    If all the K numbers are negative, then its maximum sum is defined to be 0,
+    and you are supposed to output the first and the last numbers of the whole
+    sequence.
+    */
+    if (allNegative) {
+        printf("0 %d %d\n", arr[0], arr[n - 1]);
+        return;
+    }
+
+    solution();
+    int idx = std::max_element(dp, dp + n) - dp;
+    printf("%d %d %d\n", dp[idx], arr[beginIndex[idx]], arr[idx]);
+}
+
+void pat_a_1045() {}
