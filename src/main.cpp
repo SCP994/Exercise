@@ -1,7 +1,7 @@
 #include "pat.h"
 
 int main() {
-    pat_a_1072();
+    pat_a_1087();
 
     return 0;
 }
