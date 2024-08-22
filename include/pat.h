@@ -251,7 +251,7 @@ void pat_b_1034();
 
 // 5.4 素数
 
-void pat_a_1007();
+void pat_b_1007();
 
 void pat_b_1013();
 
@@ -389,4 +389,8 @@ void pat_a_1030(); // *
 
 void pat_a_1072(); // **
 
-void pat_a_1087();
+void pat_a_1087(); // **?
+
+// 11.2 最大连续子序列和
+
+void pat_a_1007();

@@ -3466,7 +3466,7 @@ void pat_a_1088() {
 
 void pat_b_1034() { pat_a_1088(); }
 
-void pat_a_1007() {
+void pat_b_1007() {
     const int maxn = 100000;
 
     int idx = 0;
@@ -6660,4 +6660,126 @@ void pat_a_1072() {
     */
 }
 
-void pat_a_1087() {}
+namespace {
+namespace a_1087 {
+const int maxn = 200;
+const int INF = 0x3F3F3F3F;
+const double eps = std::numeric_limits<double>::epsilon();
+int n, k, s, t;
+int d[maxn];
+int happiness[maxn];
+std::vector<int> pre[maxn];
+std::vector<std::pair<int, int>> g[maxn];
+
+int cityNum = 0;
+std::unordered_map<std::string, int> msi;
+std::unordered_map<int, std::string> mis;
+int getInt(const std::string &str) {
+    if (msi.find(str) == msi.end()) {
+        msi[str] = cityNum;
+        mis[cityNum] = str;
+        ++cityNum;
+    }
+    return msi[str];
+}
+
+std::string getString(int i) { return mis[i]; }
+
+void init() {
+    std::fill(d, d + cityNum, INF);
+    d[s] = 0;
+}
+
+struct cmp {
+    bool operator()(const int &a, const int &b) { return d[a] > d[b]; }
+};
+std::priority_queue<int, std::vector<int>, cmp> q;
+
+void relax(int u, int v, int c) {
+    if (d[u] > d[v] + c) {
+        d[u] = d[v] + c;
+        q.push(u);
+        pre[u].clear();
+        pre[u].push_back(v);
+    } else if (d[u] == d[v] + c) {
+        pre[u].push_back(v);
+    }
+}
+
+void dijkstra() {
+    std::vector<bool> vis(cityNum, false);
+    q.push(s);
+    while (!q.empty()) {
+        int v = q.top();
+        q.pop();
+        if (vis[v])
+            continue;
+        vis[v] = true;
+        for (const auto &it : g[v])
+            relax(it.first, v, it.second);
+    }
+}
+
+int getHappiness(const std::vector<int> &tmp) {
+    int sum = 0;
+    for (const auto &it : tmp)
+        sum += happiness[it];
+    return sum;
+}
+
+int cnt = 0;
+int ansSum = 0;
+std::vector<int> result, tmp;
+void dfs(int v) {
+    tmp.push_back(v);
+    if (v == s) {
+        ++cnt;
+        int tmpSum = getHappiness(tmp);
+        if (tmpSum > ansSum || tmpSum == ansSum && tmp.size() < result.size()) {
+            ansSum = tmpSum;
+            result = tmp;
+        }
+    } else {
+        for (const auto &it : pre[v])
+            dfs(it);
+    }
+    tmp.pop_back();
+}
+} // namespace a_1087
+} // namespace
+
+void pat_a_1087() {
+    using namespace a_1087;
+
+    char str[5];
+    scanf("%d%d%s", &n, &k, str);
+    s = getInt(str);   // start
+    t = getInt("ROM"); // end
+    for (int i = 0, h; i < n - 1; ++i) {
+        scanf("%s%d", str, &h);
+        happiness[getInt(str)] = h;
+    }
+    char str1[5], str2[5];
+    for (int i = 0, c; i < k; ++i) {
+        scanf("%s%s%d", str1, str2, &c);
+        int u = getInt(str1);
+        int v = getInt(str2);
+        g[u].push_back({v, c});
+        g[v].push_back({u, c});
+    }
+
+    init();
+    dijkstra();
+    dfs(t);
+
+    printf("%d %d %d %d\n", cnt, d[t], ansSum,
+           static_cast<int>(1.0 * ansSum / (result.size() - 1) + eps));
+    for (int i = result.size() - 1; i >= 0; --i) {
+        printf("%s", getString(result[i]).c_str());
+        if (i)
+            printf("->");
+    }
+    printf("\n");
+}
+
+void pat_a_1007() {}
