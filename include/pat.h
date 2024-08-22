@@ -387,4 +387,4 @@ void pat_a_1018(); // *
 
 void pat_a_1030(); // *
 
-void pat_a_1072();
+void pat_a_1072(); // **

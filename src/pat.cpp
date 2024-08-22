@@ -6553,4 +6553,109 @@ void pat_a_1030() {
     printf("%d %d\n", dis[d], disCost[d]);
 }
 
-void pat_a_1072() {}
+namespace {
+namespace a_1072 {
+const int maxn = 1011;
+const int INF = 0x3F3F3F3F;
+int n, m, k, ds;
+int N;
+int d[maxn];
+std::vector<std::pair<int, int>> g[maxn];
+
+int getIndex(const char str[]) {
+    bool isG = str[0] == 'G';
+    int begin = isG ? 1 : 0;
+    int len = strlen(str);
+    int ret = 0;
+    for (int i = begin; i < len; ++i)
+        ret = ret * 10 + str[i] - '0';
+    return isG ? n + ret : ret;
+}
+
+void init(int v) {
+    for (int i = 1; i <= N; ++i)
+        d[i] = INF;
+    d[v] = 0;
+}
+
+struct cmp {
+    bool operator()(const int &a, const int &b) { return d[a] > d[b]; }
+};
+std::priority_queue<int, std::vector<int>, cmp> q;
+
+void relax(int u, int v, int w) {
+    if (d[u] > d[v] + w) {
+        d[u] = d[v] + w;
+        q.push(u);
+    }
+}
+
+void dijkstra(int s) {
+    q.push(s);
+    while (!q.empty()) {
+        int v = q.top();
+        q.pop();
+        for (const auto &it : g[v])
+            relax(it.first, v, it.second);
+    }
+}
+} // namespace a_1072
+} // namespace
+
+void pat_a_1072() {
+    using namespace a_1072;
+
+    scanf("%d%d%d%d", &n, &m, &k, &ds);
+    N = n + m;
+    for (int i = 0, w; i < k; ++i) {
+        char strU[5], strV[5];
+        scanf("%s%s%d", strU, strV, &w);
+        int u = getIndex(strU);
+        int v = getIndex(strV);
+        g[u].push_back({v, w});
+        g[v].push_back({u, w});
+    }
+
+    int solutionIdx = 0;
+    int solutionNum = 0;
+    int sumDis = INF;
+    int minDis = 0;
+    for (int i = n + 1; i <= N; ++i) {
+        init(i);
+        dijkstra(i);
+
+        bool valid = true;
+        for (int j = 1; j <= n; ++j)
+            if (d[j] > ds) {
+                valid = false;
+                break;
+            }
+        if (!valid)
+            continue;
+        ++solutionNum;
+        int tmpMinDis = *std::min_element(d + 1, d + n + 1);
+        int tmpSumDis = std::accumulate(d + 1, d + n + 1, 0);
+        if (tmpMinDis > minDis || tmpMinDis == minDis && tmpSumDis < sumDis) {
+            solutionIdx = i - n;
+            minDis = tmpMinDis;
+            sumDis = tmpSumDis;
+        }
+    }
+
+    double eps = std::numeric_limits<double>::epsilon(); // or 1e-6
+    if (solutionNum == 0)
+        printf("No Solution\n");
+    else {
+        printf("G%d\n", solutionIdx);
+        printf("%.1lf, %.1lf\n", static_cast<double>(minDis),
+               1.0 * sumDis / n + eps);
+    }
+
+    /*
+    // Floating point numbers may have rounding errors, add 1e-6
+    printf("%.1f\n", 1.25);       // 1.2
+    printf("%.1f\n", 1.35);       // 1.4
+    printf("%.1f\n", 1.25 + eps); // 1.3
+    printf("%.1f\n", 1.35 + eps); // 1.4
+    */
+}
