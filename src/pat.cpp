@@ -6832,4 +6832,46 @@ void pat_a_1007() {
     printf("%d %d %d\n", dp[idx], arr[beginIndex[idx]], arr[idx]);
 }
 
-void pat_a_1045() {}
+namespace {
+namespace a_1045 {
+const int maxn = 201;
+const int maxl = 10000;
+int color[maxn];
+std::unordered_map<int, int> map;
+int stripe[maxl];
+int dp[maxl];
+int n, m, l;
+int num;
+
+void solution() {
+    for (int i = 0; i < num; ++i) {
+        dp[i] = 1;
+        for (int j = 0; j < i; ++j) {
+            if (map[stripe[j]] <= map[stripe[i]] && dp[i] < dp[j] + 1)
+                dp[i] = dp[j] + 1;
+        }
+    }
+}
+} // namespace a_1045
+} // namespace
+
+void pat_a_1045() {
+    using namespace a_1045;
+
+    scanf("%d%d", &n, &m);
+    for (int i = 0; i < m; ++i) {
+        scanf("%d", &color[i]);
+        map[color[i]] = i;
+    }
+    scanf("%d", &l);
+    for (int i = 0, c; i < l; ++i) {
+        scanf("%d", &c);
+        if (map.find(c) != map.end()) // optimization
+            stripe[num++] = c;
+    }
+
+    solution();
+    printf("%d\n", *std::max_element(dp, dp + l));
+}
+
+void pat_a_1045_() {}
