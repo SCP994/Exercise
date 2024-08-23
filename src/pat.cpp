@@ -6834,7 +6834,7 @@ void pat_a_1007() {
 
 namespace {
 namespace a_1045 {
-const int maxn = 201;
+const int maxn = 200;
 const int maxl = 10000;
 int color[maxn];
 std::unordered_map<int, int> map;
@@ -6874,4 +6874,54 @@ void pat_a_1045() {
     printf("%d\n", *std::max_element(dp, dp + l));
 }
 
-void pat_a_1045_() {}
+namespace {
+namespace a_1045_ {
+const int maxn = 201;
+const int maxl = 10001;
+int color[maxn];
+std::unordered_map<int, int> map;
+int num = 1;
+int stripe[maxl];
+int dp[maxn][maxl];
+int n, m, l;
+
+void solution() {
+    for (int i = 0; i <= m; ++i)
+        dp[i][0] = 0;
+    for (int i = 1; i <= num; ++i)
+        dp[0][i] = 0;
+
+    for (int i = 1; i <= m; ++i)
+        for (int j = 1; j <= num; ++j) {
+            int max = std::max(dp[i - 1][j], dp[i][j - 1]);
+            if (color[i] == stripe[j])
+                dp[i][j] = max + 1;
+            else
+                dp[i][j] = max;
+        }
+}
+} // namespace a_1045_
+} // namespace
+
+void pat_a_1045_() {
+    using namespace a_1045_;
+
+    scanf("%d%d", &n, &m);
+    for (int i = 1, c; i <= m; ++i) {
+        color[i] = i;
+        scanf("%d", &c);
+        map[c] = i;
+    }
+    scanf("%d", &l);
+    for (int i = 0, c; i < l; ++i) {
+        scanf("%d", &c);
+        if (map.find(c) != map.end())
+            stripe[num++] = map[c];
+    }
+    --num; // make num the last index like m
+
+    solution();
+    printf("%d\n", dp[m][num]);
+}
+
+void pat_a_1040() {}
