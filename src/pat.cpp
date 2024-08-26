@@ -6924,4 +6924,41 @@ void pat_a_1045_() {
     printf("%d\n", dp[m][num]);
 }
 
-void pat_a_1040() {}
+namespace {
+namespace a_1040 {
+const int maxn = 1001;
+char str[maxn];
+int dp[maxn][maxn];
+int len;
+int ans = 1;
+
+void solution() {
+    for (int i = 0; i < len; ++i) {
+        dp[i][i] = 1;
+        if (i < len - 1 && str[i] == str[i + 1]) {
+            dp[i][i + 1] = 1;
+            ans = 2;
+        }
+    }
+
+    for (int L = 3; L <= len; ++L)
+        for (int i = 0; i + L - 1 < len; ++i) {
+            int j = i + L - 1;
+            dp[i][j] = str[i] == str[j] ? dp[i + 1][j - 1] : 0;
+            if (dp[i][j])
+                ans = L;
+        }
+}
+} // namespace a_1040
+} // namespace
+
+void pat_a_1040() {
+    using namespace a_1040;
+
+    std::cin.getline(str, maxn);
+    len = strlen(str);
+    solution();
+    printf("%d\n", ans);
+}
+
+void pat_a_1068() {}
