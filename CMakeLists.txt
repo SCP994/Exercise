@@ -18,3 +18,9 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 # set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 add_executable(${PROJECT_NAME} ${SRC})
+
+add_executable(testAdd ${PROJECT_SOURCE_DIR}/test/testAdd.cpp ${PROJECT_SOURCE_DIR}/src/add.cpp)
+
+enable_testing()
+
+add_test(NAME testAdd COMMAND testAdd)
