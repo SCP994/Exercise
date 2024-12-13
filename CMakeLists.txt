@@ -14,6 +14,7 @@ aux_source_directory(${PROJECT_SOURCE_DIR}/src SRC)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+# 会覆盖 CMakePresets.json 的 binaryDir
+# set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
-add_executable(main ${SRC})
+add_executable(${PROJECT_NAME} ${SRC})
