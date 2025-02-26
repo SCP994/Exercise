@@ -1,4 +1,4 @@
-#include "pat.h"
+﻿#include "pat.h"
 
 int pat_b_1001(int n) {
     int cnt = 0;
